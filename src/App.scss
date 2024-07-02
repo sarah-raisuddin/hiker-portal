@@ -1,0 +1,220 @@
+// src/App.scss
+$header-text: #304529;
+$body-text: #1e1e1e;
+$label-text: #d9d9d9;
+$label-font-size: 25px;
+$primary-color: #4a6741;
+$button-color: #304529;
+$header-background: #d9d9d9;
+$header-font-size: 60px;
+
+@mixin label-styles {
+  font-size: $label-font-size;
+  color: $label-text;
+  font-weight: bold;
+  font-style: italic;
+}
+
+@mixin button-styles {
+  background-color: $button-color;
+  padding: 5px 80px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+@mixin body-styles {
+  background-color: $primary-color;
+  border-radius: 10px;
+  padding: 34px 225px;
+  max-width: 1150px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+// global styles
+
+a {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+button {
+  @include button-styles();
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 23px;
+  label {
+    margin-bottom: 8px;
+    @include label-styles();
+  }
+
+  input {
+    padding: 13px 7px;
+    border-radius: 8px;
+    border: none;
+
+    &::placeholder {
+      @include label-styles();
+    }
+  }
+}
+
+.page-header {
+  background-color: $header-background;
+  h1 {
+    font-size: $header-font-size;
+    color: $header-text;
+    padding: 26px 39px 52px;
+    font-style: italic;
+    margin: 0;
+  }
+}
+
+// page styles
+.account-registration {
+  &-container {
+    display: flex;
+    margin: 10% auto;
+  }
+  &-body {
+    @include body-styles();
+  }
+}
+
+.login {
+  &-logo {
+    position: relative;
+    z-index: -10;
+  }
+
+  &-subtitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  &-body {
+    background-color: $primary-color;
+    border-radius: 10px;
+    padding: 34px 225px;
+    max-width: 1150px;
+    margin: 0 auto;
+  }
+
+  .forgot-password-link {
+    p {
+      @include label-styles();
+      text-align: center;
+    }
+  }
+
+  h1 {
+    font-size: 115px;
+    color: $header-text;
+    margin: 0;
+    text-align: center;
+  }
+  h2 {
+    color: $header-text;
+    font-size: 25px;
+    text-align: center;
+  }
+}
+
+.plan-trip {
+  &-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-body {
+    @include body-styles();
+  }
+
+  .two-col-inputs {
+    display: flex;
+    justify-content: space-between;
+    .input-box {
+      width: 48%;
+    }
+  }
+}
+
+.trip-progress {
+  &-summary {
+    font-size: 30px;
+    padding: 0px 39px 22px;
+    background-color: $header-background;
+
+    p {
+      margin: 0 0 2px;
+      color: $body-text;
+    }
+  }
+
+  &-footer {
+    padding: 0px 39px;
+    display: flex;
+    justify-content: space-between;
+    background-color: $header-background;
+    align-items: center;
+
+    input {
+      padding: 10px 5px;
+      width: 700px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    label {
+      font-size: 25px;
+      color: $body-text;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+  }
+}
+
+.hiker-dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  margin: 100px 0px;
+}
+
+.trip-card {
+  max-width: 485px;
+  background-color: $primary-color;
+  border-radius: 8px;
+  text-align: center;
+  padding: 146px 98px;
+  width: 100%;
+
+  &-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .trip-name {
+    font-size: 40px;
+    font-weight: bold;
+    margin: 0px 0px 2px;
+  }
+  .trip-date {
+    font-size: 18px;
+    margin: 0px 0px 10px;
+  }
+  p {
+    color: white;
+    font-style: italic;
+  }
+}
