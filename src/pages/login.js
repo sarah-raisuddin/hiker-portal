@@ -1,6 +1,6 @@
 // src/About.js
 import React from "react";
-import productLogo from "../images/treckCheck-logo-white.png"
+import productLogo from "../images/trekCheck-logo-white.png"
 import companyLogo from "../images/wanderSafe-logo-white.png";
 import SubmissionButton from "../base-components/button";
 import InputText from "../base-components/input-text";
