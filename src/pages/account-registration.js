@@ -10,8 +10,26 @@ function AccountRegistration() {
       <PageHeader text={"Finish Setting Up Your Account..."} />
       <div className="account-registration-container">
         <div className="account-registration-body">
-          <InputText label="First Name" placeholder="type your first name" />
-          <InputText label="Last Name" placeholder="type your last name" />
+          <InputText
+            label="Email:"
+            placeholder="Type your email"
+          />
+          <InputText
+            label="Password:"
+            placeholder="Type your password"
+          />
+          <div className="two-col-inputs">
+            <InputText label="First Name" placeholder="Type your first name" />
+            <InputText label="Last Name" placeholder="Type your last name" />
+          </div>
+          <InputText
+            label="Phone Number (optional):"
+            placeholder="Type your phone number"
+          />
+          <InputText
+            label="Address (optional):"
+            placeholder="Type your address"
+          /> 
           <SubmissionButton />
         </div>
       </div>

@@ -1,12 +1,20 @@
 // src/App.scss
+
+// Colours
 $header-text: #304529;
 $body-text: #1e1e1e;
 $label-text: #d9d9d9;
-$label-font-size: 25px;
+
 $primary-color: #4a6741;
-$button-color: #304529;
+$secondary-color: #304529;
 $header-background: #d9d9d9;
+
+// Font Sizes
+$label-font-size: 25px;
 $header-font-size: 60px;
+
+// Misc.
+$standard-roundness: 8px;
 
 @mixin label-styles {
   font-size: $label-font-size;
@@ -16,16 +24,16 @@ $header-font-size: 60px;
 }
 
 @mixin button-styles {
-  background-color: $button-color;
+  background-color: $secondary-color;
   padding: 5px 80px;
-  border-radius: 5px;
+  border-radius: $standard-roundness;
   border: none;
   cursor: pointer;
 }
 
 @mixin body-styles {
   background-color: $primary-color;
-  border-radius: 10px;
+  border-radius: $standard-roundness;
   padding: 34px 225px;
   max-width: 1150px;
   margin: 0 auto;
@@ -41,6 +49,33 @@ a {
 
 button {
   @include button-styles();
+}
+
+.header-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $header-background;
+
+  .header-menu-left .menu-logo {
+    height: 40px;
+    width: auto;
+  }
+
+  .header-menu-right .menu-links {
+    list-style-type: none;
+    display: flex;
+    li {
+      margin-right: 1rem;
+    }
+  
+    a {
+      color: $secondary-color;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  }
 }
 
 .button-container {
@@ -59,7 +94,7 @@ button {
 
   input {
     padding: 13px 7px;
-    border-radius: 8px;
+    border-radius: $standard-roundness;
     border: none;
 
     &::placeholder {
@@ -69,13 +104,45 @@ button {
 }
 
 .page-header {
-  background-color: $header-background;
+  background-color: white;
   h1 {
     font-size: $header-font-size;
     color: $header-text;
     padding: 26px 39px 52px;
     font-style: italic;
     margin: 0;
+  }
+}
+
+.toggle-block {
+  &-container {
+    background-color: $primary-color;
+    border-radius: $standard-roundness;
+    margin: 11px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  &-label {
+    background-color: $primary-color;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+
+  &-content {
+    color: $secondary-color;
+    background-color: white;
+    padding: 8px;
+    border: 2px solid $primary-color;
+  }
+
+  &.active
+    .toggle-block-content {
+    // only show the content of the block when its active
+    display: block;
   }
 }
 
@@ -90,8 +157,33 @@ button {
   }
 }
 
+.terms-conditions {
+  &-container {
+    display: flex;
+    margin: 10% auto;
+  }
+  &-body {
+    @include body-styles();
+    padding: 34px 10px;
+    flex-direction: column;
+  }
+  .terms-text {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    text-align:center;
+  }
+
+}
+
 .login {
-  &-logo {
+  &-productLogo {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }
+  
+  &-companyLogo {
     position: relative;
     z-index: -10;
   }
@@ -104,7 +196,7 @@ button {
 
   &-body {
     background-color: $primary-color;
-    border-radius: 10px;
+    border-radius: $standard-roundness;
     padding: 34px 225px;
     max-width: 1150px;
     margin: 0 auto;
@@ -149,11 +241,68 @@ button {
   }
 }
 
+.trip-summary {
+  &-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-body {
+    @include body-styles();
+  }
+
+  .two-col-inputs {
+    display: flex;
+    justify-content: space-between;
+    .input-box {
+      width: 48%;
+    }
+  }
+}
+
+.account-registration {
+  &-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-body {
+    @include body-styles();
+  }
+
+  .two-col-inputs {
+    display: flex;
+    justify-content: space-between;
+    .input-box {
+      width: 48%;
+    }
+  }
+}
+
+.edit-account {
+  &-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-body {
+    @include body-styles();
+  }
+
+  .two-col-inputs {
+    display: flex;
+    justify-content: space-between;
+    .input-box {
+      width: 48%;
+    }
+  }
+}
+
 .trip-progress {
   &-summary {
     font-size: 30px;
     padding: 0px 39px 22px;
-    background-color: $header-background;
+    background-color: white;
 
     p {
       margin: 0 0 2px;
@@ -162,7 +311,7 @@ button {
   }
 
   &-footer {
-    padding: 0px 39px;
+    padding: 15px 39px;
     display: flex;
     justify-content: space-between;
     background-color: $header-background;
@@ -171,7 +320,7 @@ button {
     input {
       padding: 10px 5px;
       width: 700px;
-      border-radius: 5px;
+      border-radius: $standard-roundness;
       border: none;
     }
 
@@ -194,7 +343,7 @@ button {
 .trip-card {
   max-width: 485px;
   background-color: $primary-color;
-  border-radius: 8px;
+  border-radius: $standard-roundness;
   text-align: center;
   padding: 146px 98px;
   width: 100%;

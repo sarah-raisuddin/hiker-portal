@@ -1,7 +1,6 @@
 // src/App.js
 import React from "react";
-import { Route, Routes, Link } from "react-router-dom";
-import About from "./about";
+import { Route, Routes } from "react-router-dom";
 import "./App.scss";
 import Login from "./pages/login";
 import AccountRegistration from "./pages/account-registration";
@@ -11,45 +10,19 @@ import HikerDashboard from "./pages/hiker-dashboard";
 import EditAccount from "./pages/edit-account";
 import TermsAndConditions from "./pages/terms-conditions";
 import TripSummary from "./pages/trip-summary";
+import Home from "./pages/home";
+import Faqs from "./pages/faqs";
 // import Home from "./Home"; // Assuming you have a Home component
+
+import HeaderMenu from "./base-components/header-menu"
 
 function App() {
   return (
     <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/register">Register</Link>
-          </li>
-          <li>
-            <Link to="/plan-trip">Create Trip Plan</Link>
-          </li>
-          <li>
-            <Link to="/trip-progress">Trip Progress</Link>
-          </li>
-          <li>
-            <Link to="/trips">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/edit-account">Edit Account</Link>
-          </li>
-          <li>
-            <Link to="/terms-conditions">Terms and Conditions</Link>
-          </li>
-          <li>
-            <Link to="/trip-summary">Trip Summary</Link>
-          </li>
-        </ul>
-      </nav>
+      <HeaderMenu />
       <Routes>
         {/* <Route path="/" element={<Home />} /> */}
-        <Route path="/about" element={<About />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<AccountRegistration />} />
         <Route path="/plan-trip" element={<PlanTrip />} />
@@ -57,9 +30,13 @@ function App() {
         <Route path="/edit-account" element={<EditAccount />} />
         <Route path="/terms-conditions" element={<TermsAndConditions />} />
         <Route path="/trip-summary" element={<TripSummary />} />
-        <Route path="/trip-progress" element={<TripProgress />} />   
+        <Route path="/trip-progress" element={<TripProgress />} />
+        <Route path="/faqs" element={<Faqs />} /> 
+        <Route path="/trip-plan" element={<PlanTrip />} />
+        <Route path="/account-registration" element={<AccountRegistration />} />
       </Routes>
     </div>
+    
   );
 }
 

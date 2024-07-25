@@ -12,11 +12,11 @@ function PlanTrip() {
       <div className="plan-trip-container">
         <div className="plan-trip-body">
           <div className="two-col-inputs">
-            <InputText label="Start Date:" placeholder="Type Start Date" />
-            <InputText label="End Date:" placeholder="Type End Date" />
+            <InputText label="Start Point:" placeholder="Type Start Point" />
+            <InputText label="End Point:" placeholder="Type End Point" />
           </div>
           <div className="two-col-inputs">
-            <InputDateTime label="Entry Point:" placeholder="Type Start Date" />
+            <InputDateTime label="Start Date:" placeholder="Type Start Date" />
             <InputDateTime label="End Date:" placeholder="Type End Date" />
           </div>
 
@@ -27,7 +27,7 @@ function PlanTrip() {
           <div>
             <InputText
               label="Emergency Contact Phone Number:"
-              placeholder="Type Phone Number:"
+              placeholder="Type Phone Number"
             />
             <InputText
               label="Emergency Contact Email (optional):"
