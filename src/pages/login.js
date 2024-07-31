@@ -1,11 +1,39 @@
 // src/About.js
-import React from "react";
+import React, { useState } from "react";
 import productLogo from "../images/trekCheck-logo-white.png"
 import companyLogo from "../images/wanderSafe-logo-white.png";
 import SubmissionButton from "../base-components/button";
 import InputText from "../base-components/input-text";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const apiEndpoint = "http://localhost:3000/hiker_portal/login";
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Login successful", data);
+      } else {
+        // Handle errors
+        console.log("Login failed", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
   return (
     <div className="login">
       <div>
@@ -16,14 +44,22 @@ function Login() {
         </div>
       </div>
       <div className="login-body">
-        <InputText label="Email" placeholder="type your email" />
-        <InputText label="Password" placeholder="type your password" />
+        <InputText 
+          label="Email" 
+          placeholder="type your email"
+          value={email}
+          onChange={setEmail}/>
+        <InputText 
+          label="Password" 
+          placeholder="type your password"
+          value={password}
+          onChange={setPassword} />
         <div className="forgot-password-link">
           <p>
             Forgot password? <a>Click here for account recovery</a>
           </p>
         </div>
-        <SubmissionButton />
+        <SubmissionButton handleSubmit={handleSubmit}/>
       </div>
     </div>
   );
