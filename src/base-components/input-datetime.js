@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 
-function InputDateTime({ label, placeholder, buttonText, onSubmit }) {
-  const [inputValue, setInputValue] = useState("");
+function InputDateTime({ label, placeholder, value, onChange }) {
 
   const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit(inputValue);
+    onChange(event.target.value);
   };
 
   return (
     <div className="input-box">
       <label>{label}</label>
-      <input type="datetime-local" placeholder={placeholder} />
+      <input 
+        type="datetime-local"
+        value={value}
+        placeholder={placeholder} 
+        onChange={handleInputChange} />
     </div>
   );
 }

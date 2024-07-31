@@ -57,6 +57,10 @@ button {
   @include button-styles();
 }
 
+input, select {
+  cursor: pointer;
+}
+
 .header-menu {
   display: flex;
   justify-content: space-between;
@@ -102,7 +106,7 @@ button {
     @include label-styles();
   }
 
-  input {
+  input, select {
     padding: 13px 7px;
     border-radius: $standard-roundness;
     border: none;
