@@ -5,6 +5,7 @@ import InputText from "../base-components/input-text";
 import PageHeader from "../base-components/page-header";
 import InputDateTime from "../base-components/input-datetime";
 import Dropdown from "../base-components/input-dropdown";
+import { useNavigate } from "react-router-dom";
 
 function PlanTrip() {
   const [start_date, setStartDate] = useState("");
@@ -16,6 +17,8 @@ function PlanTrip() {
   const [emergency_contact_number, setContactNumber] = useState("");
   const [emergency_contact_email, setContactEmail] = useState("");
   const [rfid_tag_uid, setRfidTagID] = useState("");
+
+  const navigateTo = useNavigate();
   
   // TODO-KT: remove me
   const [user_id, setUserId] = useState("");
@@ -41,6 +44,8 @@ function PlanTrip() {
       if (response.ok) {
         const data = await response.json();
         console.log("Trip plan creation successful", data);
+        navigateTo("/trip-summary");
+
       } else {
         // Handle errors
         console.log("Trip plan creation failed", response.statusText);

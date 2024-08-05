@@ -4,10 +4,12 @@ import productLogo from "../images/trekCheck-logo-white.png"
 import companyLogo from "../images/wanderSafe-logo-white.png";
 import SubmissionButton from "../base-components/button";
 import InputText from "../base-components/input-text";
+import { Link, useNavigate } from "react-router-dom";
 
-function Login() {
+function Login({handleUserLogIn}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigateTo = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +27,11 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful", data);
-      } else {
+        // set login state variable to true and direct user to terms and conditions
+        handleUserLogIn();
+        navigateTo("/terms-conditions");
+      } 
+      else {
         // Handle errors
         console.log("Login failed", response.statusText);
       }
@@ -54,9 +60,16 @@ function Login() {
           placeholder="type your password"
           value={password}
           onChange={setPassword} />
+        { /* TODO-beta: add accont recovery functionality       
         <div className="forgot-password-link">
           <p>
             Forgot password? <a>Click here for account recovery</a>
+          </p>
+        </div>
+        */}
+        <div className="account-registration-link">
+          <p>
+            Don't have an account? <Link to="/account-registration">Click here to sign up</Link>
           </p>
         </div>
         <SubmissionButton handleSubmit={handleSubmit}/>

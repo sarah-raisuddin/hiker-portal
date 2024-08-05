@@ -1,5 +1,5 @@
 // src/App.js
-import React from "react";
+import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.scss";
 import Login from "./pages/login";
@@ -12,19 +12,28 @@ import TermsAndConditions from "./pages/terms-conditions";
 import TripSummary from "./pages/trip-summary";
 import Home from "./pages/home";
 import Faqs from "./pages/faqs";
-// import Home from "./Home"; // Assuming you have a Home component
 
 import HeaderMenu from "./base-components/header-menu"
 
 function App() {
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState("");
+
+  const handleUserLogIn = () => {
+    setIsUserLoggedIn(true);
+  }
+
+  const handleUserLogOut = () => {
+    setIsUserLoggedIn(false);
+  }
+
   return (
     <div>
-      <HeaderMenu />
+      <HeaderMenu isUserLoggedIn={isUserLoggedIn} handleUserLogOut={handleUserLogOut}/>
       <Routes>
         {
         <Route path="/" element={<Home />} /> }
         <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login handleUserLogIn={handleUserLogIn}/>} />
         <Route path="/register" element={<AccountRegistration />} />
         <Route path="/plan-trip" element={<PlanTrip />} />
         <Route path="/trips" element={<HikerDashboard />} />

@@ -1,17 +1,26 @@
 // src/About.js
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import SubmissionButton from "../base-components/button";
 import InputText from "../base-components/input-text";
 import PageHeader from "../base-components/page-header";
+import PopUpMessage from "../base-components/pop-up-message";
+import { useLocation } from "react-router-dom";
 
 function AccountRegistration() {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [isRegistrationSucessful, setRegistrationStatus] = useState("");
 
+  const location = useLocation();
+
+  useEffect(() => {
+    setRegistrationStatus("");
+  }, [location]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,20 +37,37 @@ function AccountRegistration() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login successful", data);
+        console.log("Account registration successful", data);
+        setRegistrationStatus("success");
+
       } else {
         // Handle errors
-        console.log("Login failed", response.statusText);
+        console.log("Account registration failed", response.statusText);
+        setRegistrationStatus("failure");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during account registration:", error);
+      setRegistrationStatus("failure");
     }
 };
   
   return (
     <div className="account-registration">
-      <PageHeader text={"Finish Setting Up Your Account..."} />
-      <div className="account-registration-container">
+      <PageHeader text={"Register for an Account"} />
+      {isRegistrationSucessful === "success" && (
+      <PopUpMessage 
+        title="Registration successful!"
+        message="Please return to the login page to access your account."
+        link="/login"/>
+      )}
+      {isRegistrationSucessful === "failure" && (
+      <PopUpMessage 
+        title="Registration failed!"
+        message="Please try again."
+        link="/account-registration"/>
+      )
+      }
+      <div className={isRegistrationSucessful ? "blur account-registration-container" : "account-registration-container"}>
         <div className="account-registration-body">
           <InputText
             label="Email:"

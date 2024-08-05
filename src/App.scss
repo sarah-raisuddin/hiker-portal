@@ -25,7 +25,7 @@ $standard-roundness: 8px;
 
 @mixin button-styles {
   background-color: $secondary-color;
-  padding: 5px 80px;
+  padding: 5px 60px;
   border-radius: $standard-roundness;
   border: none;
   cursor: pointer;
@@ -34,7 +34,7 @@ $standard-roundness: 8px;
 @mixin body-styles {
   background-color: $primary-color;
   border-radius: $standard-roundness;
-  padding: 34px 225px;
+  padding: 20px 35px;
   max-width: 1150px;
   margin: 0 auto;
   width: 100%;
@@ -48,13 +48,35 @@ $standard-roundness: 8px;
 
 // global styles
 
+.blur {
+  opacity: 50%;
+  filter: blur(4px);
+  transition: 0.1s;
+}
+
 a {
   text-decoration: underline;
   cursor: pointer;
 }
 
-button {
-  @include button-styles();
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .button {
+    @include button-styles();
+    gap: 8px;
+    display: flex;
+    align-items: center;
+  
+    p {
+      @include label-styles();
+      font-size: $label-font-size - 8;
+      color: white;
+      margin: 0;
+    }
+  }
 }
 
 input, select {
@@ -78,23 +100,43 @@ input, select {
     .menu-links {
       list-style-type: none;
       display: flex;
+      align-items: center;
       li {
         margin-right: 1rem;
       }
-    
+
       a {
         color: $secondary-color;
         text-decoration: underline;
         cursor: pointer;
         font-weight: bold;
       }
+
+      .account-control-link {
+        background-color: #4a6741;
+        border-radius: $standard-roundness;
+        padding: 5px 5px;
+        margin-right: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 150px;
+        height: 30px;
+
+        // center the link in the box
+        li {
+          margin-right: 0;
+        }
+
+        a {
+          color: white;
+          text-decoration: underline;
+          cursor: pointer;
+          font-weight: bold;
+        }
+      }
     }
   }
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
 }
 
 .input-box {
@@ -122,7 +164,7 @@ input, select {
   h1 {
     font-size: $header-font-size;
     color: $header-text;
-    padding: 26px 39px 52px;
+    padding: 26px 39px 0px;
     font-style: italic;
     margin: 0;
   }
@@ -165,9 +207,11 @@ input, select {
   &-container {
     display: flex;
     margin: 10% auto;
+    max-width: 100%;
   }
   &-body {
     @include body-styles();
+    flex-direction: column;
   }
 }
 
@@ -178,8 +222,6 @@ input, select {
   }
   &-body {
     @include body-styles();
-    padding: 34px 10px;
-    flex-direction: column;
   }
   .terms-text {
     @include text-body-styles();
@@ -210,15 +252,12 @@ input, select {
   }
 
   &-body {
-    background-color: $primary-color;
-    border-radius: $standard-roundness;
-    padding: 34px 225px;
-    max-width: 1150px;
-    margin: 0 auto;
+    @include body-styles();
   }
 
-  .forgot-password-link {
-    p {
+  .forgot-password-link,
+  .account-registration-link {
+    p, a {
       @include label-styles();
       text-align: center;
     }
@@ -240,7 +279,8 @@ input, select {
 .plan-trip {
   &-container {
     display: flex;
-    flex-direction: column;
+    margin: 10% auto;
+    max-width: 100%;
   }
 
   &-body {
@@ -281,10 +321,6 @@ input, select {
     flex-direction: column;
   }
 
-  &-body {
-    @include body-styles();
-  }
-
   .two-col-inputs {
     display: flex;
     justify-content: space-between;
@@ -297,7 +333,8 @@ input, select {
 .edit-account {
   &-container {
     display: flex;
-    flex-direction: column;
+    margin: 10% auto;
+    max-width: 100%;
   }
 
   &-body {
@@ -348,12 +385,38 @@ input, select {
   }
 }
 
-.hiker-dashboard-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
-  margin: 100px 0px;
+
+
+.hiker-dashboard {
+  &-divider {
+    &-two-col {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 39px 0px;
+      
+      h2 {
+        font-size: $header-font-size - 20;
+        color: $primary-color;
+        font-style: italic;
+
+      }
+    }
+    
+    hr {
+      margin: -2px 39px -60px;
+      color: $header-background;
+    }
+  }
+
+  &-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    margin: 100px 39px;
+  }
 }
+
 
 .trip-card {
   max-width: 485px;
@@ -442,6 +505,33 @@ input, select {
     h4 {
       font-style: italic;
       margin-bottom: -5px;
+    }
+  }
+}
+
+.pop-up-underlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+
+  .pop-up-box {
+    border-radius: 20px;
+    border: 3px solid $primary-color;
+    max-width: 600px;
+    padding: 45px 35px;
+    background-color: $primary-color;
+    width: 100%;
+    height: fit-content;
+    margin: auto;
+
+    h1, p {
+      margin: 0px 0px 18px;
+      color: white;
+      text-align: center;
     }
   }
 }

@@ -2,12 +2,15 @@
 import React, { useState } from "react";
 import arrow from "../images/button-arrow.png";
 
-function SubmissionButton({ handleSubmit, text}) {
+function SubmissionButton({ handleSubmit, text, specialIcon}) {
+
+  const buttonImage = specialIcon || arrow;
+  
   return (
     <div className="button-container">
       <button className="button" onClick={handleSubmit}>
-        <img src={arrow} />
-        {text}
+        <p>{text}</p>
+        <img src={buttonImage} />
       </button>
     </div>
   );
