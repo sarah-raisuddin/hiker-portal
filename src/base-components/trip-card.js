@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import SubmissionButton from "./button";
+import { useNavigate } from "react-router-dom";
 
-function TripCard({ label, placeholder, buttonText, onSubmit }) {
+function TripCard({ label, placeholder, buttonText }) {
   const [inputValue, setInputValue] = useState("");
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
+  const navigateTo = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit(inputValue);
+  const handleSubmit = () => {
+    navigateTo("/plan-trip");
   };
 
   return (
@@ -18,7 +16,7 @@ function TripCard({ label, placeholder, buttonText, onSubmit }) {
       <div className="trip-card">
         <p className="trip-name">Juan De Fuca</p>
         <p className="trip-date">June 25, 2024 - June 30, 2024</p>
-        <SubmissionButton />
+        <SubmissionButton handleSubmit={handleSubmit}/>
       </div>
     </div>
   );

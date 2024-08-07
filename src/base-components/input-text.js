@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 
-function InputText({ label, placeholder, buttonText, onSubmit }) {
-  const [inputValue, setInputValue] = useState("");
+function InputText({ label, placeholder, value, onChange }) {
 
   const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit(inputValue);
+    onChange(event.target.value);
   };
 
   return (
     <div className="input-box">
       <label>{label}</label>
-      <input type="text" placeholder={placeholder} />
+      <input 
+        type="text"
+        value={value}
+        placeholder={placeholder} 
+        onChange={handleInputChange} />
     </div>
   );
 }

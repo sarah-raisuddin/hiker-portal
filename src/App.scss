@@ -1,12 +1,20 @@
 // src/App.scss
+
+// Colours
 $header-text: #304529;
 $body-text: #1e1e1e;
 $label-text: #d9d9d9;
-$label-font-size: 25px;
+
 $primary-color: #4a6741;
-$button-color: #304529;
+$secondary-color: #304529;
 $header-background: #d9d9d9;
+
+// Font Sizes
+$label-font-size: 25px;
 $header-font-size: 60px;
+
+// Misc.
+$standard-roundness: 8px;
 
 @mixin label-styles {
   font-size: $label-font-size;
@@ -16,35 +24,120 @@ $header-font-size: 60px;
 }
 
 @mixin button-styles {
-  background-color: $button-color;
-  padding: 5px 80px;
-  border-radius: 5px;
+  background-color: $secondary-color;
+  padding: 5px 60px;
+  border-radius: $standard-roundness;
   border: none;
   cursor: pointer;
 }
 
 @mixin body-styles {
   background-color: $primary-color;
-  border-radius: 10px;
-  padding: 34px 225px;
+  border-radius: $standard-roundness;
+  padding: 20px 35px;
   max-width: 1150px;
   margin: 0 auto;
   width: 100%;
 }
 
+@mixin text-body-styles {
+  color: white;
+  text-decoration: none;
+  text-align: center;
+}
+
 // global styles
+
+.blur {
+  opacity: 50%;
+  filter: blur(4px);
+  transition: 0.1s;
+}
+
 a {
   text-decoration: underline;
   cursor: pointer;
 }
 
-button {
-  @include button-styles();
-}
-
 .button-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+
+  .button {
+    @include button-styles();
+    gap: 8px;
+    display: flex;
+    align-items: center;
+
+    p {
+      @include label-styles();
+      font-size: $label-font-size - 8;
+      color: white;
+      margin: 0;
+    }
+  }
+}
+
+input,
+select {
+  cursor: pointer;
+}
+
+.header-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $header-background;
+
+  .header-menu-left {
+    .menu-logo {
+      height: 40px;
+      width: auto;
+    }
+  }
+
+  .header-menu-right {
+    .menu-links {
+      list-style-type: none;
+      display: flex;
+      align-items: center;
+      li {
+        margin-right: 1rem;
+      }
+
+      a {
+        color: $secondary-color;
+        text-decoration: underline;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .account-control-link {
+        background-color: #4a6741;
+        border-radius: $standard-roundness;
+        padding: 5px 5px;
+        margin-right: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 150px;
+        height: 30px;
+
+        // center the link in the box
+        li {
+          margin-right: 0;
+        }
+
+        a {
+          color: white;
+          text-decoration: underline;
+          cursor: pointer;
+          font-weight: bold;
+        }
+      }
+    }
+  }
 }
 
 .input-box {
@@ -56,9 +149,10 @@ button {
     @include label-styles();
   }
 
-  input {
+  input,
+  select {
     padding: 13px 7px;
-    border-radius: 8px;
+    border-radius: $standard-roundness;
     border: none;
 
     &::placeholder {
@@ -68,13 +162,44 @@ button {
 }
 
 .page-header {
-  background-color: $header-background;
+  background-color: white;
   h1 {
     font-size: $header-font-size;
     color: $header-text;
-    padding: 26px 39px 52px;
+    padding: 26px 39px 0px;
     font-style: italic;
     margin: 0;
+  }
+}
+
+.toggle-block {
+  &-container {
+    background-color: $primary-color;
+    border-radius: $standard-roundness;
+    margin: 11px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  &-label {
+    background-color: $primary-color;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+
+  &-content {
+    color: $secondary-color;
+    background-color: white;
+    padding: 8px;
+    border: 2px solid $primary-color;
+  }
+
+  &.active .toggle-block-content {
+    // only show the content of the block when its active
+    display: block;
   }
 }
 
@@ -83,14 +208,38 @@ button {
   &-container {
     display: flex;
     margin: 10% auto;
+    max-width: 100%;
+  }
+  &-body {
+    @include body-styles();
+    flex-direction: column;
+  }
+}
+
+.terms-conditions {
+  &-container {
+    display: flex;
+    margin: 10% auto;
   }
   &-body {
     @include body-styles();
   }
+  .terms-text {
+    @include text-body-styles();
+  }
 }
 
 .login {
-  &-logo {
+  &-productLogo {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+    max-width: 1150px;
+    margin: 0 auto;
+  }
+
+  &-companyLogo {
     position: relative;
     z-index: -10;
   }
@@ -102,15 +251,13 @@ button {
   }
 
   &-body {
-    background-color: $primary-color;
-    border-radius: 10px;
-    padding: 34px 225px;
-    max-width: 1150px;
-    margin: 0 auto;
+    @include body-styles();
   }
 
-  .forgot-password-link {
-    p {
+  .forgot-password-link,
+  .account-registration-link {
+    p,
+    a {
       @include label-styles();
       text-align: center;
     }
@@ -132,7 +279,62 @@ button {
 .plan-trip {
   &-container {
     display: flex;
+    margin: 10% auto;
+    max-width: 100%;
+  }
+
+  &-body {
+    @include body-styles();
+  }
+
+  .two-col-inputs {
+    display: flex;
+    justify-content: space-between;
+    .input-box {
+      width: 48%;
+    }
+  }
+}
+
+.trip-summary {
+  &-container {
+    display: flex;
     flex-direction: column;
+  }
+
+  &-body {
+    @include body-styles();
+  }
+
+  .two-col-inputs {
+    display: flex;
+    justify-content: space-between;
+    .input-box {
+      width: 48%;
+    }
+  }
+}
+
+.account-registration {
+  &-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .two-col-inputs {
+    display: flex;
+    justify-content: space-between;
+    .input-box {
+      width: 48%;
+    }
+  }
+}
+
+.edit-account {
+  &-container {
+    display: flex;
+    margin: 10% auto;
+    max-width: 100%;
   }
 
   &-body {
@@ -152,7 +354,7 @@ button {
   &-summary {
     font-size: 30px;
     padding: 0px 39px 22px;
-    background-color: $header-background;
+    background-color: white;
 
     p {
       margin: 0 0 2px;
@@ -161,7 +363,7 @@ button {
   }
 
   &-footer {
-    padding: 0px 39px;
+    padding: 15px 39px;
     display: flex;
     justify-content: space-between;
     background-color: $header-background;
@@ -170,7 +372,7 @@ button {
     input {
       padding: 10px 5px;
       width: 700px;
-      border-radius: 5px;
+      border-radius: $standard-roundness;
       border: none;
     }
 
@@ -183,17 +385,39 @@ button {
   }
 }
 
-.hiker-dashboard-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
-  margin: 100px 0px;
+.hiker-dashboard {
+  &-divider {
+    &-two-col {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 39px 0px;
+
+      h2 {
+        font-size: $header-font-size - 20;
+        color: $primary-color;
+        font-style: italic;
+      }
+    }
+
+    hr {
+      margin: -2px 39px -60px;
+      color: $header-background;
+    }
+  }
+
+  &-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    margin: 100px 39px;
+  }
 }
 
 .trip-card {
   max-width: 485px;
   background-color: $primary-color;
-  border-radius: 8px;
+  border-radius: $standard-roundness;
   text-align: center;
   padding: 146px 98px;
   width: 100%;
@@ -215,5 +439,96 @@ button {
   p {
     color: white;
     font-style: italic;
+  }
+}
+
+.home {
+  &-logo {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+  }
+
+  &-body {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: $primary-color;
+    border-radius: $standard-roundness;
+    padding: 15px 15px;
+
+    .system-diagram {
+      border-radius: $standard-roundness;
+      width: 100%;
+    }
+
+    .description {
+      @include text-body-styles();
+    }
+
+    h1 {
+      @include text-body-styles();
+    }
+  }
+}
+
+.about-me {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  background-color: white;
+  border-radius: $standard-roundness;
+
+  &-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    padding: 10px;
+    border-radius: $standard-roundness;
+  }
+
+  &-body {
+    display: flex;
+    flex-direction: column;
+    color: $secondary-color;
+    text-align: left;
+
+    h3 {
+      margin-bottom: -20px;
+    }
+
+    h4 {
+      font-style: italic;
+      margin-bottom: -5px;
+    }
+  }
+}
+
+.pop-up-underlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+
+  .pop-up-box {
+    border-radius: 20px;
+    border: 3px solid $primary-color;
+    max-width: 600px;
+    padding: 45px 35px;
+    background-color: $primary-color;
+    width: 100%;
+    height: fit-content;
+    margin: auto;
+
+    h1,
+    p {
+      margin: 0px 0px 18px;
+      color: white;
+      text-align: center;
+    }
   }
 }
