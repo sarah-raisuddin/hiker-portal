@@ -1,39 +1,163 @@
-// src/About.js
-import React from "react";
+import React, { act, useState } from "react";
 import SubmissionButton from "../base-components/button";
 import PageHeader from "../base-components/page-header";
+import { fetchProgress, fetchTrail } from "../api";
+import { useEffect } from "react";
+import { formatDate } from "../util";
 
-function TripProgress() {
+const TripProgress = () => {
+  const [activeCheckpoint, setActiveCheckpoint] = useState(null);
+  const [trailData, setTrailData] = useState(null);
+  const [progressData, setProgressData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetchTrail({ trailId: 1 });
+      const progressResult = await fetchProgress({ uniqueLink: "uniqueLink" });
+      setProgressData(progressResult);
+      setTrailData(result);
+    };
+    fetchData();
+  }, []);
+
+  if (!trailData || !progressData) {
+    return <div>Loading...</div>;
+  }
+
+  const checkpoints = trailData.checkpoints || [];
+  const tripPlan = progressData.tripPlan || {};
+  const checkpointEntries = progressData.checkpointEntries || [];
+
+  const getCheckpointName = (checkpointId) => {
+    return (
+      checkpoints.find((checkpoint) => checkpoint.id === checkpointId) || null
+    ).checkpoint_name;
+  };
+
+  const getProgressEntries = (checkpointId) => {
+    return checkpointEntries.filter(
+      (entry) => entry.checkpoint_id === checkpointId
+    );
+  };
+
+  const getCheckpointVisited = (checkpointId) => {
+    return checkpointEntries.some(
+      (entry) => entry.checkpoint_id === checkpointId
+    );
+  };
+
+  const TripProgressView = ({ checkpoints }) => {
+    return (
+      <div className="trip-progress-view">
+        <span className="progress-line" />
+        {checkpoints.map((checkpoint, index) => (
+          <React.Fragment key={index}>
+            <ProgressCircle
+              progress={getCheckpointVisited(checkpoint.id)}
+              label={checkpoint.checkpoint_name}
+              active={activeCheckpoint === checkpoint}
+              onClick={() => setActiveCheckpoint(checkpoint)}
+            />
+          </React.Fragment>
+        ))}
+      </div>
+    );
+  };
+
+  const OverviewTable = ({ tripPlan }) => {
+    return (
+      <div className="trip-progress-overview">
+        <div className="col">
+          <FormattedKeyValue
+            keyText={"Trail Name"}
+            valueText={trailData.trail.name}
+          />
+        </div>
+        <div className="col">
+          <FormattedKeyValue
+            keyText={"Start Date"}
+            valueText={formatDate(tripPlan.start_date).date}
+          />
+          <FormattedKeyValue
+            keyText={"Entry Point"}
+            valueText={getCheckpointName(tripPlan.entry_point)}
+          />
+        </div>
+        <div className="col">
+          <FormattedKeyValue
+            keyText={"Expected End Date"}
+            valueText={formatDate(tripPlan.end_date).date}
+          />
+          <FormattedKeyValue
+            keyText={"Exit Point"}
+            valueText={getCheckpointName(tripPlan.exit_point)}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const FormattedKeyValue = ({ keyText, valueText }) => {
+    return (
+      <p>
+        <b>{keyText}: </b> {valueText}
+      </p>
+    );
+  };
+
+  const ProgressCircle = ({ progress, label, active, onClick }) => {
+    return (
+      <div className="circle-container" onClick={onClick}>
+        <p className="circle-label">{label}</p>
+        <div className={`circle ${progress ? "filled" : "empty"}`} />
+        {active && <div className="triangle" />}
+      </div>
+    );
+  };
+
+  const CheckinDetails = () => {
+    return (
+      <div className="checkin-details">
+        <p className="checkin-details title">{checkinDetailsTitle}</p>
+        <p className="checkin-details subtitle">Recent check-ins:</p>
+        <CheckinTable />
+      </div>
+    );
+  };
+
+  const checkinDetailsTitle = activeCheckpoint
+    ? `${activeCheckpoint.checkpoint_name} (${activeCheckpoint.latitude}, ${activeCheckpoint.longitude})`
+    : "";
+
+  const CheckinTable = () => {
+    const data = getProgressEntries(activeCheckpoint.id) || [];
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <tr key={index}>
+              <td>{formatDate(row.time).date}</td>
+              <td>{formatDate(row.time).time}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
+
   return (
     <div className="trip-progress">
-      <PageHeader text={"John's Progress"} />
-      <div className="trip-progress-summary">
-        <span>
-          <p>
-            <b>Trail Name: </b>
-            Juan De Fuca
-          </p>
-        </span>
-        <span>
-          <p>
-            <b>Start Date: </b>
-            June 25 2024
-          </p>
-        </span>
-        <span>
-          <p>
-            <b>End Date: </b>
-            June 30 2024
-          </p>
-        </span>
-        <span>
-          <p>
-            <b>Additional Notes: </b>
-            "Starting the trail at Botanical Beach and ending the trail at China
-            Beach"
-          </p>
-        </span>
-      </div>
+      <PageHeader text={`${tripPlan.emergency_contact_name}'s Progress`} />
+      <OverviewTable tripPlan={tripPlan} />
+      <h2>Click on a checkpoint for more info</h2>
+      <TripProgressView checkpoints={checkpoints} />
+      {activeCheckpoint && <CheckinDetails />}
       <div className="trip-progress-container">
         <div className="trip-progress-body"></div>
         <div className="trip-progress-footer">
@@ -46,6 +170,6 @@ function TripProgress() {
       </div>
     </div>
   );
-}
+};
 
 export default TripProgress;
