@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SubmissionButton from "./button";
 import { useNavigate } from "react-router-dom";
 
-function TripCard({ label, placeholder, buttonText }) {
+function TripCard({ trailName, startDate, endDate }) {
   const [inputValue, setInputValue] = useState("");
 
   const navigateTo = useNavigate();
@@ -14,8 +14,8 @@ function TripCard({ label, placeholder, buttonText }) {
   return (
     <div className="trip-card-container">
       <div className="trip-card">
-        <p className="trip-name">Juan De Fuca</p>
-        <p className="trip-date">June 25, 2024 - June 30, 2024</p>
+        <p className="trip-name">{trailName}</p>
+        <p className="trip-date">{startDate} - {endDate}</p>
         <SubmissionButton handleSubmit={handleSubmit}/>
       </div>
     </div>

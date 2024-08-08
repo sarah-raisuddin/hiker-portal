@@ -635,3 +635,22 @@ select {
     }
   }
 }
+
+.input-error-message {
+  background-color: #d97228;
+  border-radius: $standard-roundness;
+  max-height: 80;
+  display: flex;
+  align-items: center;
+
+  p {
+    color: white;
+    font-weight: bold;
+  }
+
+  img {
+    max-width: 30px;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+}
