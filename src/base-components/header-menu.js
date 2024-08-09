@@ -1,48 +1,58 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../images/wanderSafe-logo-grey.png";
+import { useNavigate } from "react-router-dom";
 
 function HeaderMenu( {isUserLoggedIn, handleUserLogOut}) {
+    
+    // navigation
+    const navigateTo = useNavigate();
+
+    // useNavigate was used so that user log-in status does not get
+    // reset like it does when Link is used
+    const handleFaqNav = () => {
+        navigateTo("/faqs");
+    }
+
+    const handleEditAccountNav = () => {
+        navigateTo("/edit-account");
+    }
+
+    const handleHomeNav = () => {
+        navigateTo("/home");
+    }
+
+    const handleDashboardNav = () => {
+        navigateTo("/trips");
+    }
+    
     return (
         <nav className="header-menu">
             <div className="header-menu-left">
-                <Link to="/home" className="menu-logo">
-                    <img className="menu-logo" src={logo} alt="WanderSafe Logo" />
-                </Link>
+                <button className="menu-logo" onClick={handleHomeNav}>
+                    <img className="menu-logo" src={logo} alt="WanderSafe Logo" />            
+                </button>
             </div>
             <div className="header-menu-right">
-                <ul className="menu-links">
-                    <li>
-                        <Link to="/faqs">FAQs</Link>
-                    </li>
-                    {isUserLoggedIn && 
-                    <li>
-                        <Link to="/edit-account">Edit Account</Link>
-                    </li>
+                <div className="menu-links">
+                    {isUserLoggedIn &&
+                        <button className="underlined-link" onClick={handleDashboardNav}>
+                            <p>Dashboard</p>
+                        </button>
                     }
-                    {/* The links below are for development rn and should be removed once proper
+                    {isUserLoggedIn && 
+                        <button className="underlined-link" onClick={handleEditAccountNav}>
+                            <p>Edit Account</p>
+                        </button>
+                    }
+                    <button className="underlined-link" onClick={handleFaqNav}>
+                        <p>FAQs</p>
+                    </button>
+                    {/* The link below is for development rn and should be removed once proper
                         routing is in place. */}
                     <li>
                         <Link to="/trip-progress">Trip Progress</Link>
                     </li>
-                    { /* DEBUG: left links here for easy debug later if needed
-                    <li>
-                        <Link to="/terms-conditions">Terms and Conditions</Link>
-                    </li>
-                    <li>
-                        <Link to="/trips">Dashboard</Link>
-                    </li>
-                    <li>
-                        <Link to="/account-registration">Account Registration</Link>
-                    </li>
-                                        <li>
-                        <Link to="/trip-summary">Trip Summary</Link>
-                    </li>
-                    <li>
-                        <Link to="/trip-plan">Trip Plan</Link>
-                    </li>
-                    */ }
-
                     {isUserLoggedIn ? 
                     (
                     <div className="account-control-link">
@@ -60,7 +70,7 @@ function HeaderMenu( {isUserLoggedIn, handleUserLogOut}) {
                     </div>
                     )
                     }
-                </ul>
+                </div>
             </div>   
         </nav>
     );

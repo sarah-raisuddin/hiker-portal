@@ -4,7 +4,6 @@ import PageHeader from "../base-components/page-header";
 import TripCard from "../base-components/trip-card";
 import plus from "../images/button-plus.png";
 import { useNavigate } from "react-router-dom";
-import formatDate from "../util";
 
 function HikerDashboard() {
   // user detauls
@@ -61,10 +60,8 @@ function HikerDashboard() {
       <div className="hiker-dashboard-container">
         {tripPlans.map((trail, index) => (
           <TripCard 
-          key={index} 
-          trailName={trail.trail_name} 
-          startDate={formatDate(trail.start_date).date}
-          endDate={formatDate(trail.end_date).date}>
+          key={index}
+          trailPlan={trail}>
           </TripCard>
         ))}
       </div>

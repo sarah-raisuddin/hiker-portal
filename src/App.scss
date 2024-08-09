@@ -15,6 +15,7 @@ $header-font-size: 60px;
 
 // Misc.
 $standard-roundness: 8px;
+$standard-container-margin: 2% auto;
 
 @mixin label-styles {
   font-size: $label-font-size;
@@ -34,16 +35,32 @@ $standard-roundness: 8px;
 @mixin body-styles {
   background-color: $primary-color;
   border-radius: $standard-roundness;
-  padding: 20px 35px;
+  padding: 10px 35px;
   max-width: 1150px;
   margin: 0 auto;
-  // width: 100%;
+  width: 100%;
 }
 
 @mixin text-body-styles {
   color: white;
   text-decoration: none;
   text-align: center;
+}
+
+@mixin form-container-styles {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+@mixin underlined-link-styles {
+  color: $secondary-color;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 24px;
+  font-style: italic;
+  margin: 0px;
 }
 
 // global styles
@@ -90,27 +107,28 @@ select {
   align-items: center;
   background-color: $header-background;
 
-  .header-menu-left {
+  &-left {
     .menu-logo {
       height: 40px;
       width: auto;
+      cursor: pointer;
+      background-color: $header-background;
+      border: $header-background;
     }
   }
 
-  .header-menu-right {
+  &-right {
     .menu-links {
       list-style-type: none;
       display: flex;
       align-items: center;
-      li {
-        margin-right: 1rem;
-      }
-
-      a {
-        color: $secondary-color;
-        text-decoration: underline;
-        cursor: pointer;
-        font-weight: bold;
+      gap: 5px;
+      
+      .underlined-link {
+        @include underlined-link-styles();
+        background-color: $header-background;
+        border: $header-background;
+        font-size: 18px;
       }
 
       .account-control-link {
@@ -134,6 +152,7 @@ select {
           text-decoration: underline;
           cursor: pointer;
           font-weight: bold;
+          font-size: 18px;
         }
       }
     }
@@ -164,12 +183,12 @@ select {
 
 .page-header {
   background-color: white;
+  margin-bottom: 8px;
   h1 {
     font-size: $header-font-size;
     color: $header-text;
     margin: 26px 39px 0px;
     font-style: italic;
-    // margin: 0;
   }
 }
 
@@ -207,9 +226,7 @@ select {
 // page styles
 .account-registration {
   &-container {
-    display: flex;
-    margin: 10% auto;
-    max-width: 100%;
+    @include form-container-styles();
   }
   &-body {
     @include body-styles();
@@ -219,8 +236,7 @@ select {
 
 .terms-conditions {
   &-container {
-    display: flex;
-    margin: 10% auto;
+    @include form-container-styles();
   }
   &-body {
     @include body-styles();
@@ -237,7 +253,7 @@ select {
     align-content: center;
     width: 100%;
     max-width: 1150px;
-    margin: 0 auto;
+    margin: 2% auto;
   }
 
   &-companyLogo {
@@ -279,9 +295,7 @@ select {
 
 .plan-trip {
   &-container {
-    display: flex;
-    margin: 10% auto;
-    max-width: 100%;
+    @include form-container-styles();
   }
 
   &-body {
@@ -299,8 +313,7 @@ select {
 
 .trip-summary {
   &-container {
-    display: flex;
-    flex-direction: column;
+    @include form-container-styles();
   }
 
   &-body {
@@ -316,26 +329,9 @@ select {
   }
 }
 
-.account-registration {
-  &-container {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .two-col-inputs {
-    display: flex;
-    justify-content: space-between;
-    .input-box {
-      width: 48%;
-    }
-  }
-}
-
 .edit-account {
   &-container {
-    display: flex;
-    margin: 10% auto;
-    max-width: 100%;
+    @include form-container-styles();
   }
 
   &-body {
@@ -494,12 +490,14 @@ select {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 25px 39px 0px;
+      padding: 0px 39px 0px;
 
       h2 {
         font-size: $header-font-size - 20;
         color: $primary-color;
         font-style: italic;
+        margin-top: 20px;
+        margin-bottom: 20px;
       }
     }
 
@@ -652,5 +650,34 @@ select {
     max-width: 30px;
     margin-right: 10px;
     margin-left: 10px;
+  }
+}
+
+.back-to-dashboard-container{
+  display: flex;
+
+  .back-to-dashboard {
+    gap: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    background-color: white;
+    border: #d9d9d9;
+    margin: 8px 33px 0px;
+
+    img {
+      max-width: 20px;
+    }
+    
+    p {
+      @include underlined-link-styles();
+      // color: $secondary-color;
+      // text-decoration: underline;
+      // cursor: pointer;
+      // font-weight: bold;
+      // font-size: 24px;
+      // font-style: italic;
+      // margin: 0px;
+    }
   }
 }
