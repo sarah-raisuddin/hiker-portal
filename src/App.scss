@@ -119,7 +119,7 @@ select {
 
   &-left {
     .menu-logo {
-      height: 40px;
+      height: 50px;
       width: auto;
       cursor: pointer;
       background-color: $header-background;
@@ -187,6 +187,20 @@ select {
 
     &::placeholder {
       @include label-styles();
+    }
+  }
+
+  &.password {
+    position: relative;
+  }
+  .visibility-icon {
+    max-width: 35px;
+    position: absolute;
+    right: 0;
+    top: 43px;
+    padding-right: 8px;
+    &:hover {
+      cursor: pointer;
     }
   }
 }
