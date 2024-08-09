@@ -1,6 +1,6 @@
 // src/About.js
 import React, { useState } from "react";
-import productLogo from "../images/trekCheck-logo-white.png"
+import productLogo from "../images/trekCheck-logo-white.png";
 import companyLogo from "../images/wanderSafe-logo-white.png";
 import SubmissionButton from "../base-components/button";
 import InputText from "../base-components/input-text";
@@ -8,7 +8,7 @@ import InputErrorMessage from "../base-components/input-error-message";
 import { Link, useNavigate } from "react-router-dom";
 import InputPassword from "../base-components/input-password";
 
-function Login({handleUserLogIn}) {
+function Login({ handleUserLogIn }) {
   // login info
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,20 +23,19 @@ function Login({handleUserLogIn}) {
   const validateEmailFormat = (email) => {
     // RegEx expression from: https://mailtrap.io/blog/validate-emails-in-react/
     const emailRegEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    
+
     const isEmailValid = emailRegEx.test(email);
     return isEmailValid;
-  } 
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const isEmailValid = validateEmailFormat(email) 
+    const isEmailValid = validateEmailFormat(email);
     if (!isEmailValid) {
       setEmailInputError(true);
       console.log("email is invalid");
-    }
-    else {
+    } else {
       setEmailInputError(false);
     }
 
@@ -53,7 +52,7 @@ function Login({handleUserLogIn}) {
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful", data);
-        
+
         // set login state variable to true, store important login info in local storage
         setUnsuccessfulLogin(false);
         handleUserLogIn();
@@ -63,8 +62,7 @@ function Login({handleUserLogIn}) {
 
         // direct user to terms and conditions
         navigateTo("/terms-conditions");
-      } 
-      else {
+      } else {
         // Handle errors
         console.log("Login failed", response.statusText);
         setUnsuccessfulLogin(true);
@@ -85,23 +83,29 @@ function Login({handleUserLogIn}) {
         </div>
       </div>
       <div className="login-body">
-        <InputText 
-          label="Email" 
+        <InputText
+          label="Email"
           placeholder="type your email"
           value={email}
-          onChange={setEmail}/>
-        <InputPassword 
-          label="Password" 
+          onChange={setEmail}
+        />
+        <InputPassword
+          label="Password"
           placeholder="type your password"
           value={password}
-          onChange={setPassword} />
+          onChange={setPassword}
+        />
         {emailInputError && (
-          <InputErrorMessage message={"Invalid email address. Please try again."}/>
+          <InputErrorMessage
+            message={"Invalid email address. Please try again."}
+          />
         )}
         {unsuccessfulLogin && !emailInputError && (
-          <InputErrorMessage message={"Incorrect email or password. Please try again."}/>
+          <InputErrorMessage
+            message={"Incorrect email or password. Please try again."}
+          />
         )}
-        { /* TODO-beta: add accont recovery functionality       
+        {/* TODO-beta: add accont recovery functionality       
         <div className="forgot-password-link">
           <p>
             Forgot password? <a>Click here for account recovery</a>
@@ -110,10 +114,11 @@ function Login({handleUserLogIn}) {
         */}
         <div className="account-registration-link">
           <p>
-            Don't have an account? <Link to="/account-registration">Click here to sign up</Link>
+            Don't have an account?{" "}
+            <Link to="/account-registration">Click here to sign up</Link>
           </p>
         </div>
-        <SubmissionButton handleSubmit={handleSubmit}/>
+        <SubmissionButton handleSubmit={handleSubmit} />
       </div>
     </div>
   );
