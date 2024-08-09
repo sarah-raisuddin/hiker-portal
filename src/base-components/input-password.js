@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import openEye from "../images/eye-open.png";
+import closedEye from "../images/eye-closed.png";
 
 function InputPassword({ label, placeholder, value, onChange }) {
 
@@ -6,14 +8,23 @@ function InputPassword({ label, placeholder, value, onChange }) {
     onChange(event.target.value);
   };
 
+  const handleVisibilityChange = () => {
+    setIsPasswordShown(!isPasswordShown);
+  };
+
+  const [isPasswordShown, setIsPasswordShown] = useState(false);
+
   return (
-    <div className="input-box">
-      <label>{label}</label>
-      <input 
-        type="password"
+    <div className="input-box password">
+    <label>{label}</label>
+      <input
+        type={isPasswordShown ? "text" : "password"}
         value={value}
         placeholder={placeholder} 
         onChange={handleInputChange} />
+        <img className="visibility-icon"
+          src={isPasswordShown ? openEye : closedEye}
+          onClick={handleVisibilityChange}/>
     </div>
   );
 }

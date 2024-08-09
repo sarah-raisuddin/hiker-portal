@@ -14,23 +14,27 @@ function EditAccount() {
                 <div className="edit-account-body">
                     <DisplayText
                         label="Email:"
-                        placeholder={accountData.email}
+                        value={accountData.email}
                     />
                     <DisplayText
                         label="Password:"
-                        placeholder={accountData.password}
+                        value={accountData.password}
                     />
                     <div className="two-col-inputs">
-                        <DisplayText label="First Name" placeholder={accountData.firstName} />
-                        <DisplayText label="Last Name" placeholder={accountData.lastName} />
+                        <DisplayText 
+                            label="First Name" 
+                            value={accountData.firstName} />
+                        <DisplayText 
+                            label="Last Name" 
+                            value={accountData.lastName} />
                     </div>
                     <DisplayText
                         label="Phone Number (optional):"
-                        placeholder={accountData.phoneNumber}
+                        value={accountData.phoneNumber}
                     />
                     <DisplayText
                         label="Address (optional):"
-                        placeholder={accountData.address}
+                        value={accountData.address}
                     />
                     <SubmissionButton />
                 </div>
