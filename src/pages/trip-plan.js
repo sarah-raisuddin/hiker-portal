@@ -6,6 +6,7 @@ import PageHeader from "../base-components/page-header";
 import InputDateTime from "../base-components/input-datetime";
 import Dropdown from "../base-components/input-dropdown";
 import { useNavigate } from "react-router-dom";
+import BackToDashboard from "../base-components/back-to-dashboard";
 
 function PlanTrip() {
   
@@ -99,6 +100,8 @@ function PlanTrip() {
       if (response.ok) {
         const data = await response.json();
         console.log("Trip plan creation successful", data);
+
+        localStorage.setItem("tripPlanToView",  JSON.stringify(data));
         navigateTo("/trip-summary");
 
       } else {
@@ -113,6 +116,7 @@ function PlanTrip() {
   return (
     <div className="plan-trip">
       <PageHeader text={"Create a Trip Plan"} />
+      <BackToDashboard/>
       <div className="plan-trip-container">
         <div className="plan-trip-body">
           <Dropdown
