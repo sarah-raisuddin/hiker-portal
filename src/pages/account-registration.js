@@ -13,7 +13,6 @@ function AccountRegistration() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
   const [isRegistrationSucessful, setRegistrationStatus] = useState("");
 
   const location = useLocation();
@@ -32,7 +31,7 @@ function AccountRegistration() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ password, email, firstName, lastName, phoneNumber, address }),
+        body: JSON.stringify({ password, email, firstName, lastName, phoneNumber }),
       });
 
       if (response.ok) {
@@ -96,11 +95,6 @@ function AccountRegistration() {
             placeholder="Type your Phone Number"
             value={phoneNumber}
             onChange={setPhoneNumber}/>
-          <InputText
-            label="Address (optional):"
-            placeholder="Type your Address"
-            value={address}
-            onChange={setAddress}/>
           <SubmissionButton handleSubmit={handleSubmit}/>
         </div>
       </div>

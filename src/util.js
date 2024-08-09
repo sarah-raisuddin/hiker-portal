@@ -16,3 +16,5 @@ export const formatDate = (dateString) => {
     time: formattedTime,
   };
 };
+
+export default formatDate;

@@ -4,6 +4,7 @@ const Dropdown = ({ label, options, onSelect, placeholder }) => {
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleChange = (event) => {
+    console.log("this is the selected option value ", event.target.value);
     setSelectedOption(event.target.value);
     onSelect(event.target.value);
   };
@@ -16,8 +17,8 @@ const Dropdown = ({ label, options, onSelect, placeholder }) => {
           {placeholder}
         </option>
         {options.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
+          <option key={index} value={option.id}>
+            {option.name}
           </option>
         ))}
       </select>

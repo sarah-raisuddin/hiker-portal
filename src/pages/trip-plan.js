@@ -1,5 +1,5 @@
 // src/About.js
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import SubmissionButton from "../base-components/button";
 import InputText from "../base-components/input-text";
 import PageHeader from "../base-components/page-header";
@@ -8,6 +8,8 @@ import Dropdown from "../base-components/input-dropdown";
 import { useNavigate } from "react-router-dom";
 
 function PlanTrip() {
+  
+  const user_id = localStorage.getItem("userId");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
   const [trail_id, setTrailID] = useState("");
@@ -17,16 +19,69 @@ function PlanTrip() {
   const [emergency_contact_number, setContactNumber] = useState("");
   const [emergency_contact_email, setContactEmail] = useState("");
   const [rfid_tag_uid, setRfidTagID] = useState("");
+  const [trailOptions, setTrailOptions] = useState([]);
+  const [checkpointOptions, setCheckpointOptions] = useState([]);
 
   const navigateTo = useNavigate();
-  
-  // TODO-KT: remove me
-  const [user_id, setUserId] = useState("");
 
-  // TODO-KT: hard code some options for now, thinking we should eventually grab this info 
-  //          from the database, it would make it more scalable and ensure it is up to date
-  //          if trails are added in sar dash
-  const trailOptions = ["Juan de Fuca Trail", "Machu Picchu", "West Coast Trail"]
+  const getTrailOptions = async () => {
+    const apiEndPoint = "http://localhost:3000/sar_dashboard/trails";
+    try {
+      const response = await fetch(apiEndPoint, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }, 
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Get trail options successful", data);
+        
+        setTrailOptions(data.trails);
+      }
+      else {
+        console.log("Error getting trail options", response.status);
+      }
+    }
+    catch (error) {
+      console.log("Error getting trail options", error);
+    }
+  };
+
+  const getTrailCheckpoints = async() => {
+    console.log(trail_id);
+    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${trail_id}`;
+    try {
+      const response = await fetch(apiEndPoint, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }, 
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Get checkpoint options successful", data);
+        
+        setCheckpointOptions(data.checkpoints);
+      }
+      else {
+        console.log("Error getting checkpoint options", response.status);
+      }
+    }
+    catch (error) {
+      console.log("Error getting checkpoint options", error);
+    }
+  };
+
+  useEffect(() => {
+    getTrailOptions();
+  }, []);
+
+  useEffect(() => {
+    getTrailCheckpoints();
+  }, [trail_id])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,33 +115,22 @@ function PlanTrip() {
       <PageHeader text={"Create a Trip Plan"} />
       <div className="plan-trip-container">
         <div className="plan-trip-body">
-        <InputText 
-          // TODO-KT: remove me, added here to test api endpoint, need to get user id from server i think
-          label="User ID:"
-          placeholder="REMOVE ME"
-          value={user_id}
-          onChange={setUserId}/>
-          {/* <Dropdown
+          <Dropdown
             label="Trail Name:"
             placeholder="Select the Trail"
             options={trailOptions}
-            onSelect={setTrailID} /> */}
-          <InputText 
-            label="Trail:"
-            placeholder="Type Trail Name"
-            value={trail_id}
-            onChange={setTrailID} />
+            onSelect={setTrailID} />
           <div className="two-col-inputs">
-            <InputText 
+            <Dropdown 
               label="Start Point:"
-              placeholder="Type Start Point"
-              value={entry_point}
-              onChange={setEntryPoint}/>
-            <InputText 
+              placeholder="Select Start Point"
+              options={checkpointOptions}
+              onSelect={setEntryPoint}/>
+            <Dropdown 
               label="End Point:" 
-              placeholder="Type End Point"
-              value={exit_point}
-              onChange={setExitPoint} />
+              placeholder="Select End Point"
+              options={checkpointOptions}
+              onSelect={setExitPoint} />
           </div>
           <div className="two-col-inputs">
             <InputDateTime 
