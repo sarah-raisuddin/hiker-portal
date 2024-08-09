@@ -8,7 +8,7 @@ function TripCard({ trailName, startDate, endDate }) {
   const navigateTo = useNavigate();
 
   const handleSubmit = () => {
-    navigateTo("/plan-trip");
+    navigateTo("/trip-summary");
   };
 
   return (

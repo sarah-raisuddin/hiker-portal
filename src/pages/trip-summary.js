@@ -4,8 +4,17 @@ import PageHeader from "../base-components/page-header";
 import DisplayDateTime from "../base-components/display-datetime";
 import SubmissionButton from "../base-components/button";
 import tripData from "../data/trip-dummyData";
+import { useNavigate } from "react-router-dom";
 
 function TripSummary() {
+  
+  // navigation
+  const navigateTo = useNavigate();
+
+  const handleSubmit = () => {
+    navigateTo("/trips");
+  }
+  
   return (
     <div className="trip-summary">
       <PageHeader text={"Trip Summary"} />
@@ -38,8 +47,7 @@ function TripSummary() {
             label="Tag Identifier:"
             value={tripData.tagIdentifier}
           />
-
-          <SubmissionButton />
+          <SubmissionButton handleSubmit={handleSubmit}/>
         </div>
       </div>
     </div>
