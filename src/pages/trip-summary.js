@@ -26,23 +26,13 @@ function TripSummary() {
   const [startPointName, setStartPointName] = useState("");
   const [endPointName, setEndPointName] = useState("");
   const [uniqueTrackingLink, setUniqueTrackingLink] = useState("");
+  const [tripPlan, setTripPlan] = useState(null);
 
   //navigation
   const navigateTo = useNavigate();
 
   const handleSubmit = () => {
     navigateTo("/trips");
-  };
-
-  const isPlanArchived = tripPlan.archived;
-
-  const archivePlan = async () => {
-    try {
-      const result = await archiveTripPlan({ id: tripPlan.id });
-      console.log("Trip plan archived:", result);
-    } catch (error) {
-      console.error("Error archiving trip plan:", error);
-    }
   };
 
   const getTripPlan = async () => {
@@ -61,6 +51,8 @@ function TripSummary() {
         const tripPlanToView = data.trails.find(
           (trail) => trail.id === Number(tripPlanId)
         );
+
+        setTripPlan(tripPlanToView);
 
         // TODO-KT: this is very messy, should clean up
         setStartDate(tripPlanToView.start_date);
@@ -112,6 +104,17 @@ function TripSummary() {
     }
   };
 
+  const isPlanArchived = tripPlan.archived;
+
+  const archivePlan = async () => {
+    try {
+      const result = await archiveTripPlan({ id: tripPlan.id });
+      console.log("Trip plan archived:", result);
+    } catch (error) {
+      console.error("Error archiving trip plan:", error);
+    }
+  };
+
   useEffect(() => {
     getTripPlan();
   }, []);
@@ -131,31 +134,38 @@ function TripSummary() {
               {isPlanArchived ? "Archived Trip" : "Archive Trip"}
             </button>
           </div>
-          <DisplayText label="Trail Name:" value={tripPlan.trail_name} />
+          <DisplayText
+            label="Progress Tracking Link:"
+            value={uniqueTrackingLink}
+          />
+          <DisplayText label="Trail Name:" value={trail_name} />
           <div className="two-col-inputs">
-            <DisplayText label="Start Point:" value={tripPlan.entry_point} />
-            <DisplayText label="End Point:" value={tripPlan.exit_point} />
+            <DisplayText label="Start Point:" value={startPointName} />
+            <DisplayText label="End Point:" value={endPointName} />
           </div>
           <div className="two-col-inputs">
-            <DisplayDateTime label="Start Date:" value={tripPlan.start_date} />
-            <DisplayDateTime label="End Date:" value={tripPlan.end_date} />
+            <DisplayText
+              label="Start Date:"
+              value={formatDate(start_date).date}
+            />
+            <DisplayText label="End Date:" value={formatDate(end_date).date} />
           </div>
           <DisplayText
             label="Emergency Contact Name:"
-            value={tripPlan.emergency_contact_name}
+            value={emergency_contact_name}
           />
           <div>
             <DisplayText
               label="Emergency Contact Phone Number:"
-              value={tripPlan.emergency_contact_number}
+              value={emergency_contact_number}
             />
             {/* <DisplayText
-              label="Emergency Contact Email (optional):"
-              value={tripPlan.emergency_contact_email} 
-            /> */}
+               label="Emergency Contact Email (optional):"
+               value={tripPlan.emergency_contact_email} 
+             /> */}
           </div>
-          <DisplayText label="Tag Identifier:" value={tripPlan.rfid_tag_uid} />
-          {/* <SubmissionButton handleSubmit={handleSubmit} /> */}
+          <DisplayText label="Tag Identifier:" value={rfid_tag_uid} />
+          <SubmissionButton handleSubmit={handleSubmit} />
         </div>
       </div>
     </div>
