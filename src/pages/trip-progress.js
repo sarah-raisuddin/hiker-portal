@@ -19,8 +19,10 @@ const TripProgress = () => {
       const uid = queryParams.get("uid");
 
       if (uid) {
-        const result = await fetchTrail({ trailId: 1 });
         const progressResult = await fetchProgress({ uid });
+        const result = await fetchTrail({
+          trailId: progressResult.tripPlan.trail_id,
+        });
         setProgressData(progressResult);
         setTrailData(result);
       }
