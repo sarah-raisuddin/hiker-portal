@@ -10,7 +10,7 @@ function InputDateTime({ label, placeholder, value, onChange }) {
     <div className="input-box">
       <label>{label}</label>
       <input 
-        type="datetime-local"
+        type="date"
         value={value}
         placeholder={placeholder} 
         onChange={handleInputChange} />

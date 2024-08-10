@@ -100,8 +100,9 @@ function PlanTrip() {
       if (response.ok) {
         const data = await response.json();
         console.log("Trip plan creation successful", data);
+        const tripPlanId = data.id;
 
-        localStorage.setItem("tripPlanToView",  JSON.stringify(data));
+        localStorage.setItem("tripPlanIdToView", tripPlanId);
         navigateTo("/trip-summary");
 
       } else {
