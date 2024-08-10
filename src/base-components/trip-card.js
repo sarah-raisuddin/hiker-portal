@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SubmissionButton from "./button";
 import { useNavigate } from "react-router-dom";
-import formatDate from "../util";
+import {formatDate} from "../util";
 
 function TripCard({ trailPlan }) {
 
@@ -11,7 +11,7 @@ function TripCard({ trailPlan }) {
   const endDate = formatDate(trailPlan.end_date).date;
 
   const handleSubmit = () => {
-    localStorage.setItem("tripPlanToView",  JSON.stringify(trailPlan));
+    localStorage.setItem("tripPlanIdToView", trailPlan.id);
     console.log("trip plan from trip-card: ",trailPlan);
     navigateTo("/trip-summary");
   };
