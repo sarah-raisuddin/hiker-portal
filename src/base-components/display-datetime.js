@@ -1,14 +1,10 @@
 import React from "react";
 
-function DisplayDateTime({ label, value}) {
-
+function DisplayDateTime({ label, value }) {
   return (
     <div className="input-box">
       <label>{label}</label>
-      <input 
-        type="datetime-local"
-        value={value}
-        readOnly/>
+      <input type="datetime-local" value={value} />
     </div>
   );
 }

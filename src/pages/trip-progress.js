@@ -1,24 +1,32 @@
-import React, { act, useState } from "react";
+import React, { useState } from "react";
 import SubmissionButton from "../base-components/button";
 import PageHeader from "../base-components/page-header";
 import { fetchProgress, fetchTrail } from "../api";
 import { useEffect } from "react";
 import { formatDate } from "../util";
+import { useLocation } from "react-router-dom";
 
 const TripProgress = () => {
   const [activeCheckpoint, setActiveCheckpoint] = useState(null);
   const [trailData, setTrailData] = useState(null);
   const [progressData, setProgressData] = useState(null);
 
+  const location = useLocation();
+
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetchTrail({ trailId: 1 });
-      const progressResult = await fetchProgress({ uniqueLink: "uniqueLink" });
-      setProgressData(progressResult);
-      setTrailData(result);
+      const queryParams = new URLSearchParams(location.search);
+      const uid = queryParams.get("uid");
+
+      if (uid) {
+        const result = await fetchTrail({ trailId: 1 });
+        const progressResult = await fetchProgress({ uid });
+        setProgressData(progressResult);
+        setTrailData(result);
+      }
     };
     fetchData();
-  }, []);
+  }, [location.search]);
 
   if (!trailData || !progressData) {
     return <div>Loading...</div>;
@@ -31,19 +39,15 @@ const TripProgress = () => {
   const getCheckpointName = (checkpointId) => {
     return (
       checkpoints.find((checkpoint) => checkpoint.id === checkpointId) || null
-    ).checkpoint_name;
+    ).name;
   };
 
-  const getProgressEntries = (checkpointId) => {
-    return checkpointEntries.filter(
-      (entry) => entry.checkpoint_id === checkpointId
-    );
+  const getProgressEntries = (pole_id) => {
+    return checkpointEntries.filter((entry) => entry.pole_id === pole_id);
   };
 
   const getCheckpointVisited = (checkpointId) => {
-    return checkpointEntries.some(
-      (entry) => entry.checkpoint_id === checkpointId
-    );
+    return checkpointEntries.some((entry) => entry.pole_id === checkpointId);
   };
 
   const TripProgressView = ({ checkpoints }) => {
@@ -53,8 +57,8 @@ const TripProgress = () => {
         {checkpoints.map((checkpoint, index) => (
           <React.Fragment key={index}>
             <ProgressCircle
-              progress={getCheckpointVisited(checkpoint.id)}
-              label={checkpoint.checkpoint_name}
+              progress={getCheckpointVisited(checkpoint.pole_id)}
+              label={checkpoint.name}
               active={activeCheckpoint === checkpoint}
               onClick={() => setActiveCheckpoint(checkpoint)}
             />
@@ -126,11 +130,11 @@ const TripProgress = () => {
   };
 
   const checkinDetailsTitle = activeCheckpoint
-    ? `${activeCheckpoint.checkpoint_name} (${activeCheckpoint.latitude}, ${activeCheckpoint.longitude})`
+    ? `${activeCheckpoint.name} (${activeCheckpoint.latitude}, ${activeCheckpoint.longitude})`
     : "";
 
   const CheckinTable = () => {
-    const data = getProgressEntries(activeCheckpoint.id) || [];
+    const data = getProgressEntries(activeCheckpoint.pole_id) || [];
     return (
       <table>
         <thead>

@@ -29,10 +29,8 @@ export const fetchTrail = async ({ trailId }) => {
   }
 };
 
-export const fetchProgress = async ({ uniqueLink }) => {
-  const apiEndpoint = `${hikerPortalApi}/progress?unique_link=${encodeURIComponent(
-    uniqueLink
-  )}`;
+export const fetchProgress = async ({ uid }) => {
+  const apiEndpoint = `${hikerPortalApi}/progress?uid=${uid}`;
 
   try {
     const response = await fetch(apiEndpoint, {

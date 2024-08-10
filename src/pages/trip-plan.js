@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
 
 function PlanTrip() {
-  
   const user_id = localStorage.getItem("userId");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
@@ -32,25 +31,23 @@ function PlanTrip() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-        }, 
+        },
       });
 
       if (response.ok) {
         const data = await response.json();
         console.log("Get trail options successful", data);
-        
+
         setTrailOptions(data.trails);
-      }
-      else {
+      } else {
         console.log("Error getting trail options", response.status);
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.log("Error getting trail options", error);
     }
   };
 
-  const getTrailCheckpoints = async() => {
+  const getTrailCheckpoints = async () => {
     console.log(trail_id);
     const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${trail_id}`;
     try {
@@ -58,20 +55,18 @@ function PlanTrip() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-        }, 
+        },
       });
 
       if (response.ok) {
         const data = await response.json();
         console.log("Get checkpoint options successful", data);
-        
+
         setCheckpointOptions(data.checkpoints);
-      }
-      else {
+      } else {
         console.log("Error getting checkpoint options", response.status);
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.log("Error getting checkpoint options", error);
     }
   };
@@ -82,7 +77,7 @@ function PlanTrip() {
 
   useEffect(() => {
     getTrailCheckpoints();
-  }, [trail_id])
+  }, [trail_id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -94,16 +89,25 @@ function PlanTrip() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_id, start_date, end_date, trail_id, entry_point, exit_point, emergency_contact_name, emergency_contact_number, rfid_tag_uid }),
+        body: JSON.stringify({
+          user_id,
+          start_date,
+          end_date,
+          trail_id,
+          entry_point,
+          exit_point,
+          emergency_contact_name,
+          emergency_contact_number,
+          rfid_tag_uid,
+        }),
       });
 
       if (response.ok) {
         const data = await response.json();
         console.log("Trip plan creation successful", data);
 
-        localStorage.setItem("tripPlanToView",  JSON.stringify(data));
+        localStorage.setItem("tripPlanToView", JSON.stringify(data));
         navigateTo("/trip-summary");
-
       } else {
         // Handle errors
         console.log("Trip plan creation failed", response.statusText);
@@ -116,62 +120,71 @@ function PlanTrip() {
   return (
     <div className="plan-trip">
       <PageHeader text={"Create a Trip Plan"} />
-      <BackToDashboard/>
+      <BackToDashboard />
       <div className="plan-trip-container">
         <div className="plan-trip-body">
           <Dropdown
             label="Trail Name:"
             placeholder="Select the Trail"
             options={trailOptions}
-            onSelect={setTrailID} />
+            onSelect={setTrailID}
+          />
           <div className="two-col-inputs">
-            <Dropdown 
+            <Dropdown
               label="Start Point:"
               placeholder="Select Start Point"
               options={checkpointOptions}
-              onSelect={setEntryPoint}/>
-            <Dropdown 
-              label="End Point:" 
+              onSelect={setEntryPoint}
+            />
+            <Dropdown
+              label="End Point:"
               placeholder="Select End Point"
               options={checkpointOptions}
-              onSelect={setExitPoint} />
+              onSelect={setExitPoint}
+            />
           </div>
           <div className="two-col-inputs">
-            <InputDateTime 
+            <InputDateTime
               label="Start Date:"
               placeholder="Type Start Date"
               value={start_date}
-              onChange={setStartDate} />
-            <InputDateTime 
-              label="End Date:" 
-              placeholder="Type End Date" 
+              onChange={setStartDate}
+            />
+            <InputDateTime
+              label="End Date:"
+              placeholder="Type End Date"
               value={end_date}
-              onChange={setEndDate} />
+              onChange={setEndDate}
+            />
           </div>
           <InputText
             label="Emergency Contact Name:"
             placeholder="Type Emergency Contact Name"
             value={emergency_contact_name}
-            onChange={setContactName} />
+            onChange={setContactName}
+          />
           <div>
             <InputText
               label="Emergency Contact Phone Number:"
               placeholder="Type Phone Number"
               value={emergency_contact_number}
-              onChange={setContactNumber} />
+              onChange={setContactNumber}
+            />
             <InputText
               // TODO-KT: need to propogate this field into server code/database, leave blank for now
               label="Emergency Contact Email (optional):"
               placeholder="Type Email"
-              value={(emergency_contact_email)}
-              onChange={setContactEmail} />
+              value={emergency_contact_email}
+              onChange={setContactEmail}
+            />
           </div>
           <InputText
             label="Tag Identifier:"
             placeholder="Type Tag Identifier"
             value={rfid_tag_uid}
-            onChange={setRfidTagID} />
-          <SubmissionButton handleSubmit={handleSubmit}/>
+            onChange={setRfidTagID}
+          />
+          <SubmissionButton handleSubmit={handleSubmit} />
         </div>
       </div>
     </div>
