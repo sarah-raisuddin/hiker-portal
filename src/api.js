@@ -58,3 +58,24 @@ export const fetchProgress = async ({ uid }) => {
     console.error("Error during progress fetch:", error);
   }
 };
+
+export const archiveTripPlan = async ({ id }) => {
+  const apiEndpoint = `${hikerPortalApi}/archive_trip_plan`;
+
+  try {
+    const response = await fetch(apiEndpoint, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: id }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    }
+  } catch (error) {
+    console.error("Error during trip plan archiving:", error);
+  }
+};

@@ -36,7 +36,7 @@ $standard-container-margin: 2% auto;
 @mixin body-styles {
   background-color: $primary-color;
   border-radius: $standard-roundness;
-  padding: 10px 35px;
+  padding: 15px 35px;
   max-width: 1150px;
   margin: 0 auto;
   width: 100%;
@@ -86,6 +86,10 @@ a {
   cursor: pointer;
 }
 
+button {
+  cursor: pointer;
+}
+
 .button-container {
   display: flex;
   justify-content: center;
@@ -96,6 +100,10 @@ a {
     gap: 8px;
     display: flex;
     align-items: center;
+
+    &.inactive {
+      background-color: gray;
+    }
 
     p {
       @include label-styles();
@@ -133,7 +141,7 @@ select {
       display: flex;
       align-items: center;
       gap: 5px;
-      
+
       .underlined-link {
         @include underlined-link-styles();
         background-color: $header-background;
@@ -199,9 +207,7 @@ select {
     right: 0;
     top: 43px;
     padding-right: 8px;
-    &:hover {
-      cursor: pointer;
-    }
+    cursor: pointer;
   }
 }
 
@@ -319,6 +325,23 @@ select {
 
   &-body {
     @include body-styles();
+    &.archived {
+      background-color: #474f44;
+    }
+  }
+
+  &-archive {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      border-radius: $standard-roundness;
+      padding: 10px 20px;
+      font-size: $default-font-size;
+      font-weight: bold;
+      background-color: $secondary-color;
+      color: $label-text;
+      border: none;
+    }
   }
 
   .two-col-inputs {
@@ -435,9 +458,7 @@ select {
       width: 40px;
       height: 40px;
       border: 20px solid $primary-color;
-      &:hover {
-        cursor: pointer;
-      }
+      cursor: pointer;
 
       &-label {
         position: absolute;
@@ -520,9 +541,22 @@ select {
       }
     }
 
+    .toggle {
+      cursor: pointer;
+    }
+
     hr {
       margin: -2px 39px -60px;
       color: $header-background;
+    }
+  }
+
+  .archived-plans {
+    &-divider {
+      &-container {
+        padding: 0px 39px 0px;
+      }
+      border-bottom: 1px solid $primary-color;
     }
   }
 
@@ -541,6 +575,9 @@ select {
   text-align: center;
   padding: 146px 98px;
   width: 100%;
+  &.archived {
+    background-color: #474f44;
+  }
 
   &-container {
     display: flex;
@@ -585,7 +622,7 @@ select {
 
     .description {
       @include text-body-styles();
-      font-size: $default-font-size
+      font-size: $default-font-size;
     }
 
     h1 {
@@ -678,7 +715,7 @@ select {
   }
 }
 
-.back-to-dashboard-container{
+.back-to-dashboard-container {
   display: flex;
 
   .back-to-dashboard {
@@ -693,7 +730,7 @@ select {
     img {
       max-width: 20px;
     }
-    
+
     p {
       @include underlined-link-styles();
     }

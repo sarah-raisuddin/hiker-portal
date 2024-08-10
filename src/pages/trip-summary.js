@@ -5,6 +5,7 @@ import DisplayDateTime from "../base-components/display-datetime";
 import SubmissionButton from "../base-components/button";
 import { useNavigate } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
+import { archiveTripPlan } from "../api";
 
 function TripSummary() {
   // user info
@@ -18,12 +19,28 @@ function TripSummary() {
     navigateTo("/trips");
   };
 
+  const isPlanArchived = tripPlan.archived;
+
+  const archivePlan = async () => {
+    try {
+      const result = await archiveTripPlan({ id: tripPlan.id });
+      console.log("Trip plan archived:", result);
+    } catch (error) {
+      console.error("Error archiving trip plan:", error);
+    }
+  };
+
   return (
     <div className="trip-summary">
       <PageHeader text={"Trip Summary"} />
       <BackToDashboard />
       <div className="plan-trip-container">
-        <div className="plan-trip-body">
+        <div className={`plan-trip-body ${isPlanArchived ? "archived" : ""}`}>
+          <div className="plan-trip-archive">
+            <button disabled={isPlanArchived} onClick={archivePlan}>
+              {isPlanArchived ? "Archived Trip" : "Archive Trip"}
+            </button>
+          </div>
           <DisplayText label="Trail Name:" value={tripPlan.trail_name} />
           <div className="two-col-inputs">
             <DisplayText label="Start Point:" value={tripPlan.entry_point} />
@@ -48,7 +65,7 @@ function TripSummary() {
             /> */}
           </div>
           <DisplayText label="Tag Identifier:" value={tripPlan.rfid_tag_uid} />
-          <SubmissionButton handleSubmit={handleSubmit} />
+          {/* <SubmissionButton handleSubmit={handleSubmit} /> */}
         </div>
       </div>
     </div>
