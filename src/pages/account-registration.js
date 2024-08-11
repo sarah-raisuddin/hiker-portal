@@ -12,11 +12,11 @@ function AccountRegistration() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [isRegistrationSucessful, setRegistrationStatus] = useState("");
+  const [registrationStatus, setRegistrationStatus] = useState("");
 
   const location = useLocation();
 
+      // reset update status upon re-navigating back to this page
   useEffect(() => {
     setRegistrationStatus("");
   }, [location]);
@@ -31,7 +31,7 @@ function AccountRegistration() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ password, email, firstName, lastName, phoneNumber }),
+        body: JSON.stringify({ password, email, firstName, lastName }),
       });
 
       if (response.ok) {
@@ -53,20 +53,20 @@ function AccountRegistration() {
   return (
     <div className="account-registration">
       <PageHeader text={"Register for an Account"} />
-      {isRegistrationSucessful === "success" && (
+      {registrationStatus === "success" && (
       <PopUpMessage 
         title="Registration successful!"
         message="Please return to the login page to access your account."
         link="/login"/>
       )}
-      {isRegistrationSucessful === "failure" && (
+      {registrationStatus === "failure" && (
       <PopUpMessage 
         title="Registration failed!"
         message="Please try again."
         link="/account-registration"/>
       )
       }
-      <div className={isRegistrationSucessful ? "blur account-registration-container" : "account-registration-container"}>
+      <div className={registrationStatus ? "blur account-registration-container" : "account-registration-container"}>
         <div className="account-registration-body">
           <InputText
             label="Email:"
@@ -90,11 +90,6 @@ function AccountRegistration() {
             value={lastName}
             onChange={setLastName}/>
           </div>
-          <InputText
-            label="Phone Number (optional):"
-            placeholder="Type your Phone Number"
-            value={phoneNumber}
-            onChange={setPhoneNumber}/>
           <SubmissionButton handleSubmit={handleSubmit}/>
         </div>
       </div>

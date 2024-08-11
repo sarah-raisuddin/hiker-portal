@@ -4,6 +4,7 @@ function InputDateTime({ label, placeholder, value, onChange }) {
 
   const handleInputChange = (event) => {
     onChange(event.target.value);
+    console.log(event.target.value);
   };
 
   return (

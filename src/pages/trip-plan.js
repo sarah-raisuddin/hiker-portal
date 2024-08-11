@@ -115,11 +115,11 @@ function PlanTrip() {
   };
 
   return (
-    <div className="plan-trip">
+    <div className="trip-plan">
       <PageHeader text={"Create a Trip Plan"} />
       <BackToDashboard/>
-      <div className="plan-trip-container">
-        <div className="plan-trip-body">
+      <div className="trip-plan-container">
+        <div className="trip-plan-body">
           <Dropdown
             label="Trail Name:"
             placeholder="Select the Trail"

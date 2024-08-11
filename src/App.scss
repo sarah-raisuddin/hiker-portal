@@ -99,9 +99,13 @@ a {
 
     p {
       @include label-styles();
-      font-size: $label-font-size - 8;
+      font-size: $label-font-size - 4;
       color: white;
       margin: 0;
+    }
+
+    img {
+      max-width: 35px;
     }
   }
 }
@@ -312,7 +316,7 @@ select {
   }
 }
 
-.plan-trip {
+.trip-plan {
   &-container {
     @include form-container-styles();
   }
@@ -337,6 +341,49 @@ select {
 
   &-body {
     @include body-styles();
+
+    .edit-controls {
+      .button-container {
+        justify-content: right;
+      }
+    }
+  }
+
+  .two-col-inputs {
+    display: flex;
+    justify-content: space-between;
+    .input-box {
+      width: 48%;
+    }
+  }
+}
+
+.trip-edit {
+  &-container {
+    @include form-container-styles();
+  }
+
+  &-body {
+    @include body-styles();
+
+    .controls {
+      display: flex;
+      justify-content: right;
+      padding-bottom: 8px;
+      gap: 8px;
+      &-save {
+        .button-container {
+          justify-content: right;
+        }
+      }
+  
+      &-controls {
+        .button-container {
+          justify-content: left;
+        }
+      }
+    }
+
   }
 
   .two-col-inputs {
@@ -648,7 +695,9 @@ select {
     background-color: $primary-color;
     width: 100%;
     height: fit-content;
-    margin: auto;
+    position: fixed;
+    top: 40%;
+    
 
     h1,
     p {
@@ -665,6 +714,7 @@ select {
   max-height: 80;
   display: flex;
   align-items: center;
+  position: absolute;
 
   p {
     color: white;

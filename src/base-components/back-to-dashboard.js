@@ -14,7 +14,7 @@ function BackToDashboard() {
     <div className="back-to-dashboard-container">
       <button className="back-to-dashboard" onClick={handleSubmit}>
         <img className="back-arrow" src={backArrow} />
-        <p>Back To Dasboard</p>
+        <p>Back To Dashboard</p>
       </button>
     </div>
   );

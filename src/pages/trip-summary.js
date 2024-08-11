@@ -5,6 +5,7 @@ import SubmissionButton from "../base-components/button";
 import { useNavigate } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
 import {formatDate} from "../util";
+import edit from "../images/button-edit.png"
 
 function TripSummary() {
   //user info
@@ -107,54 +108,61 @@ function TripSummary() {
     getCheckpointNames();
   }, [trail_id, entry_point, exit_point]);
 
+  const handleEditTripPlan = () => {
+    navigateTo("/trip-edit");
+  };
+
   return (
      <div className="trip-summary">
        <PageHeader text={"Trip Summary"} />
        <BackToDashboard/>
-       <div className="plan-trip-container">
-         <div className="plan-trip-body">
+       <div className="trip-summary-container">
+         <div className="trip-summary-body">
+          <div className="edit-controls">
+            <SubmissionButton text="Edit Trip Plan" handleSubmit={handleEditTripPlan} specialIcon={edit}></SubmissionButton>
+          </div>
+          <DisplayText 
+            label="Progress Tracking Link:"
+            value={uniqueTrackingLink}
+          />
+          <DisplayText
+            label="Trail Name:"
+            value={trail_name} />
+          <div className="two-col-inputs">
             <DisplayText 
-              label="Progress Tracking Link:"
-              value={uniqueTrackingLink}
+              label="Start Point:"
+              value={startPointName} />
+            <DisplayText 
+              label="End Point:" 
+              value={endPointName} />
+          </div>
+          <div className="two-col-inputs">
+            <DisplayText 
+              label="Start Date:" 
+              value={formatDate(start_date).date} />
+            <DisplayText 
+              label="End Date:" 
+              value={formatDate(end_date).date} />
+          </div>
+          <DisplayText
+            label="Emergency Contact Name:"
+            value={emergency_contact_name}
+          />
+          <div>
+            <DisplayText
+              label="Emergency Contact Phone Number:"
+              value={emergency_contact_number} 
             />
-           <DisplayText
-             label="Trail Name:"
-             value={trail_name} />
-           <div className="two-col-inputs">
-             <DisplayText 
-               label="Start Point:"
-               value={startPointName} />
-             <DisplayText 
-               label="End Point:" 
-               value={endPointName} />
-           </div>
-           <div className="two-col-inputs">
-             <DisplayText 
-               label="Start Date:" 
-               value={formatDate(start_date).date} />
-             <DisplayText 
-               label="End Date:" 
-               value={formatDate(end_date).date} />
-           </div>
-           <DisplayText
-             label="Emergency Contact Name:"
-             value={emergency_contact_name}
-           />
-           <div>
-             <DisplayText
-               label="Emergency Contact Phone Number:"
-               value={emergency_contact_number} 
-             />
-             {/* <DisplayText
-               label="Emergency Contact Email (optional):"
-               value={tripPlan.emergency_contact_email} 
-             /> */}
-           </div>
-           <DisplayText
-             label="Tag Identifier:"
-             value={rfid_tag_uid}
-           />
-           <SubmissionButton handleSubmit={handleSubmit}/>
+            {/* <DisplayText
+              label="Emergency Contact Email (optional):"
+              value={tripPlan.emergency_contact_email} 
+            /> */}
+          </div>
+          <DisplayText
+            label="Tag Identifier:"
+            value={rfid_tag_uid}
+          />
+          <SubmissionButton handleSubmit={handleSubmit}/>
          </div>
        </div>
      </div>
