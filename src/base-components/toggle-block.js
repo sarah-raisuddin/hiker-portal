@@ -12,12 +12,8 @@ function ToggleBlock({ blockLabel, blockContent }) {
     <div className="toggle-block">
       <div className="toggle-block-container">
         <div className="toggle-block-label" onClick={() => setIsActive(!isActive)}>
-          <div>
-            {blockLabel}
-          </div>
-          <div>
-            {isActive ?  downCaret : upCaret}
-          </div>
+          <h2>{blockLabel}</h2>
+          <h2>{isActive ?  downCaret : upCaret}</h2>
         </div>
         {isActive && <div className="toggle-block-content">{blockContent}</div>}
       </div>

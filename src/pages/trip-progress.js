@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 const TripProgress = () => {
   const [activeCheckpoint, setActiveCheckpoint] = useState(null);
   const [trailData, setTrailData] = useState(null);
-  const [progressData, setProgressData] = useState(null);
+  const [progressData, setProgressData] = useState({});
 
   const location = useLocation();
 
@@ -30,6 +30,8 @@ const TripProgress = () => {
     fetchData();
   }, [location.search]);
 
+  console.log(trailData);
+  console.log(progressData);
   if (!trailData || !progressData) {
     return <div>Loading...</div>;
   }

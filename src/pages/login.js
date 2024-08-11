@@ -7,6 +7,7 @@ import InputText from "../base-components/input-text";
 import InputErrorMessage from "../base-components/input-error-message";
 import { Link, useNavigate } from "react-router-dom";
 import InputPassword from "../base-components/input-password";
+import { validateEmailFormat } from "../util";
 
 function Login({ handleUserLogIn }) {
   // login info
@@ -19,14 +20,6 @@ function Login({ handleUserLogIn }) {
 
   // navigation
   const navigateTo = useNavigate();
-
-  const validateEmailFormat = (email) => {
-    // RegEx expression from: https://mailtrap.io/blog/validate-emails-in-react/
-    const emailRegEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-
-    const isEmailValid = emailRegEx.test(email);
-    return isEmailValid;
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

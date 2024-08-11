@@ -1,14 +1,10 @@
 import React from "react";
 
-function DisplayText({ label, value}) {
-
+function DisplayText({ label, value, onClick }) {
   return (
-    <div className="input-box">
+    <div onClick={onClick} className="input-box">
       <label>{label}</label>
-      <input 
-        type="text" 
-        value={value}
-        readOnly/>
+      <input type="text" value={value} readOnly />
     </div>
   );
 }

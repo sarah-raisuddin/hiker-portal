@@ -16,8 +16,14 @@ function TermsAndConditions() {
             <PageHeader text={"Terms and Conditions for Use"} />
             <div className="terms-conditions-container">
                 <div className="terms-conditions-body">
-                        <p className="terms-text">{termsText}</p>
-                    <SubmissionButton handleSubmit={handleSubmit}/>
+                    <div className="terms-text">
+                        <h2>{termsText.termsHeading}</h2>
+                        <p>{termsText.termsDescription}</p>
+                        <h2>{termsText.friendlyReminderHeading}</h2>
+                        <p>{termsText.friendlyReminder1}</p>
+                        <p>{termsText.friendlyReminder2}</p>
+                    </div>
+                    <SubmissionButton text={"I agree"} handleSubmit={handleSubmit}/>
                 </div>
             </div>
 

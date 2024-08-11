@@ -107,9 +107,13 @@ button {
 
     p {
       @include label-styles();
-      font-size: $label-font-size - 8;
+      font-size: $label-font-size - 4;
       color: white;
       margin: 0;
+    }
+
+    img {
+      max-width: 35px;
     }
   }
 }
@@ -234,17 +238,19 @@ select {
   &-label {
     background-color: $primary-color;
     color: white;
-    padding: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
     display: flex;
     justify-content: space-between;
     font-weight: bold;
+    font-style: italic;
   }
 
   &-content {
     color: $secondary-color;
     background-color: white;
     padding: 8px;
-    border: 2px solid $primary-color;
+    font-size: $default-font-size;
   }
 
   &.active .toggle-block-content {
@@ -273,6 +279,8 @@ select {
   }
   .terms-text {
     @include text-body-styles();
+    font-size: $default-font-size;
+    text-align: left;
   }
 }
 
@@ -318,30 +326,13 @@ select {
   }
 }
 
-.plan-trip {
+.trip-plan {
   &-container {
     @include form-container-styles();
   }
 
   &-body {
     @include body-styles();
-    &.archived {
-      background-color: #474f44;
-    }
-  }
-
-  &-archive {
-    display: flex;
-    justify-content: flex-end;
-    button {
-      border-radius: $standard-roundness;
-      padding: 10px 20px;
-      font-size: $default-font-size;
-      font-weight: bold;
-      background-color: $secondary-color;
-      color: $label-text;
-      border: none;
-    }
   }
 
   .two-col-inputs {
@@ -360,6 +351,91 @@ select {
 
   &-body {
     @include body-styles();
+    &.archived {
+      background-color: #474f44;
+    }
+
+    .link-reminder {
+      display: flex;
+      align-items: center;
+      padding-bottom: 8px;
+      gap: 8px;
+  
+      p {
+        color: white;
+        font-size: $default-font-size;
+        font-style: italic;
+        font-weight: bold;
+      }
+
+      img {
+        max-width: 60px;
+      }
+    }
+
+    hr {
+      height: 1px;
+      color: white;
+      background-color: white;
+      border-radius: $standard-roundness;
+    }
+    .controls {
+      display: flex;
+      justify-content: right;
+      padding-bottom: 8px;
+      gap: 8px;
+
+      &-edit {
+        .button-container {
+          justify-content: right;
+        }
+      }
+
+      &-archive {
+        button {
+          gap: 8px;
+          display: flex;
+          align-items: center;
+          border-radius: $standard-roundness;
+          padding: 5px 60px;
+          font-size: $default-font-size;
+          font-weight: bold;
+          background-color: $secondary-color;
+          color: white;
+          border: none;
+
+          img {
+            max-width: 35px;
+          }
+        }
+      }
+    }
+  }
+
+  .two-col-inputs {
+    display: flex;
+    justify-content: space-between;
+    .input-box {
+      width: 48%;
+    }
+  }
+}
+
+.trip-edit {
+  &-container {
+    @include form-container-styles();
+  }
+
+  &-body {
+    @include body-styles();
+
+    .controls {
+      display: flex;
+      justify-content: right;
+      padding-bottom: 8px;
+      gap: 8px;
+    }
+
   }
 
   .two-col-inputs {
@@ -685,7 +761,9 @@ select {
     background-color: $primary-color;
     width: 100%;
     height: fit-content;
-    margin: auto;
+    position: fixed;
+    top: 40%;
+    
 
     h1,
     p {
@@ -702,6 +780,7 @@ select {
   max-height: 80;
   display: flex;
   align-items: center;
+  margin-bottom: 8px;
 
   p {
     color: white;

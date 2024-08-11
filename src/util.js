@@ -16,3 +16,50 @@ export const formatDate = (dateString) => {
     time: formattedTime,
   };
 };
+
+// TODO: this function is needed because we are currently storing the date in the database as
+// a timestamp value, so sometimes the date picker is one day off due to timezone issues
+// (see: https://medium.com/@sungbinkim98/is-your-javascript-date-one-day-off-c56afb37e4bc)
+// the data type of the values in the database should ideally change if we are not storing time
+// info anymore.
+export const formatDateFromDatabase = (dateString) => {
+  if(dateString === "") {
+    return dateString;
+  }
+
+  const date = new Date(dateString);
+
+  // referenced from: 
+  // https://www.servicenow.com/community/developer-forum/how-can-i-convert-date-format-at-client-side/m-p/2596709
+  const formattedDate = date.toISOString().split('T')[0];
+
+  return formattedDate
+};
+
+export const validateEmailFormat = (email) => {
+  // RegEx expression from: https://mailtrap.io/blog/validate-emails-in-react/
+  const emailRegEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+
+  const isEmailValid = emailRegEx.test(email);
+  return isEmailValid;
+};
+
+export const validateDateRange = (startDateString, endDateString) => {
+  if (startDateString === "" || endDateString === "") {
+    return false;
+  }
+
+  const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
+
+  const isDateRangeValid = (startDate <= endDate);
+  return isDateRangeValid;
+}
+
+export const validatePhoneNumberFormat = (number) => {
+    // RegEx expression from: https://stackoverflow.com/questions/8634139/phone-validation-regex
+  const phoneRegEx = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+
+  const isNumberValid = phoneRegEx.test(number);
+  return isNumberValid;
+}

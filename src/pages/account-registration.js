@@ -5,24 +5,30 @@ import InputText from "../base-components/input-text";
 import PageHeader from "../base-components/page-header";
 import PopUpMessage from "../base-components/pop-up-message";
 import { useLocation } from "react-router-dom";
+import InputErrorMessage from "../base-components/input-error-message";
+import InputPassword from "../base-components/input-password";
+import { validateEmailFormat } from "../util";
 
 function AccountRegistration() {
+  // user info
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [isRegistrationSucessful, setRegistrationStatus] = useState("");
+
+  // error handling
+  const [registrationStatus, setRegistrationStatus] = useState("");
+  const [hasEmptyField, setHasEmptyField] = useState(false);
+  const [emailInputError, setEmailInputError] = useState(false);
 
   const location = useLocation();
 
+  // reset update status upon re-navigating back to this page
   useEffect(() => {
     setRegistrationStatus("");
   }, [location]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const registerUserAccount = async () => {
     const apiEndpoint =
       "https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal/register";
     try {
@@ -31,13 +37,7 @@ function AccountRegistration() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          password,
-          email,
-          firstName,
-          lastName,
-          phoneNumber,
-        }),
+        body: JSON.stringify({ password, email, firstName, lastName }),
       });
 
       if (response.ok) {
@@ -55,17 +55,37 @@ function AccountRegistration() {
     }
   };
 
+  const validateUserAccountInfo = () => {
+    if (
+      email === "" ||
+      password === "" ||
+      firstName === "" ||
+      lastName === ""
+    ) {
+      setHasEmptyField(true);
+    } else {
+      setHasEmptyField(false);
+      const isEmailValid = validateEmailFormat(email);
+      if (isEmailValid) {
+        setEmailInputError(false);
+        registerUserAccount();
+      } else {
+        setEmailInputError(true);
+      }
+    }
+  };
+
   return (
     <div className="account-registration">
       <PageHeader text={"Register for an Account"} />
-      {isRegistrationSucessful === "success" && (
+      {registrationStatus === "success" && (
         <PopUpMessage
           title="Registration successful!"
           message="Please return to the login page to access your account."
           link="/login"
         />
       )}
-      {isRegistrationSucessful === "failure" && (
+      {registrationStatus === "failure" && (
         <PopUpMessage
           title="Registration failed!"
           message="Please try again."
@@ -74,7 +94,7 @@ function AccountRegistration() {
       )}
       <div
         className={
-          isRegistrationSucessful
+          registrationStatus
             ? "blur account-registration-container"
             : "account-registration-container"
         }
@@ -86,7 +106,7 @@ function AccountRegistration() {
             value={email}
             onChange={setEmail}
           />
-          <InputText
+          <InputPassword
             label="Password:"
             placeholder="Type your password"
             value={password}
@@ -106,13 +126,17 @@ function AccountRegistration() {
               onChange={setLastName}
             />
           </div>
-          <InputText
-            label="Phone Number (optional):"
-            placeholder="Type your Phone Number"
-            value={phoneNumber}
-            onChange={setPhoneNumber}
-          />
-          <SubmissionButton handleSubmit={handleSubmit} />
+          {hasEmptyField && (
+            <InputErrorMessage
+              message={"Account information cannot be blank. Please try again."}
+            />
+          )}
+          {emailInputError && (
+            <InputErrorMessage
+              message={"Invalid email address. Please try again."}
+            />
+          )}
+          <SubmissionButton handleSubmit={validateUserAccountInfo} />
         </div>
       </div>
     </div>

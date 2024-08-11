@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const Dropdown = ({ label, options, onSelect, placeholder }) => {
+const Dropdown = ({ label, options, onSelect, placeholder, initialOptionValue="" }) => {
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleChange = (event) => {
@@ -8,6 +8,12 @@ const Dropdown = ({ label, options, onSelect, placeholder }) => {
     setSelectedOption(event.target.value);
     onSelect(event.target.value);
   };
+
+  useEffect(() => {
+    if(initialOptionValue) {
+      setSelectedOption(initialOptionValue);
+    }
+  }, [initialOptionValue])
 
   return (
     <div className="input-dropdown input-box">
