@@ -9,6 +9,8 @@ import InputText from "../base-components/input-text";
 import Dropdown from "../base-components/input-dropdown";
 import InputDateTime from "../base-components/input-datetime";
 import {formatDateFromDatabase} from "../util";
+import { validateDateRange, validatePhoneNumberFormat } from "../util";
+import InputErrorMessage from "../base-components/input-error-message";
 
 function EditTrip() {
 
@@ -28,6 +30,11 @@ function EditTrip() {
   const [rfid_tag_uid, setRfidTagID] = useState("");
 
   const [checkpointOptions, setCheckpointOptions] = useState([]);
+
+  // error checking
+  const [hasEmptyField, setHasEmptyField] = useState(false);
+  const [hasInvalidDates, setHasInvalidDates] = useState(false);
+  const [hasInvalidPhoneNumber, setHasInvalidPhoneNumber] = useState(false);
 
   // navigation
   const navigateTo = useNavigate();
@@ -96,7 +103,6 @@ function EditTrip() {
   };
 
   const handleSave = async () => {
-
     const apiEndPoint = `http://localhost:3000/hiker_portal/trip_plan/${userId}/${tripPlanId}`;
     try {
       const response = await fetch(apiEndPoint, {
@@ -128,6 +134,30 @@ function EditTrip() {
     }
   };
 
+  const validateTripPlan = () => {
+    if (trail_id === "" || entry_point === "" || exit_point === "" || start_date === "" || end_date === "" || emergency_contact_name === "" || emergency_contact_number === "" || rfid_tag_uid === "") {
+      setHasEmptyField(true);
+    }
+    else {
+      setHasEmptyField(false);
+      const isDateRangeValid = validateDateRange(start_date, end_date)
+      if (!isDateRangeValid) {
+        setHasInvalidDates(true);
+      }
+      else {
+        setHasInvalidDates(false);
+        const isPhoneNumberValid = validatePhoneNumberFormat(emergency_contact_number);
+        
+        if(!isPhoneNumberValid) {
+          setHasInvalidPhoneNumber(true);
+        }
+        else {
+          setHasInvalidPhoneNumber(false);
+          handleSave();
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     getTripPlan();
@@ -144,12 +174,27 @@ function EditTrip() {
          <div className="trip-edit-body">
             <div className="controls">
               <div className="controls-save">
-                <SubmissionButton text="Save" handleSubmit={handleSave} specialIcon={save}></SubmissionButton>
+                <SubmissionButton text="Save" handleSubmit={validateTripPlan} specialIcon={save}></SubmissionButton>
               </div>
               <div className="controls-cancel">
                 <SubmissionButton text="Cancel" handleSubmit={handleCancel} specialIcon={cancel}></SubmissionButton>
               </div>
             </div>
+            {hasEmptyField && (
+            <InputErrorMessage
+            message={"Trip plan information cannot be blank. Please try again."}
+          />
+          )}
+          {hasInvalidDates && (
+            <InputErrorMessage
+            message={"The start date cannot be after the end date. Please try again."}
+          />
+          )}
+          {hasInvalidPhoneNumber && (
+            <InputErrorMessage
+            message={"Invalid phone number. Please try again."}
+          />
+          )}
           <DisplayText
             label="Trail Name:"
             value={trail_name} />
@@ -187,10 +232,6 @@ function EditTrip() {
               value={emergency_contact_number}
               onChange={setContactNumber}
             />
-            {/* <DisplayText
-              label="Emergency Contact Email (optional):"
-              value={tripPlan.emergency_contact_email} 
-            /> */}
           </div>
           <InputText
             label="Tag Identifier:"

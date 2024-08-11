@@ -372,6 +372,13 @@ select {
         max-width: 60px;
       }
     }
+
+    hr {
+      height: 1px;
+      color: white;
+      background-color: white;
+      border-radius: $standard-roundness;
+    }
     .controls {
       display: flex;
       justify-content: right;
@@ -773,7 +780,7 @@ select {
   max-height: 80;
   display: flex;
   align-items: center;
-  position: absolute;
+  margin-bottom: 8px;
 
   p {
     color: white;

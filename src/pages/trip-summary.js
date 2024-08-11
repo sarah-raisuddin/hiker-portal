@@ -24,7 +24,6 @@ function TripSummary() {
   const [exit_point, setExitPoint] = useState("");
   const [emergency_contact_name, setContactName] = useState("");
   const [emergency_contact_number, setContactNumber] = useState("");
-  const [emergency_contact_email, setContactEmail] = useState("");
   const [rfid_tag_uid, setRfidTagID] = useState("");
   const [startPointName, setStartPointName] = useState("");
   const [endPointName, setEndPointName] = useState("");

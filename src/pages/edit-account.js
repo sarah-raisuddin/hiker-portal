@@ -6,13 +6,18 @@ import BackToDashboard from "../base-components/back-to-dashboard";
 import InputText from "../base-components/input-text";
 import PopUpMessage from "../base-components/pop-up-message";
 import { useNavigate, useLocation } from "react-router-dom";
+import InputErrorMessage from "../base-components/input-error-message";
 
 function EditAccount() {
+    // user info
     const userId = localStorage.getItem("userId");
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [updateStatus, setUpdateStatus] = useState("");
+
+    // error handling
+    const [hasEmptyField, setHasEmptyField] = useState(false);
 
     const location = useLocation();
 
@@ -48,6 +53,16 @@ function EditAccount() {
           console.log("Error during get user account info", error);
         }
     };
+
+    const validateUserAccountInfo = () => {
+        if (firstName === "" || lastName === "") {
+            setHasEmptyField(true);
+        }
+        else {
+            setHasEmptyField(false);
+            updateUserAccountInfo();
+        }
+    }
 
     const updateUserAccountInfo = async () => {
         const apiEndpoint = `http://localhost:3000/hiker_portal/updateAccount/${userId}`;
@@ -119,15 +134,13 @@ function EditAccount() {
                             value={lastName} 
                             onChange={setLastName}/>
                     </div>
-                    {/* <DisplayText
-                        label="Phone Number (optional):"
-                        value={accountData.phoneNumber}
-                    />
-                    <DisplayText
-                        label="Address (optional):"
-                        value={accountData.address}
-                    /> */}
-                    <SubmissionButton handleSubmit={updateUserAccountInfo}/>
+                    {hasEmptyField && (
+                        <InputErrorMessage
+                        message={"Account information cannot be blank. Please try again."}
+                      />
+                    )
+                    }
+                    <SubmissionButton handleSubmit={validateUserAccountInfo}/>
                 </div>
             </div>
         </div>

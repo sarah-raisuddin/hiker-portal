@@ -35,3 +35,31 @@ export const formatDateFromDatabase = (dateString) => {
 
   return formattedDate
 };
+
+export const validateEmailFormat = (email) => {
+  // RegEx expression from: https://mailtrap.io/blog/validate-emails-in-react/
+  const emailRegEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+
+  const isEmailValid = emailRegEx.test(email);
+  return isEmailValid;
+};
+
+export const validateDateRange = (startDateString, endDateString) => {
+  if (startDateString === "" || endDateString === "") {
+    return false;
+  }
+
+  const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
+
+  const isDateRangeValid = (startDate <= endDate);
+  return isDateRangeValid;
+}
+
+export const validatePhoneNumberFormat = (number) => {
+    // RegEx expression from: https://stackoverflow.com/questions/8634139/phone-validation-regex
+  const phoneRegEx = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+
+  const isNumberValid = phoneRegEx.test(number);
+  return isNumberValid;
+}

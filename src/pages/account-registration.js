@@ -5,24 +5,31 @@ import InputText from "../base-components/input-text";
 import PageHeader from "../base-components/page-header";
 import PopUpMessage from "../base-components/pop-up-message";
 import { useLocation } from "react-router-dom";
+import InputErrorMessage from "../base-components/input-error-message";
+import InputPassword from "../base-components/input-password";
+import { validateEmailFormat } from "../util";
 
 function AccountRegistration() {
   
+  // user info
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+
+  // error handling
   const [registrationStatus, setRegistrationStatus] = useState("");
+  const [hasEmptyField, setHasEmptyField] = useState(false);
+  const [emailInputError, setEmailInputError] = useState(false);
 
   const location = useLocation();
 
-      // reset update status upon re-navigating back to this page
+  // reset update status upon re-navigating back to this page
   useEffect(() => {
     setRegistrationStatus("");
   }, [location]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const registerUserAccount = async () => {
 
     const apiEndpoint = "http://localhost:3000/hiker_portal/register";
     try {
@@ -48,7 +55,24 @@ function AccountRegistration() {
       console.error("Error during account registration:", error);
       setRegistrationStatus("failure");
     }
-};
+  };
+
+  const validateUserAccountInfo = () => {
+    if (email === "" || password === "" || firstName === "" || lastName === "") {
+      setHasEmptyField(true);
+    }
+    else {
+      setHasEmptyField(false);
+      const isEmailValid = validateEmailFormat(email);
+      if (isEmailValid) {
+        setEmailInputError(false);
+        registerUserAccount();
+      }
+      else {
+        setEmailInputError(true);
+      }
+    }
+  }
   
   return (
     <div className="account-registration">
@@ -73,7 +97,7 @@ function AccountRegistration() {
             placeholder="Type your email"
             value={email}
             onChange={setEmail}/>
-          <InputText
+          <InputPassword
             label="Password:"
             placeholder="Type your password"
             value={password}
@@ -90,7 +114,17 @@ function AccountRegistration() {
             value={lastName}
             onChange={setLastName}/>
           </div>
-          <SubmissionButton handleSubmit={handleSubmit}/>
+          {hasEmptyField && (
+            <InputErrorMessage
+            message={"Account information cannot be blank. Please try again."}
+          />
+          )}
+          {emailInputError && (
+            <InputErrorMessage
+            message={"Invalid email address. Please try again."}
+            />
+          )}
+          <SubmissionButton handleSubmit={validateUserAccountInfo}/>
         </div>
       </div>
     </div>

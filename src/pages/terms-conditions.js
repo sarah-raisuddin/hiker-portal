@@ -23,7 +23,7 @@ function TermsAndConditions() {
                         <p>{termsText.friendlyReminder1}</p>
                         <p>{termsText.friendlyReminder2}</p>
                     </div>
-                    <SubmissionButton handleSubmit={handleSubmit}/>
+                    <SubmissionButton text={"I agree"} handleSubmit={handleSubmit}/>
                 </div>
             </div>
 

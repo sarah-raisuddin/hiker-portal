@@ -7,8 +7,11 @@ import InputDateTime from "../base-components/input-datetime";
 import Dropdown from "../base-components/input-dropdown";
 import { useNavigate } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
+import { validateDateRange, validatePhoneNumberFormat } from "../util";
+import InputErrorMessage from "../base-components/input-error-message";
 
 function PlanTrip() {
+  // user info
   const user_id = localStorage.getItem("userId");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
@@ -17,10 +20,14 @@ function PlanTrip() {
   const [exit_point, setExitPoint] = useState("");
   const [emergency_contact_name, setContactName] = useState("");
   const [emergency_contact_number, setContactNumber] = useState("");
-  const [emergency_contact_email, setContactEmail] = useState("");
   const [rfid_tag_uid, setRfidTagID] = useState("");
   const [trailOptions, setTrailOptions] = useState([]);
   const [checkpointOptions, setCheckpointOptions] = useState([]);
+
+  // error checking
+  const [hasEmptyField, setHasEmptyField] = useState(false);
+  const [hasInvalidDates, setHasInvalidDates] = useState(false);
+  const [hasInvalidPhoneNumber, setHasInvalidPhoneNumber] = useState(false);
 
   const navigateTo = useNavigate();
 
@@ -79,8 +86,32 @@ function PlanTrip() {
     getTrailCheckpoints();
   }, [trail_id]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const validateTripPlan = () => {
+    if (trail_id === "" || entry_point === "" || exit_point === "" || start_date === "" || end_date === "" || emergency_contact_name === "" || emergency_contact_number === "" || rfid_tag_uid === "") {
+      setHasEmptyField(true);
+    }
+    else {
+      setHasEmptyField(false);
+      const isDateRangeValid = validateDateRange(start_date, end_date)
+      if (!isDateRangeValid) {
+        setHasInvalidDates(true);
+      }
+      else {
+        setHasInvalidDates(false);
+        const isPhoneNumberValid = validatePhoneNumberFormat(emergency_contact_number);
+        
+        if(!isPhoneNumberValid) {
+          setHasInvalidPhoneNumber(true);
+        }
+        else {
+          setHasInvalidPhoneNumber(false);
+          submitTripPlan();
+        }
+      }
+    }
+  }
+
+  const submitTripPlan = async () => {
 
     const apiEndpoint = "http://localhost:3000/hiker_portal/trip_plans";
     try {
@@ -171,13 +202,6 @@ function PlanTrip() {
               value={emergency_contact_number}
               onChange={setContactNumber}
             />
-            <InputText
-              // TODO-KT: need to propogate this field into server code/database, leave blank for now
-              label="Emergency Contact Email (optional):"
-              placeholder="Type Email"
-              value={emergency_contact_email}
-              onChange={setContactEmail}
-            />
           </div>
           <InputText
             label="Tag Identifier:"
@@ -185,7 +209,22 @@ function PlanTrip() {
             value={rfid_tag_uid}
             onChange={setRfidTagID}
           />
-          <SubmissionButton handleSubmit={handleSubmit} />
+          {hasEmptyField && (
+            <InputErrorMessage
+            message={"Trip plan information cannot be blank. Please try again."}
+          />
+          )}
+          {hasInvalidDates && (
+            <InputErrorMessage
+            message={"The start date cannot be after the end date. Please try again."}
+          />
+          )}
+          {hasInvalidPhoneNumber && (
+            <InputErrorMessage
+            message={"Invalid phone number. Please try again."}
+          />
+          )}
+          <SubmissionButton handleSubmit={validateTripPlan} />
         </div>
       </div>
     </div>
