@@ -13,11 +13,19 @@ import TripSummary from "./pages/trip-summary";
 import Home from "./pages/home";
 import Faqs from "./pages/faqs";
 import EditTrip from "./pages/trip-edit";
+import { useEffect } from "react";
 
 import HeaderMenu from "./base-components/header-menu";
 
 function App() {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState("");
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(() => {
+    const loginState = localStorage.getItem("isUserLoggedIn");
+    return loginState === "true";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("isUserLoggedIn", isUserLoggedIn);
+  }, [isUserLoggedIn]);
 
   const handleUserLogIn = () => {
     setIsUserLoggedIn(true);
