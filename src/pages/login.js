@@ -39,7 +39,8 @@ function Login({ handleUserLogIn }) {
       setEmailInputError(false);
     }
 
-    const apiEndpoint = "http://localhost:3000/hiker_portal/login";
+    const apiEndpoint =
+      "https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal/login";
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",

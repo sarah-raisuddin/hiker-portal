@@ -21,7 +21,7 @@ function HikerDashboard() {
   };
 
   const getTripPlans = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plans?user_id=${userId}`;
+    const apiEndpoint = `https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal/trip_plans?user_id=${userId}`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "GET",
