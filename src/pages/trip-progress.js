@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SubmissionButton from "../base-components/button";
 import PageHeader from "../base-components/page-header";
-import { fetchProgress, fetchTrail } from "../api";
+import { fetchProgress, fetchTrail, fetchUserInfo } from "../api";
 import { useEffect } from "react";
 import { formatDate } from "../util";
 import { useLocation } from "react-router-dom";
@@ -10,6 +10,7 @@ const TripProgress = () => {
   const [activeCheckpoint, setActiveCheckpoint] = useState(null);
   const [trailData, setTrailData] = useState(null);
   const [progressData, setProgressData] = useState({});
+  const [userData, setUserData] = useState({});
 
   const location = useLocation();
 
@@ -20,10 +21,11 @@ const TripProgress = () => {
 
       if (uid) {
         const progressResult = await fetchProgress({ uid });
-        console.log();
         const result = await fetchTrail({
           trailId: progressResult.tripPlan.trail_id,
         });
+        const userData = await fetchUserInfo(progressResult.tripPlan.user_id);
+        setUserData(userData);
         setProgressData(progressResult);
         setTrailData(result);
       }
@@ -162,7 +164,7 @@ const TripProgress = () => {
 
   return (
     <div className="trip-progress">
-      <PageHeader text={`${tripPlan.emergency_contact_name}'s Progress`} />
+      <PageHeader text={`${userData.first_name}'s Progress`} />
       <OverviewTable tripPlan={tripPlan} />
       <h2>Click on a checkpoint for more info</h2>
       <TripProgressView checkpoints={checkpoints} />

@@ -15,6 +15,14 @@ function TripSummary() {
   const tripPlanId = localStorage.getItem("tripPlanIdToView");
   const userId = localStorage.getItem("userId");
 
+  const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
+  const navigateTo = useNavigate();
+  useEffect(() => {
+    if (isUserLoggedIn === "false") {
+      navigateTo("/login");
+    }
+  }, [isUserLoggedIn, navigateTo]);
+
   // trip plan info
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
@@ -32,7 +40,6 @@ function TripSummary() {
   const [isPlanArchived, setIsPlanArchived] = useState(false);
 
   //navigation
-  const navigateTo = useNavigate();
 
   const getTripPlan = async () => {
     const apiEndpoint = `https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal/trip_plans?user_id=${userId}`;
@@ -106,6 +113,7 @@ function TripSummary() {
     try {
       const result = await archiveTripPlan({ id: tripPlanId });
       console.log("Trip plan archived:", result);
+      navigateTo("/trips");
     } catch (error) {
       console.error("Error archiving trip plan:", error);
     }
@@ -133,7 +141,11 @@ function TripSummary() {
         >
           <div className="controls">
             <div className="controls-archive">
-              <button disabled={isPlanArchived} onClick={archivePlan}>
+              <button
+                disabled={isPlanArchived}
+                onClick={archivePlan}
+                className={isPlanArchived ? "inactive" : ""}
+              >
                 {isPlanArchived ? "Archived Trip" : "Archive Trip"}
                 <img src={archive} />
               </button>
@@ -143,6 +155,7 @@ function TripSummary() {
                 text="Edit Trip Plan"
                 handleSubmit={handleEditTripPlan}
                 specialIcon={edit}
+                inactive={isPlanArchived}
               ></SubmissionButton>
             </div>
           </div>

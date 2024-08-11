@@ -16,6 +16,14 @@ function EditAccount() {
   const [lastName, setLastName] = useState("");
   const [updateStatus, setUpdateStatus] = useState("");
 
+  const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
+  const navigateTo = useNavigate();
+  useEffect(() => {
+    if (isUserLoggedIn === "false") {
+      navigateTo("/login");
+    }
+  }, [isUserLoggedIn, navigateTo]);
+
   // error handling
   const [hasEmptyField, setHasEmptyField] = useState(false);
 
@@ -25,8 +33,6 @@ function EditAccount() {
   useEffect(() => {
     setUpdateStatus("");
   }, [location]);
-
-  const navigateTo = useNavigate();
 
   const getUserAccountInfo = async () => {
     const apiEndpoint = `http://localhost:3000/hiker_portal/accountDetails/${userId}`;

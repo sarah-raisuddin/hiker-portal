@@ -10,6 +10,7 @@ function SubmissionButton({ handleSubmit, text, specialIcon, inactive }) {
       <button
         className={`button ${inactive ? "inactive" : ""}`}
         onClick={handleSubmit}
+        disabled={inactive}
       >
         <p>{text}</p>
         <img src={buttonImage} />

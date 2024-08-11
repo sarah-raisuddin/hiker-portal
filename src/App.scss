@@ -88,6 +88,10 @@ a {
 
 button {
   cursor: pointer;
+  &.inactive {
+    background-color: gray !important;
+    cursor: default !important;
+  }
 }
 
 .button-container {
@@ -360,7 +364,7 @@ select {
       align-items: center;
       padding-bottom: 8px;
       gap: 8px;
-  
+
       p {
         color: white;
         font-size: $default-font-size;
@@ -435,7 +439,6 @@ select {
       padding-bottom: 8px;
       gap: 8px;
     }
-
   }
 
   .two-col-inputs {
@@ -763,7 +766,6 @@ select {
     height: fit-content;
     position: fixed;
     top: 40%;
-    
 
     h1,
     p {

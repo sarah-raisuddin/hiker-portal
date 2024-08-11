@@ -29,7 +29,17 @@ function PlanTrip() {
   const [hasInvalidDates, setHasInvalidDates] = useState(false);
   const [hasInvalidPhoneNumber, setHasInvalidPhoneNumber] = useState(false);
 
+  const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
+  useEffect(() => {
+    if (isUserLoggedIn === "false") {
+      navigateTo("/login");
+    }
+  }, [isUserLoggedIn, navigateTo]);
+
+  const handleAddNewPlan = () => {
+    navigateTo("/trip-plan");
+  };
 
   const getTrailOptions = async () => {
     const apiEndPoint =
@@ -88,32 +98,39 @@ function PlanTrip() {
   }, [trail_id]);
 
   const validateTripPlan = () => {
-    if (trail_id === "" || entry_point === "" || exit_point === "" || start_date === "" || end_date === "" || emergency_contact_name === "" || emergency_contact_number === "" || rfid_tag_uid === "") {
+    if (
+      trail_id === "" ||
+      entry_point === "" ||
+      exit_point === "" ||
+      start_date === "" ||
+      end_date === "" ||
+      emergency_contact_name === "" ||
+      emergency_contact_number === "" ||
+      rfid_tag_uid === ""
+    ) {
       setHasEmptyField(true);
-    }
-    else {
+    } else {
       setHasEmptyField(false);
-      const isDateRangeValid = validateDateRange(start_date, end_date)
+      const isDateRangeValid = validateDateRange(start_date, end_date);
       if (!isDateRangeValid) {
         setHasInvalidDates(true);
-      }
-      else {
+      } else {
         setHasInvalidDates(false);
-        const isPhoneNumberValid = validatePhoneNumberFormat(emergency_contact_number);
-        
-        if(!isPhoneNumberValid) {
+        const isPhoneNumberValid = validatePhoneNumberFormat(
+          emergency_contact_number
+        );
+
+        if (!isPhoneNumberValid) {
           setHasInvalidPhoneNumber(true);
-        }
-        else {
+        } else {
           setHasInvalidPhoneNumber(false);
           submitTripPlan();
         }
       }
     }
-  }
+  };
 
   const submitTripPlan = async () => {
-
     const apiEndpoint =
       "https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal/trip_plans";
     try {
@@ -154,7 +171,7 @@ function PlanTrip() {
   return (
     <div className="trip-plan">
       <PageHeader text={"Create a Trip Plan"} />
-      <BackToDashboard/>
+      <BackToDashboard />
       <div className="trip-plan-container">
         <div className="trip-plan-body">
           <Dropdown
@@ -213,18 +230,22 @@ function PlanTrip() {
           />
           {hasEmptyField && (
             <InputErrorMessage
-            message={"Trip plan information cannot be blank. Please try again."}
-          />
+              message={
+                "Trip plan information cannot be blank. Please try again."
+              }
+            />
           )}
           {hasInvalidDates && (
             <InputErrorMessage
-            message={"The start date cannot be after the end date. Please try again."}
-          />
+              message={
+                "The start date cannot be after the end date. Please try again."
+              }
+            />
           )}
           {hasInvalidPhoneNumber && (
             <InputErrorMessage
-            message={"Invalid phone number. Please try again."}
-          />
+              message={"Invalid phone number. Please try again."}
+            />
           )}
           <SubmissionButton handleSubmit={validateTripPlan} />
         </div>

@@ -1,7 +1,7 @@
 const sarDashApi =
-  "https://local-test-deployment-capstone-2024.azurewebsites.net//sar_dashboard";
+  "https://local-test-deployment-capstone-2024.azurewebsites.net/sar_dashboard";
 const hikerPortalApi =
-  "https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal";
+  "https://local-test-deployment-capstone-2024.azurewebsites.net/hiker_portal";
 
 export const fetchTrail = async ({ trailId }) => {
   // Replace with your API endpoint
@@ -79,5 +79,26 @@ export const archiveTripPlan = async ({ id }) => {
     }
   } catch (error) {
     console.error("Error during trip plan archiving:", error);
+  }
+};
+
+export const fetchUserInfo = async (userId) => {
+  const apiEndpoint = `${hikerPortalApi}/accountDetails/${userId}`;
+  try {
+    const response = await fetch(apiEndpoint, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      console.log("Failed to get user account info", response.status);
+    }
+  } catch (error) {
+    console.log("Error during get user account info", error);
   }
 };

@@ -13,8 +13,13 @@ function HikerDashboard() {
   const [tripPlans, setTripPlans] = useState([]);
   const [showArchived, setShowArchived] = useState(false);
 
-  // navigation
+  const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
+  useEffect(() => {
+    if (isUserLoggedIn === "false") {
+      navigateTo("/login");
+    }
+  }, [isUserLoggedIn, navigateTo]);
 
   const handleAddNewPlan = () => {
     navigateTo("/trip-plan");

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 export const formatDate = (dateString) => {
   const date = new Date(dateString);
   const dateOptions = { year: "numeric", month: "long", day: "numeric" };
@@ -23,17 +24,17 @@ export const formatDate = (dateString) => {
 // the data type of the values in the database should ideally change if we are not storing time
 // info anymore.
 export const formatDateFromDatabase = (dateString) => {
-  if(dateString === "") {
+  if (dateString === "") {
     return dateString;
   }
 
   const date = new Date(dateString);
 
-  // referenced from: 
+  // referenced from:
   // https://www.servicenow.com/community/developer-forum/how-can-i-convert-date-format-at-client-side/m-p/2596709
-  const formattedDate = date.toISOString().split('T')[0];
+  const formattedDate = date.toISOString().split("T")[0];
 
-  return formattedDate
+  return formattedDate;
 };
 
 export const validateEmailFormat = (email) => {
@@ -52,14 +53,14 @@ export const validateDateRange = (startDateString, endDateString) => {
   const startDate = new Date(startDateString);
   const endDate = new Date(endDateString);
 
-  const isDateRangeValid = (startDate <= endDate);
+  const isDateRangeValid = startDate <= endDate;
   return isDateRangeValid;
-}
+};
 
 export const validatePhoneNumberFormat = (number) => {
-    // RegEx expression from: https://stackoverflow.com/questions/8634139/phone-validation-regex
+  // RegEx expression from: https://stackoverflow.com/questions/8634139/phone-validation-regex
   const phoneRegEx = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
 
   const isNumberValid = phoneRegEx.test(number);
   return isNumberValid;
-}
+};
