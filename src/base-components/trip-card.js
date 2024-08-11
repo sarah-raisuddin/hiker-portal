@@ -26,6 +26,7 @@ function TripCard({ trailPlan }) {
         <SubmissionButton
           handleSubmit={handleSubmit}
           inactive={trailPlan.archived}
+          text="View Plan"
         />
       </div>
     </div>

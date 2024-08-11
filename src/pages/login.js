@@ -112,7 +112,7 @@ function Login({ handleUserLogIn }) {
             <Link to="/account-registration">Click here to sign up</Link>
           </p>
         </div>
-        <SubmissionButton handleSubmit={handleSubmit} />
+        <SubmissionButton text="Login" handleSubmit={handleSubmit} />
       </div>
     </div>
   );
