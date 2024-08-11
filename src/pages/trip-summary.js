@@ -7,6 +7,8 @@ import BackToDashboard from "../base-components/back-to-dashboard";
 import { archiveTripPlan } from "../api";
 import { formatDate } from "../util";
 import edit from "../images/button-edit.png"
+import archive from "../images/button-archive.png"
+import info from "../images/info.png"
 
 function TripSummary() {
   //user info
@@ -32,10 +34,6 @@ function TripSummary() {
 
   //navigation
   const navigateTo = useNavigate();
-
-  const handleSubmit = () => {
-    navigateTo("/trips");
-  };
 
   const getTripPlan = async () => {
     const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plans?user_id=${userId}`;
@@ -135,18 +133,27 @@ function TripSummary() {
        <BackToDashboard/>
        <div className="trip-summary-container">
          <div className={`trip-summary-body ${isPlanArchived ? "archived" : ""}`}>
-         <div className="trip-summary-archive">
-            <button disabled={isPlanArchived} onClick={archivePlan}>
-              {isPlanArchived ? "Archived Trip" : "Archive Trip"}
-            </button>
+          <div className="controls">
+            <div className="controls-archive">
+              <button disabled={isPlanArchived} onClick={archivePlan}>
+                {isPlanArchived ? "Archived Trip" : "Archive Trip"}
+                <img src={archive} />
+              </button>
+            </div>
+            <div className="controls-edit">
+              <SubmissionButton text="Edit Trip Plan" handleSubmit={handleEditTripPlan} specialIcon={edit}></SubmissionButton>
+            </div>
           </div>
-          <div className="edit-controls">
-            <SubmissionButton text="Edit Trip Plan" handleSubmit={handleEditTripPlan} specialIcon={edit}></SubmissionButton>
+          <div className="link-reminder">
+            <img src={info} />
+            <p>Remember to provide your emergency contact with this link so they can monitor your progress. 
+            This link is unique to you and will update as you tap your tag at each checkpoint.</p>
           </div>
           <DisplayText 
             label="Progress Tracking Link:"
             value={uniqueTrackingLink}
           />
+          <hr></hr>
           <DisplayText
             label="Trail Name:"
             value={trail_name} />
@@ -175,16 +182,11 @@ function TripSummary() {
               label="Emergency Contact Phone Number:"
               value={emergency_contact_number} 
             />
-            {/* <DisplayText
-              label="Emergency Contact Email (optional):"
-              value={tripPlan.emergency_contact_email} 
-            /> */}
           </div>
           <DisplayText
             label="Tag Identifier:"
             value={rfid_tag_uid}
           />
-          <SubmissionButton handleSubmit={handleSubmit}/>
          </div>
        </div>
      </div>

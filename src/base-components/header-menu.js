@@ -48,11 +48,6 @@ function HeaderMenu( {isUserLoggedIn, handleUserLogOut}) {
                     <button className="underlined-link" onClick={handleFaqNav}>
                         <p>FAQs</p>
                     </button>
-                    {/* The link below is for development rn and should be removed once proper
-                        routing is in place. */}
-                    <li>
-                        <Link to="/trip-progress">Trip Progress</Link>
-                    </li>
                     {isUserLoggedIn ? 
                     (
                     <div className="account-control-link">
