@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
 import { archiveTripPlan } from "../api";
 import { formatDate } from "../util";
+import edit from "../images/button-edit.png"
 
 function TripSummary() {
   //user info
@@ -26,7 +27,8 @@ function TripSummary() {
   const [startPointName, setStartPointName] = useState("");
   const [endPointName, setEndPointName] = useState("");
   const [uniqueTrackingLink, setUniqueTrackingLink] = useState("");
-  const [tripPlan, setTripPlan] = useState(null);
+  //const [tripPlan, setTripPlan] = useState(null);
+  const [isPlanArchived, setIsPlanArchived] = useState(false);
 
   //navigation
   const navigateTo = useNavigate();
@@ -52,7 +54,7 @@ function TripSummary() {
           (trail) => trail.id === Number(tripPlanId)
         );
 
-        setTripPlan(tripPlanToView);
+        //setTripPlan(tripPlanToView);
 
         // TODO-KT: this is very messy, should clean up
         setStartDate(tripPlanToView.start_date);
@@ -65,6 +67,8 @@ function TripSummary() {
         setContactName(tripPlanToView.emergency_contact_name);
         setContactNumber(tripPlanToView.emergency_contact_number);
         setUniqueTrackingLink(tripPlanToView.progress_tracking_link);
+        setIsPlanArchived(tripPlanToView.archived);
+
       } else {
         console.log("Failed to get trip plan", response.status);
       }
@@ -104,11 +108,9 @@ function TripSummary() {
     }
   };
 
-  const isPlanArchived = tripPlan.archived;
-
   const archivePlan = async () => {
     try {
-      const result = await archiveTripPlan({ id: tripPlan.id });
+      const result = await archiveTripPlan({ id: tripPlanId});
       console.log("Trip plan archived:", result);
     } catch (error) {
       console.error("Error archiving trip plan:", error);
@@ -123,32 +125,46 @@ function TripSummary() {
     getCheckpointNames();
   }, [trail_id, entry_point, exit_point]);
 
+  const handleEditTripPlan = () => {
+    navigateTo("/trip-edit");
+  };
+
   return (
-    <div className="trip-summary">
-      <PageHeader text={"Trip Summary"} />
-      <BackToDashboard />
-      <div className="plan-trip-container">
-        <div className={`plan-trip-body ${isPlanArchived ? "archived" : ""}`}>
-          <div className="plan-trip-archive">
+     <div className="trip-summary">
+       <PageHeader text={"Trip Summary"} />
+       <BackToDashboard/>
+       <div className="trip-summary-container">
+         <div className={`trip-summary-body ${isPlanArchived ? "archived" : ""}`}>
+         <div className="trip-summary-archive">
             <button disabled={isPlanArchived} onClick={archivePlan}>
               {isPlanArchived ? "Archived Trip" : "Archive Trip"}
             </button>
           </div>
-          <DisplayText
+          <div className="edit-controls">
+            <SubmissionButton text="Edit Trip Plan" handleSubmit={handleEditTripPlan} specialIcon={edit}></SubmissionButton>
+          </div>
+          <DisplayText 
             label="Progress Tracking Link:"
             value={uniqueTrackingLink}
           />
-          <DisplayText label="Trail Name:" value={trail_name} />
+          <DisplayText
+            label="Trail Name:"
+            value={trail_name} />
           <div className="two-col-inputs">
-            <DisplayText label="Start Point:" value={startPointName} />
-            <DisplayText label="End Point:" value={endPointName} />
+            <DisplayText 
+              label="Start Point:"
+              value={startPointName} />
+            <DisplayText 
+              label="End Point:" 
+              value={endPointName} />
           </div>
           <div className="two-col-inputs">
-            <DisplayText
-              label="Start Date:"
-              value={formatDate(start_date).date}
-            />
-            <DisplayText label="End Date:" value={formatDate(end_date).date} />
+            <DisplayText 
+              label="Start Date:" 
+              value={formatDate(start_date).date} />
+            <DisplayText 
+              label="End Date:" 
+              value={formatDate(end_date).date} />
           </div>
           <DisplayText
             label="Emergency Contact Name:"
@@ -157,18 +173,21 @@ function TripSummary() {
           <div>
             <DisplayText
               label="Emergency Contact Phone Number:"
-              value={emergency_contact_number}
+              value={emergency_contact_number} 
             />
             {/* <DisplayText
-               label="Emergency Contact Email (optional):"
-               value={tripPlan.emergency_contact_email} 
-             /> */}
+              label="Emergency Contact Email (optional):"
+              value={tripPlan.emergency_contact_email} 
+            /> */}
           </div>
-          <DisplayText label="Tag Identifier:" value={rfid_tag_uid} />
-          <SubmissionButton handleSubmit={handleSubmit} />
-        </div>
-      </div>
-    </div>
+          <DisplayText
+            label="Tag Identifier:"
+            value={rfid_tag_uid}
+          />
+          <SubmissionButton handleSubmit={handleSubmit}/>
+         </div>
+       </div>
+     </div>
   );
 }
 

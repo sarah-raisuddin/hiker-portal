@@ -12,6 +12,7 @@ import TermsAndConditions from "./pages/terms-conditions";
 import TripSummary from "./pages/trip-summary";
 import Home from "./pages/home";
 import Faqs from "./pages/faqs";
+import EditTrip from "./pages/trip-edit";
 
 import HeaderMenu from "./base-components/header-menu"
 
@@ -35,7 +36,6 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login handleUserLogIn={handleUserLogIn}/>} />
         <Route path="/register" element={<AccountRegistration />} />
-        <Route path="/plan-trip" element={<PlanTrip />} />
         <Route path="/trips" element={<HikerDashboard />} />
         <Route path="/edit-account" element={<EditAccount />} />
         <Route path="/terms-conditions" element={<TermsAndConditions />} />
@@ -44,6 +44,7 @@ function App() {
         <Route path="/faqs" element={<Faqs />} /> 
         <Route path="/trip-plan" element={<PlanTrip />} />
         <Route path="/account-registration" element={<AccountRegistration />} />
+        <Route path="/trip-edit" element={<EditTrip />} />
       </Routes>
     </div>
     
