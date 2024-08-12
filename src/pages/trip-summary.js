@@ -14,6 +14,8 @@ function TripSummary() {
   //user info
   const tripPlanId = localStorage.getItem("tripPlanIdToView");
   const userId = localStorage.getItem("userId");
+  const webDomain =
+    "https://hiker-portal-trekcheck-dff0bthcgfgceeh5.westus-01.azurewebsites.net/";
 
   const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
@@ -36,10 +38,7 @@ function TripSummary() {
   const [startPointName, setStartPointName] = useState("");
   const [endPointName, setEndPointName] = useState("");
   const [uniqueTrackingLink, setUniqueTrackingLink] = useState("");
-  //const [tripPlan, setTripPlan] = useState(null);
   const [isPlanArchived, setIsPlanArchived] = useState(false);
-
-  //navigation
 
   const getTripPlan = async () => {
     const apiEndpoint = `https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal/trip_plans?user_id=${userId}`;
@@ -121,9 +120,6 @@ function TripSummary() {
 
   useEffect(() => {
     getTripPlan();
-  }, []);
-
-  useEffect(() => {
     getCheckpointNames();
   }, [trail_id, entry_point, exit_point]);
 
@@ -169,7 +165,7 @@ function TripSummary() {
           </div>
           <DisplayText
             label="Progress Tracking Link:"
-            value={uniqueTrackingLink}
+            value={`${webDomain}/trip-progress?uids=${uniqueTrackingLink}`}
             onClick={() =>
               navigateTo(`/trip-progress?uid=${uniqueTrackingLink}`)
             }
