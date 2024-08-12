@@ -67,7 +67,7 @@ function PlanTrip() {
 
   const getTrailCheckpoints = async () => {
     console.log(trail_id);
-    const apiEndPoint = `https://local-test-deployment-capstone-2024.azurewebsites.net//sar_dashboard/trailInfo/${trail_id}`;
+    const apiEndPoint = `https://local-test-deployment-capstone-2024.azurewebsites.net/sar_dashboard/trailInfo/${trail_id}`;
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",
@@ -155,7 +155,7 @@ function PlanTrip() {
       if (response.ok) {
         const data = await response.json();
         console.log("Trip plan creation successful", data);
-        const tripPlanId = data.id;
+        const tripPlanId = data.userId;
 
         localStorage.setItem("tripPlanIdToView", tripPlanId);
         navigateTo("/trip-summary");

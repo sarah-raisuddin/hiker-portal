@@ -35,6 +35,8 @@ function EditTrip() {
   const [emergency_contact_name, setContactName] = useState("");
   const [emergency_contact_number, setContactNumber] = useState("");
   const [rfid_tag_uid, setRfidTagID] = useState("");
+  const [startPointName, setStartPointName] = useState("");
+  const [endPointName, setEndPointName] = useState("");
 
   const [checkpointOptions, setCheckpointOptions] = useState([]);
 
@@ -48,7 +50,42 @@ function EditTrip() {
   };
 
   const getTripPlan = async () => {
-    const apiEndPoint = `http://localhost:3000/hiker_portal/trip_plan/${userId}/${tripPlanId}`;
+    const apiEndpoint = `https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal/trip_plans?user_id=${userId}`;
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Get trip plan sucessful", data);
+        const tripPlanToView = data.trails.find(
+          (trail) => trail.id === Number(tripPlanId)
+        );
+
+        // TODO-KT: this is very messy, should clean up
+        setStartDate(tripPlanToView.start_date);
+        setEndDate(tripPlanToView.end_date);
+        setTrailID(tripPlanToView.trail_id);
+        setEntryPoint(tripPlanToView.entry_point);
+        setExitPoint(tripPlanToView.exit_point);
+        setRfidTagID(tripPlanToView.rfid_tag_uid);
+        setTrailName(tripPlanToView.trail_name);
+        setContactName(tripPlanToView.emergency_contact_name);
+        setContactNumber(tripPlanToView.emergency_contact_number);
+      } else {
+        console.log("Failed to get trip plan", response.status);
+      }
+    } catch (error) {
+      console.log("Error during get trip plan", error);
+    }
+  };
+
+  const getCheckpointNames = async () => {
+    const apiEndPoint = `https://local-test-deployment-capstone-2024.azurewebsites.net/sar_dashboard/trailInfo/${trail_id}`;
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",
@@ -59,46 +96,24 @@ function EditTrip() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Get trip plan successful", data);
-        // TODO-KT: this is very messy, should clean up
-        setStartDate(data.trail.start_date);
-        setEndDate(data.trail.end_date);
-        setTrailID(data.trail.trail_id);
-        setEntryPoint(data.trail.entry_point);
-        setExitPoint(data.trail.exit_point);
-        setRfidTagID(data.trail.rfid_tag_uid);
-        setTrailName(data.trail.trail_name);
-        setContactName(data.trail.emergency_contact_name);
-        setContactNumber(data.trail.emergency_contact_number);
+        console.log("Get checkpoint names successful", data);
+
+        const entryCheckpoint = data.checkpoints.find(
+          (checkpoint) => checkpoint.id === Number(entry_point)
+        );
+        const exitCheckpoint = data.checkpoints.find(
+          (checkpoint) => checkpoint.id === Number(exit_point)
+        );
+
+        setCheckpointOptions(data.checkpoints);
+
+        setStartPointName(entryCheckpoint.name);
+        setEndPointName(exitCheckpoint.name);
       } else {
         console.log("Error getting checkpoint names", response.status);
       }
     } catch (error) {
       console.log("Error getting checkpoint names", error);
-    }
-  };
-
-  const getTrailCheckpoints = async () => {
-    console.log(trail_id);
-    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${trail_id}`;
-    try {
-      const response = await fetch(apiEndPoint, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Get checkpoint options successful", data);
-
-        setCheckpointOptions(data.checkpoints);
-      } else {
-        console.log("Error getting checkpoint options", response.status);
-      }
-    } catch (error) {
-      console.log("Error getting checkpoint options", error);
     }
   };
 
@@ -168,11 +183,12 @@ function EditTrip() {
 
   useEffect(() => {
     getTripPlan();
-  }, []);
+    getCheckpointNames();
+  }, [trail_id, entry_point, exit_point]);
 
-  useEffect(() => {
-    getTrailCheckpoints();
-  }, [trail_id]);
+  const handleEditTripPlan = () => {
+    navigateTo("/trip-edit");
+  };
 
   return (
     <div className="trip-edit">
