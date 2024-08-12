@@ -118,7 +118,9 @@ function EditTrip() {
   };
 
   const handleSave = async () => {
-    const apiEndPoint = `http://localhost:3000/hiker_portal/trip_plan/${userId}/${tripPlanId}`;
+    console.log(userId);
+    console.log(tripPlanId);
+    const apiEndPoint = `https://local-test-deployment-capstone-2024.azurewebsites.net/hiker_portal/trip_plan/${userId}/${tripPlanId}`;
     try {
       const response = await fetch(apiEndPoint, {
         method: "PUT",
@@ -184,7 +186,7 @@ function EditTrip() {
   useEffect(() => {
     getTripPlan();
     getCheckpointNames();
-  }, [trail_id, entry_point, exit_point]);
+  }, [trail_id]);
 
   const handleEditTripPlan = () => {
     navigateTo("/trip-edit");
