@@ -9,6 +9,7 @@ import { formatDate } from "../util";
 import edit from "../images/button-edit.png";
 import archive from "../images/button-archive.png";
 import info from "../images/info.png";
+import DisplayLongText from "../base-components/display-text-long";
 
 function TripSummary() {
   //user info
@@ -39,7 +40,9 @@ function TripSummary() {
   const [endPointName, setEndPointName] = useState("");
   const [uniqueTrackingLink, setUniqueTrackingLink] = useState("");
   const [isPlanArchived, setIsPlanArchived] = useState(false);
+  const [additionalNotes, setAdditionalNotes] = useState("");
 
+  // TODO-KT: get additional notes text
   const getTripPlan = async () => {
     const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plans?user_id=${userId}`;
     try {
@@ -194,6 +197,7 @@ function TripSummary() {
             />
           </div>
           <DisplayText label="Tag Identifier:" value={rfid_tag_uid} />
+          <DisplayLongText label="Additional Notes:" value={additionalNotes} />
         </div>
       </div>
     </div>

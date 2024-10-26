@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
 import { validateDateRange, validatePhoneNumberFormat } from "../util";
 import InputErrorMessage from "../base-components/input-error-message";
+import LongInputText from "../base-components/input-text-long";
 
 function PlanTrip() {
   // user info
@@ -23,6 +24,7 @@ function PlanTrip() {
   const [rfid_tag_uid, setRfidTagID] = useState("");
   const [trailOptions, setTrailOptions] = useState([]);
   const [checkpointOptions, setCheckpointOptions] = useState([]);
+  const [additionalNotes, setAdditionalNotes] = useState("");
 
   // error checking
   const [hasEmptyField, setHasEmptyField] = useState(false);
@@ -129,6 +131,7 @@ function PlanTrip() {
     }
   };
 
+  // TODO-KT: add additonal notes to server endpoint
   const submitTripPlan = async () => {
     const apiEndpoint = "http://localhost:3000/hiker_portal/trip_plans";
     try {
@@ -225,6 +228,12 @@ function PlanTrip() {
             placeholder="Type Tag Identifier"
             value={rfid_tag_uid}
             onChange={setRfidTagID}
+          />
+          <LongInputText
+            label="Additional Notes:"
+            placeholder="Type Additional Notes"
+            value={additionalNotes}
+            onChange={setAdditionalNotes}
           />
           {hasEmptyField && (
             <InputErrorMessage

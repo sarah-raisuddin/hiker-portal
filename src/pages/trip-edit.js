@@ -11,6 +11,7 @@ import InputDateTime from "../base-components/input-datetime";
 import { formatDateFromDatabase } from "../util";
 import { validateDateRange, validatePhoneNumberFormat } from "../util";
 import InputErrorMessage from "../base-components/input-error-message";
+import LongInputText from "../base-components/input-text-long";
 
 function EditTrip() {
   const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
@@ -37,6 +38,7 @@ function EditTrip() {
   const [rfid_tag_uid, setRfidTagID] = useState("");
   const [startPointName, setStartPointName] = useState("");
   const [endPointName, setEndPointName] = useState("");
+  const [additionalNotes, setAdditionalNotes] = useState("");
 
   const [checkpointOptions, setCheckpointOptions] = useState([]);
 
@@ -49,6 +51,7 @@ function EditTrip() {
     navigateTo("/trip-summary");
   };
 
+  // TODO-KT: get additional notes
   const getTripPlan = async () => {
     const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plans?user_id=${userId}`;
     try {
@@ -275,6 +278,11 @@ function EditTrip() {
             label="Tag Identifier:"
             value={rfid_tag_uid}
             onChange={setRfidTagID}
+          />
+          <LongInputText
+            label="Additional Notes:"
+            value={additionalNotes}
+            onChange={setAdditionalNotes}
           />
         </div>
       </div>
