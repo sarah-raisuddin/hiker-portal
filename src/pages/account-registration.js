@@ -29,8 +29,7 @@ function AccountRegistration() {
   }, [location]);
 
   const registerUserAccount = async () => {
-    const apiEndpoint =
-      "https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal/register";
+    const apiEndpoint = "http://localhost:3000/hiker_portal/register";
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",

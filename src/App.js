@@ -13,6 +13,7 @@ import TripSummary from "./pages/trip-summary";
 import Home from "./pages/home";
 import Faqs from "./pages/faqs";
 import EditTrip from "./pages/trip-edit";
+import BugReport from "./pages/bug-report";
 import { useEffect } from "react";
 
 import HeaderMenu from "./base-components/header-menu";
@@ -58,6 +59,7 @@ function App() {
         <Route path="/trip-plan" element={<PlanTrip />} />
         <Route path="/account-registration" element={<AccountRegistration />} />
         <Route path="/trip-edit" element={<EditTrip />} />
+        <Route path="/bug-report" element={<BugReport />} />
       </Routes>
     </div>
   );

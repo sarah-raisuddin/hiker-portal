@@ -35,7 +35,7 @@ function EditAccount() {
   }, [location]);
 
   const getUserAccountInfo = async () => {
-    const apiEndpoint = `https://local-test-deployment-capstone-2024.azurewebsites.net/hiker_portal/accountDetails/${userId}`;
+    const apiEndpoint = `http://localhost:3000/hiker_portal/accountDetails/${userId}`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "GET",
@@ -68,7 +68,7 @@ function EditAccount() {
   };
 
   const updateUserAccountInfo = async () => {
-    const apiEndpoint = `https://local-test-deployment-capstone-2024.azurewebsites.net/hiker_portal/updateAccount/${userId}`;
+    const apiEndpoint = `http://localhost:3000/hiker_portal/updateAccount/${userId}`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "PUT",

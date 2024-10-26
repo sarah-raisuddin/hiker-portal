@@ -195,7 +195,8 @@ select {
   }
 
   input,
-  select {
+  select,
+  textarea {
     padding: 13px 7px;
     border-radius: $standard-roundness;
     border: none;
@@ -285,6 +286,41 @@ select {
     @include text-body-styles();
     font-size: $default-font-size;
     text-align: left;
+  }
+}
+
+.bug-report {
+  &-container {
+    @include form-container-styles();
+  }
+  &-body {
+    @include body-styles();
+  }
+  &-text {
+    @include text-body-styles();
+    font-size: $default-font-size;
+    text-align: left;
+  }
+  &-header {
+    display: flex;
+    align-items: center;
+    p {
+      @include text-body-styles();
+      font-size: $default-font-size;
+      text-align: left;
+    }
+
+    h2 {
+      @include text-body-styles();
+      text-align: left;
+      font-size: 30px;
+    }
+
+    img {
+      max-width: 40px;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
   }
 }
 

@@ -42,8 +42,7 @@ function PlanTrip() {
   };
 
   const getTrailOptions = async () => {
-    const apiEndPoint =
-      "https://local-test-deployment-capstone-2024.azurewebsites.net//sar_dashboard/trails";
+    const apiEndPoint = "http://localhost:3000/sar_dashboard/trails";
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",
@@ -67,7 +66,7 @@ function PlanTrip() {
 
   const getTrailCheckpoints = async () => {
     console.log(trail_id);
-    const apiEndPoint = `https://local-test-deployment-capstone-2024.azurewebsites.net/sar_dashboard/trailInfo/${trail_id}`;
+    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${trail_id}`;
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",
@@ -131,8 +130,7 @@ function PlanTrip() {
   };
 
   const submitTripPlan = async () => {
-    const apiEndpoint =
-      "https://local-test-deployment-capstone-2024.azurewebsites.net//hiker_portal/trip_plans";
+    const apiEndpoint = "http://localhost:3000/hiker_portal/trip_plans";
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",

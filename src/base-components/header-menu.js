@@ -25,6 +25,10 @@ function HeaderMenu({ isUserLoggedIn, handleUserLogOut }) {
     navigateTo("/trips");
   };
 
+  const handleReportBugNav = () => {
+    navigateTo("/bug-report");
+  };
+
   return (
     <nav className="header-menu">
       <div className="header-menu-left">
@@ -46,6 +50,9 @@ function HeaderMenu({ isUserLoggedIn, handleUserLogOut }) {
           )}
           <button className="underlined-link" onClick={handleFaqNav}>
             <p>FAQs</p>
+          </button>
+          <button className="underlined-link" onClick={handleReportBugNav}>
+            <p>Report An Issue</p>
           </button>
           <div className="account-control-link">
             <li>
