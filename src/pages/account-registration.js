@@ -139,7 +139,10 @@ function AccountRegistration() {
               message={"Invalid email address. Please try again."}
             />
           )}
-          <SubmissionButton handleSubmit={validateUserAccountInfo} />
+          <SubmissionButton
+            handleSubmit={validateUserAccountInfo}
+            text="Register"
+          />
         </div>
       </div>
     </div>
