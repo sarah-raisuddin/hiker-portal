@@ -21,6 +21,9 @@ function Login({ handleUserLogIn }) {
   // navigation
   const navigateTo = useNavigate();
 
+  // button state
+  const isButtonDisabled = email.trim() === "" || password.trim() === "";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -111,7 +114,11 @@ function Login({ handleUserLogIn }) {
             <Link to="/account-registration">Click here to sign up</Link>
           </p>
         </div>
-        <SubmissionButton text="Login" handleSubmit={handleSubmit} />
+        <SubmissionButton
+          text="Login"
+          handleSubmit={handleSubmit}
+          inactive={isButtonDisabled}
+        />
       </div>
     </div>
   );

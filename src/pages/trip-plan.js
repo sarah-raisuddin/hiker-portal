@@ -42,6 +42,15 @@ function PlanTrip() {
   const handleAddNewPlan = () => {
     navigateTo("/trip-plan");
   };
+  // button state
+  const isButtonDisabled =
+    start_date.trim() === "" ||
+    end_date.trim() === "" ||
+    trail_id.trim() === "" ||
+    entry_point === "" ||
+    exit_point === "" ||
+    emergency_contact_name.trim() === "" ||
+    emergency_contact_number.trim() === "";
 
   const getTrailOptions = async () => {
     const apiEndPoint = "http://localhost:3000/sar_dashboard/trails";
@@ -254,7 +263,10 @@ function PlanTrip() {
               message={"Invalid phone number. Please try again."}
             />
           )}
-          <SubmissionButton handleSubmit={validateTripPlan} />
+          <SubmissionButton
+            handleSubmit={validateTripPlan}
+            inactive={isButtonDisabled}
+          />
         </div>
       </div>
     </div>

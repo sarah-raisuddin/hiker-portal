@@ -9,6 +9,9 @@ function BugReport() {
   const [isIssueSubmitted, setIsIssueSubmitted] = useState(false);
   const [issueDescription, setIssueDescription] = useState("");
 
+  // button state
+  const isButtonDisabled = issueDescription.trim() === "";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,7 +40,11 @@ function BugReport() {
               value={issueDescription}
               onChange={setIssueDescription}
             />
-            <SubmissionButton text="Submit" handleSubmit={handleSubmit} />
+            <SubmissionButton
+              text="Submit"
+              handleSubmit={handleSubmit}
+              inactive={isButtonDisabled}
+            />
           </div>
         )}
         {isIssueSubmitted && (

@@ -47,6 +47,16 @@ function EditTrip() {
   const [hasInvalidDates, setHasInvalidDates] = useState(false);
   const [hasInvalidPhoneNumber, setHasInvalidPhoneNumber] = useState(false);
 
+  // button state
+  const isButtonDisabled =
+    start_date.trim() === "" ||
+    end_date.trim() === "" ||
+    trail_name.trim() === "" ||
+    entry_point === "" ||
+    exit_point === "" ||
+    emergency_contact_name.trim() === "" ||
+    emergency_contact_number.trim() === "";
+
   const handleCancel = () => {
     navigateTo("/trip-summary");
   };
@@ -206,6 +216,7 @@ function EditTrip() {
                 text="Save"
                 handleSubmit={validateTripPlan}
                 specialIcon={save}
+                inactive={isButtonDisabled}
               ></SubmissionButton>
             </div>
             <div className="controls-cancel">

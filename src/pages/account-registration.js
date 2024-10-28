@@ -24,6 +24,13 @@ function AccountRegistration() {
 
   const location = useLocation();
 
+  // button state
+  const isButtonDisabled =
+    email.trim() === "" ||
+    password.trim() === "" ||
+    firstName.trim() === "" ||
+    lastName.trim() === "";
+
   // reset update status upon re-navigating back to this page
   useEffect(() => {
     setRegistrationStatus("");
@@ -142,6 +149,7 @@ function AccountRegistration() {
           <SubmissionButton
             handleSubmit={validateUserAccountInfo}
             text="Register"
+            inactive={isButtonDisabled}
           />
         </div>
       </div>

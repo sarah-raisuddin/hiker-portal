@@ -29,6 +29,10 @@ function EditAccount() {
 
   const location = useLocation();
 
+  // button state
+  const isButtonDisabled =
+    email.trim() === "" || firstName.trim() === "" || lastName.trim() === "";
+
   // reset update status upon re-navigating back to this page
   useEffect(() => {
     setUpdateStatus("");
@@ -146,7 +150,10 @@ function EditAccount() {
               message={"Account information cannot be blank. Please try again."}
             />
           )}
-          <SubmissionButton handleSubmit={validateUserAccountInfo} />
+          <SubmissionButton
+            handleSubmit={validateUserAccountInfo}
+            inactive={isButtonDisabled}
+          />
         </div>
       </div>
     </div>
