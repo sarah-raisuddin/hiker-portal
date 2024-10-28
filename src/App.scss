@@ -114,6 +114,7 @@ button {
       font-size: $label-font-size - 4;
       color: white;
       margin: 0;
+      vertical-align: middle;
     }
 
     img {
@@ -287,6 +288,19 @@ select {
     font-size: $default-font-size;
     text-align: left;
   }
+}
+
+.tutorials {
+  &-container {
+    @include form-container-styles();
+  }
+  &-body {
+    @include body-styles();
+  }
+
+  @include text-body-styles();
+  font-size: $default-font-size;
+  text-align: left;
 }
 
 .bug-report {
@@ -808,6 +822,16 @@ select {
       margin: 0px 0px 18px;
       color: white;
       text-align: center;
+    }
+  }
+
+  .pop-up-options {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+
+    p {
+      margin: 0px 0px 0px;
     }
   }
 }

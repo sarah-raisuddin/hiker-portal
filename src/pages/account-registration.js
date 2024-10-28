@@ -4,6 +4,7 @@ import SubmissionButton from "../base-components/button";
 import InputText from "../base-components/input-text";
 import PageHeader from "../base-components/page-header";
 import PopUpMessage from "../base-components/pop-up-message";
+import PopUpOption from "../base-components/pop-up-option";
 import { useLocation } from "react-router-dom";
 import InputErrorMessage from "../base-components/input-error-message";
 import InputPassword from "../base-components/input-password";
@@ -78,10 +79,13 @@ function AccountRegistration() {
     <div className="account-registration">
       <PageHeader text={"Register for an Account"} />
       {registrationStatus === "success" && (
-        <PopUpMessage
+        <PopUpOption
           title="Registration successful!"
-          message="Please return to the login page to access your account."
-          link="/login"
+          message="You can return to the login page to access your account, or learn how to navigate the HikerPortal by watching one of our tutorials."
+          link1="/login"
+          link1Label="Login"
+          link2="/tutorials"
+          link2label="Tutorials"
         />
       )}
       {registrationStatus === "failure" && (

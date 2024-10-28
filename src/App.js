@@ -14,6 +14,7 @@ import Home from "./pages/home";
 import Faqs from "./pages/faqs";
 import EditTrip from "./pages/trip-edit";
 import BugReport from "./pages/bug-report";
+import Tutorials from "./pages/tutorial";
 import { useEffect } from "react";
 
 import HeaderMenu from "./base-components/header-menu";
@@ -60,6 +61,7 @@ function App() {
         <Route path="/account-registration" element={<AccountRegistration />} />
         <Route path="/trip-edit" element={<EditTrip />} />
         <Route path="/bug-report" element={<BugReport />} />
+        <Route path="/tutorials" element={<Tutorials />} />
       </Routes>
     </div>
   );
