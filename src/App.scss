@@ -129,7 +129,8 @@ button {
 }
 
 input,
-select {
+select,
+label {
   cursor: pointer;
 }
 
@@ -892,5 +893,23 @@ select {
     p {
       @include underlined-link-styles();
     }
+  }
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  p {
+    @include text-body-styles();
+    font-size: $default-font-size;
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: underline;
+  }
+
+  input {
+    transform: scale(1.25);
   }
 }
