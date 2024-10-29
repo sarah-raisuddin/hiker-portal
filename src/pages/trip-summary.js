@@ -26,25 +26,26 @@ function TripSummary() {
     }
   }, [isUserLoggedIn, navigateTo]);
 
-  // trip plan info
-  const [start_date, setStartDate] = useState("");
-  const [end_date, setEndDate] = useState("");
-  const [trail_id, setTrailID] = useState("");
-  const [trail_name, setTrailName] = useState("");
-  const [entry_point, setEntryPoint] = useState("");
-  const [exit_point, setExitPoint] = useState("");
-  const [emergency_contact_name, setContactName] = useState("");
-  const [emergency_contact_number, setContactNumber] = useState("");
-  const [rfid_tag_uid, setRfidTagID] = useState("");
-  const [startPointName, setStartPointName] = useState("");
-  const [endPointName, setEndPointName] = useState("");
-  const [uniqueTrackingLink, setUniqueTrackingLink] = useState("");
-  const [isPlanArchived, setIsPlanArchived] = useState(false);
-  const [additionalNotes, setAdditionalNotes] = useState("");
+  const [tripPlan, setTripPlan] = useState({
+    trailId: "",
+    trailName: "",
+    startPoint: "",
+    startPointName: "",
+    endPoint: "",
+    endPointName: "",
+    startDate: "",
+    endDate: "",
+    emergencyContactName: "",
+    emergencyContactNumber: "",
+    tagId: "",
+    additionalNotes: "",
+    progressLink: "",
+    archived: "",
+  });
 
   // TODO-KT: get additional notes text
   const getTripPlan = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plans?user_id=${userId}`;
+    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plan/${userId}/${tripPlanId}`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "GET",
@@ -56,58 +57,29 @@ function TripSummary() {
       if (response.ok) {
         const data = await response.json();
         console.log("Get trip plan sucessful", data);
-        const tripPlanToView = data.trails.find(
-          (trail) => trail.id === Number(tripPlanId)
-        );
 
-        // TODO-KT: this is very messy, should clean up
-        setStartDate(tripPlanToView.start_date);
-        setEndDate(tripPlanToView.end_date);
-        setTrailID(tripPlanToView.trail_id);
-        setEntryPoint(tripPlanToView.entry_point);
-        setExitPoint(tripPlanToView.exit_point);
-        setRfidTagID(tripPlanToView.rfid_tag_uid);
-        setTrailName(tripPlanToView.trail_name);
-        setContactName(tripPlanToView.emergency_contact_name);
-        setContactNumber(tripPlanToView.emergency_contact_number);
-        setUniqueTrackingLink(tripPlanToView.progress_tracking_link);
-        setIsPlanArchived(tripPlanToView.archived);
+        // TODO-KT: add additional notes field
+        setTripPlan({
+          trailId: data.trail.trail_id,
+          trailName: data.trail.trail_name,
+          startPoint: data.trail.entry_point,
+          startPointName: data.startPointName,
+          endPoint: data.trail.exit_point,
+          endPointName: data.endPointName,
+          startDate: data.trail.start_date,
+          endDate: data.trail.end_date,
+          emergencyContactName: data.trail.emergency_contact_name,
+          emergencyContactNumber: data.trail.emergency_contact_number,
+          tagId: data.trail.rfid_tag_uid,
+          additionalNotes: "",
+          progressLink: data.trail.progress_tracking_link,
+          archived: data.trail.archived,
+        });
       } else {
         console.log("Failed to get trip plan", response.status);
       }
     } catch (error) {
       console.log("Error during get trip plan", error);
-    }
-  };
-
-  const getCheckpointNames = async () => {
-    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${trail_id}`;
-    try {
-      const response = await fetch(apiEndPoint, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Get checkpoint names successful", data);
-
-        const entryCheckpoint = data.checkpoints.find(
-          (checkpoint) => checkpoint.id === Number(entry_point)
-        );
-        const exitCheckpoint = data.checkpoints.find(
-          (checkpoint) => checkpoint.id === Number(exit_point)
-        );
-
-        setStartPointName(entryCheckpoint.name);
-        setEndPointName(exitCheckpoint.name);
-      } else {
-        console.log("Error getting checkpoint names", response.status);
-      }
-    } catch (error) {
-      console.log("Error getting checkpoint names", error);
     }
   };
 
@@ -123,8 +95,7 @@ function TripSummary() {
 
   useEffect(() => {
     getTripPlan();
-    getCheckpointNames();
-  }, [trail_id, entry_point, exit_point]);
+  }, [tripPlan.trailId]);
 
   const handleEditTripPlan = () => {
     navigateTo("/trip-edit");
@@ -136,16 +107,16 @@ function TripSummary() {
       <BackToDashboard />
       <div className="trip-summary-container">
         <div
-          className={`trip-summary-body ${isPlanArchived ? "archived" : ""}`}
+          className={`trip-summary-body ${tripPlan.archived ? "archived" : ""}`}
         >
           <div className="controls">
             <div className="controls-archive">
               <button
-                disabled={isPlanArchived}
+                disabled={tripPlan.archived}
                 onClick={archivePlan}
-                className={isPlanArchived ? "inactive" : ""}
+                className={tripPlan.archived ? "inactive" : ""}
               >
-                {isPlanArchived ? "Archived Trip" : "Archive Trip"}
+                {tripPlan.archived ? "Archived Trip" : "Archive Trip"}
                 <img src={archive} />
               </button>
             </div>
@@ -154,7 +125,7 @@ function TripSummary() {
                 text="Edit Trip Plan"
                 handleSubmit={handleEditTripPlan}
                 specialIcon={edit}
-                inactive={isPlanArchived}
+                inactive={tripPlan.archived}
               ></SubmissionButton>
             </div>
           </div>
@@ -168,36 +139,42 @@ function TripSummary() {
           </div>
           <DisplayText
             label="Progress Tracking Link:"
-            value={`${webDomain}/trip-progress?uids=${uniqueTrackingLink}`}
+            value={`${webDomain}/trip-progress?uids=${tripPlan.progressLink}`}
             onClick={() =>
-              navigateTo(`/trip-progress?uid=${uniqueTrackingLink}`)
+              navigateTo(`/trip-progress?uid=${tripPlan.progressLink}`)
             }
           />
           <hr></hr>
-          <DisplayText label="Trail Name:" value={trail_name} />
+          <DisplayText label="Trail Name:" value={tripPlan.trailName} />
           <div className="two-col-inputs">
-            <DisplayText label="Start Point:" value={startPointName} />
-            <DisplayText label="End Point:" value={endPointName} />
+            <DisplayText label="Start Point:" value={tripPlan.startPointName} />
+            <DisplayText label="End Point:" value={tripPlan.endPointName} />
           </div>
           <div className="two-col-inputs">
             <DisplayText
               label="Start Date:"
-              value={formatDate(start_date).date}
+              value={formatDate(tripPlan.startDate).date}
             />
-            <DisplayText label="End Date:" value={formatDate(end_date).date} />
+            <DisplayText
+              label="End Date:"
+              value={formatDate(tripPlan.endDate).date}
+            />
           </div>
           <DisplayText
             label="Emergency Contact Name:"
-            value={emergency_contact_name}
+            value={tripPlan.emergencyContactName}
           />
           <div>
             <DisplayText
               label="Emergency Contact Phone Number:"
-              value={emergency_contact_number}
+              value={tripPlan.emergencyContactNumber}
             />
           </div>
-          <DisplayText label="Tag Identifier:" value={rfid_tag_uid} />
-          <DisplayLongText label="Additional Notes:" value={additionalNotes} />
+          <DisplayText label="Tag Identifier:" value={tripPlan.tagId} />
+          <DisplayLongText
+            label="Additional Notes:"
+            value={tripPlan.additionalNotes}
+          />
         </div>
       </div>
     </div>

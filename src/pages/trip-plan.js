@@ -14,17 +14,22 @@ import LongInputText from "../base-components/input-text-long";
 function PlanTrip() {
   // user info
   const user_id = localStorage.getItem("userId");
-  const [start_date, setStartDate] = useState("");
-  const [end_date, setEndDate] = useState("");
-  const [trail_id, setTrailID] = useState("");
-  const [entry_point, setEntryPoint] = useState("");
-  const [exit_point, setExitPoint] = useState("");
-  const [emergency_contact_name, setContactName] = useState("");
-  const [emergency_contact_number, setContactNumber] = useState("");
-  const [rfid_tag_uid, setRfidTagID] = useState("");
+
+  // select options
   const [trailOptions, setTrailOptions] = useState([]);
   const [checkpointOptions, setCheckpointOptions] = useState([]);
-  const [additionalNotes, setAdditionalNotes] = useState("");
+
+  const [tripPlan, setTripPlan] = useState({
+    trailId: "",
+    startPoint: "",
+    endPoint: "",
+    startDate: "",
+    endDate: "",
+    emergencyContactName: "",
+    emergencyContactNumber: "",
+    tagId: "",
+    additionalNotes: "",
+  });
 
   // error checking
   const [hasEmptyField, setHasEmptyField] = useState(false);
@@ -39,18 +44,15 @@ function PlanTrip() {
     }
   }, [isUserLoggedIn, navigateTo]);
 
-  const handleAddNewPlan = () => {
-    navigateTo("/trip-plan");
-  };
   // button state
   const isButtonDisabled =
-    start_date.trim() === "" ||
-    end_date.trim() === "" ||
-    trail_id.trim() === "" ||
-    entry_point === "" ||
-    exit_point === "" ||
-    emergency_contact_name.trim() === "" ||
-    emergency_contact_number.trim() === "";
+    tripPlan.startDate.trim() === "" ||
+    tripPlan.endDate.trim() === "" ||
+    tripPlan.trailId.trim() === "" ||
+    tripPlan.startPoint === "" ||
+    tripPlan.exitPoint === "" ||
+    tripPlan.emergencyContactName.trim() === "" ||
+    tripPlan.emergencyContactNumber.trim() === "";
 
   const getTrailOptions = async () => {
     const apiEndPoint = "http://localhost:3000/sar_dashboard/trails";
@@ -76,8 +78,8 @@ function PlanTrip() {
   };
 
   const getTrailCheckpoints = async () => {
-    console.log(trail_id);
-    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${trail_id}`;
+    console.log(tripPlan.trailId);
+    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${tripPlan.trailId}`;
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",
@@ -105,29 +107,32 @@ function PlanTrip() {
 
   useEffect(() => {
     getTrailCheckpoints();
-  }, [trail_id]);
+  }, [tripPlan.trailId]);
 
   const validateTripPlan = () => {
     if (
-      trail_id === "" ||
-      entry_point === "" ||
-      exit_point === "" ||
-      start_date === "" ||
-      end_date === "" ||
-      emergency_contact_name === "" ||
-      emergency_contact_number === "" ||
-      rfid_tag_uid === ""
+      tripPlan.trailId === "" ||
+      tripPlan.startPoint === "" ||
+      tripPlan.endPoint === "" ||
+      tripPlan.startDate === "" ||
+      tripPlan.endDate === "" ||
+      tripPlan.emergencyContactName === "" ||
+      tripPlan.emergencyContactNumber === "" ||
+      tripPlan.tagId === ""
     ) {
       setHasEmptyField(true);
     } else {
       setHasEmptyField(false);
-      const isDateRangeValid = validateDateRange(start_date, end_date);
+      const isDateRangeValid = validateDateRange(
+        tripPlan.startDate,
+        tripPlan.endDate
+      );
       if (!isDateRangeValid) {
         setHasInvalidDates(true);
       } else {
         setHasInvalidDates(false);
         const isPhoneNumberValid = validatePhoneNumberFormat(
-          emergency_contact_number
+          tripPlan.emergencyContactNumber
         );
 
         if (!isPhoneNumberValid) {
@@ -143,6 +148,7 @@ function PlanTrip() {
   // TODO-KT: add additonal notes to server endpoint
   const submitTripPlan = async () => {
     const apiEndpoint = "http://localhost:3000/hiker_portal/trip_plans";
+    console.log("trip plan to submit: ", tripPlan);
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",
@@ -150,22 +156,22 @@ function PlanTrip() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id,
-          start_date,
-          end_date,
-          trail_id,
-          entry_point,
-          exit_point,
-          emergency_contact_name,
-          emergency_contact_number,
-          rfid_tag_uid,
+          user_id: user_id,
+          start_date: tripPlan.startDate,
+          end_date: tripPlan.endDate,
+          trail_id: tripPlan.trailId,
+          entry_point: tripPlan.startPoint,
+          exit_point: tripPlan.endPoint,
+          emergency_contact_name: tripPlan.emergencyContactName,
+          emergency_contact_number: tripPlan.emergencyContactNumber,
+          rfid_tag_uid: tripPlan.tagId,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
         console.log("Trip plan creation successful", data);
-        const tripPlanId = data.userId;
+        const tripPlanId = data.id;
 
         localStorage.setItem("tripPlanIdToView", tripPlanId);
         navigateTo("/trip-summary");
@@ -178,6 +184,13 @@ function PlanTrip() {
     }
   };
 
+  const handleInputChange = (field) => (value) => {
+    setTripPlan((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   return (
     <div className="trip-plan">
       <PageHeader text={"Create a Trip Plan"} />
@@ -188,61 +201,67 @@ function PlanTrip() {
             label="Trail Name:"
             placeholder="Select the Trail"
             options={trailOptions}
-            onSelect={setTrailID}
+            onSelect={(selectedId) => {
+              handleInputChange("trailId")(selectedId);
+            }}
           />
           <div className="two-col-inputs">
             <Dropdown
               label="Start Point:"
               placeholder="Select Start Point"
               options={checkpointOptions}
-              onSelect={setEntryPoint}
+              onSelect={(selectedId) => {
+                handleInputChange("startPoint")(selectedId);
+              }}
             />
             <Dropdown
               label="End Point:"
               placeholder="Select End Point"
               options={checkpointOptions}
-              onSelect={setExitPoint}
+              onSelect={(selectedId) => {
+                handleInputChange("endPoint")(selectedId);
+              }}
             />
           </div>
           <div className="two-col-inputs">
             <InputDateTime
               label="Start Date:"
               placeholder="Type Start Date"
-              value={start_date}
-              onChange={setStartDate}
+              value={tripPlan.startDate}
+              onChange={handleInputChange("startDate")}
             />
             <InputDateTime
               label="End Date:"
               placeholder="Type End Date"
-              value={end_date}
-              onChange={setEndDate}
+              value={tripPlan.endDate}
+              onChange={handleInputChange("endDate")}
             />
           </div>
           <InputText
             label="Emergency Contact Name:"
             placeholder="Type Emergency Contact Name"
-            value={emergency_contact_name}
-            onChange={setContactName}
+            value={tripPlan.emergencyContactName}
+            onChange={handleInputChange("emergencyContactName")}
           />
           <div>
             <InputText
               label="Emergency Contact Phone Number:"
               placeholder="Type Phone Number"
-              value={emergency_contact_number}
-              onChange={setContactNumber}
+              value={tripPlan.emergencyContactNumber}
+              onChange={handleInputChange("emergencyContactNumber")}
             />
           </div>
           <InputText
             label="Tag Identifier:"
             placeholder="Type Tag Identifier"
-            value={rfid_tag_uid}
-            onChange={setRfidTagID}
+            value={tripPlan.tagId}
+            onChange={handleInputChange("tagId")}
           />
           <LongInputText
             label="Additional Notes:"
             placeholder="Type Additional Notes"
-            value={additionalNotes}
-            onChange={setAdditionalNotes}
+            value={tripPlan.additionalNotes}
+            onChange={handleInputChange("additionalNotes")}
           />
           {hasEmptyField && (
             <InputErrorMessage

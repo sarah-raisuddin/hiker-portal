@@ -27,18 +27,22 @@ function EditTrip() {
   const userId = localStorage.getItem("userId");
 
   // trip plan info
-  const [start_date, setStartDate] = useState("");
-  const [end_date, setEndDate] = useState("");
-  const [trail_id, setTrailID] = useState("");
-  const [trail_name, setTrailName] = useState("");
-  const [entry_point, setEntryPoint] = useState("");
-  const [exit_point, setExitPoint] = useState("");
-  const [emergency_contact_name, setContactName] = useState("");
-  const [emergency_contact_number, setContactNumber] = useState("");
-  const [rfid_tag_uid, setRfidTagID] = useState("");
-  const [startPointName, setStartPointName] = useState("");
-  const [endPointName, setEndPointName] = useState("");
-  const [additionalNotes, setAdditionalNotes] = useState("");
+  const [tripPlan, setTripPlan] = useState({
+    trailId: "",
+    trailName: "",
+    startPoint: "",
+    startPointName: "",
+    endPoint: "",
+    endPointName: "",
+    startDate: "",
+    endDate: "",
+    emergencyContactName: "",
+    emergencyContactNumber: "",
+    tagId: "",
+    additionalNotes: "",
+    progressLink: "",
+    archived: "",
+  });
 
   const [checkpointOptions, setCheckpointOptions] = useState([]);
 
@@ -49,21 +53,21 @@ function EditTrip() {
 
   // button state
   const isButtonDisabled =
-    start_date.trim() === "" ||
-    end_date.trim() === "" ||
-    trail_name.trim() === "" ||
-    entry_point === "" ||
-    exit_point === "" ||
-    emergency_contact_name.trim() === "" ||
-    emergency_contact_number.trim() === "";
+    tripPlan.startDate.trim() === "" ||
+    tripPlan.endDate.trim() === "" ||
+    tripPlan.trailName.trim() === "" ||
+    tripPlan.startPoint === "" ||
+    tripPlan.endPoint === "" ||
+    tripPlan.emergencyContactName.trim() === "" ||
+    tripPlan.emergencyContactNumber.trim() === "";
 
   const handleCancel = () => {
     navigateTo("/trip-summary");
   };
 
-  // TODO-KT: get additional notes
+  // TODO-KT: get additional notes text
   const getTripPlan = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plans?user_id=${userId}`;
+    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plan/${userId}/${tripPlanId}`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "GET",
@@ -75,58 +79,29 @@ function EditTrip() {
       if (response.ok) {
         const data = await response.json();
         console.log("Get trip plan sucessful", data);
-        const tripPlanToView = data.trails.find(
-          (trail) => trail.id === Number(tripPlanId)
-        );
 
-        // TODO-KT: this is very messy, should clean up
-        setStartDate(tripPlanToView.start_date);
-        setEndDate(tripPlanToView.end_date);
-        setTrailID(tripPlanToView.trail_id);
-        setEntryPoint(tripPlanToView.entry_point);
-        setExitPoint(tripPlanToView.exit_point);
-        setRfidTagID(tripPlanToView.rfid_tag_uid);
-        setTrailName(tripPlanToView.trail_name);
-        setContactName(tripPlanToView.emergency_contact_name);
-        setContactNumber(tripPlanToView.emergency_contact_number);
+        // TODO-KT: add additional notes field
+        setTripPlan({
+          trailId: data.trail.trail_id,
+          trailName: data.trail.trail_name,
+          startPoint: data.trail.entry_point,
+          startPointName: data.startPointName,
+          endPoint: data.trail.exit_point,
+          endPointName: data.endPointName,
+          startDate: data.trail.start_date,
+          endDate: data.trail.end_date,
+          emergencyContactName: data.trail.emergency_contact_name,
+          emergencyContactNumber: data.trail.emergency_contact_number,
+          tagId: data.trail.rfid_tag_uid,
+          additionalNotes: "",
+          progressLink: data.trail.progress_tracking_link,
+          archived: data.trail.archived,
+        });
       } else {
         console.log("Failed to get trip plan", response.status);
       }
     } catch (error) {
       console.log("Error during get trip plan", error);
-    }
-  };
-
-  const getCheckpointNames = async () => {
-    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${trail_id}`;
-    try {
-      const response = await fetch(apiEndPoint, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Get checkpoint names successful", data);
-
-        const entryCheckpoint = data.checkpoints.find(
-          (checkpoint) => checkpoint.id === Number(entry_point)
-        );
-        const exitCheckpoint = data.checkpoints.find(
-          (checkpoint) => checkpoint.id === Number(exit_point)
-        );
-
-        setCheckpointOptions(data.checkpoints);
-
-        setStartPointName(entryCheckpoint.name);
-        setEndPointName(exitCheckpoint.name);
-      } else {
-        console.log("Error getting checkpoint names", response.status);
-      }
-    } catch (error) {
-      console.log("Error getting checkpoint names", error);
     }
   };
 
@@ -141,13 +116,13 @@ function EditTrip() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          entry_point: entry_point,
-          exit_point: exit_point,
-          start_date: start_date,
-          end_date: end_date,
-          emergency_contact_name: emergency_contact_name,
-          emergency_contact_number: emergency_contact_number,
-          rfid_tag_uid: rfid_tag_uid,
+          entry_point: tripPlan.startPoint,
+          exit_point: tripPlan.endPoint,
+          start_date: tripPlan.startDate,
+          end_date: tripPlan.endDate,
+          emergency_contact_name: tripPlan.emergencyContactName,
+          emergency_contact_number: tripPlan.emergencyContactNumber,
+          rfid_tag_uid: tripPlan.tagId,
         }),
       });
 
@@ -165,25 +140,28 @@ function EditTrip() {
 
   const validateTripPlan = () => {
     if (
-      trail_id === "" ||
-      entry_point === "" ||
-      exit_point === "" ||
-      start_date === "" ||
-      end_date === "" ||
-      emergency_contact_name === "" ||
-      emergency_contact_number === "" ||
-      rfid_tag_uid === ""
+      tripPlan.trailId === "" ||
+      tripPlan.startPoint === "" ||
+      tripPlan.endPoint === "" ||
+      tripPlan.startDate === "" ||
+      tripPlan.endDate === "" ||
+      tripPlan.emergencyContactName === "" ||
+      tripPlan.emergencyContactNumber === "" ||
+      tripPlan.tagId === ""
     ) {
       setHasEmptyField(true);
     } else {
       setHasEmptyField(false);
-      const isDateRangeValid = validateDateRange(start_date, end_date);
+      const isDateRangeValid = validateDateRange(
+        tripPlan.startDate,
+        tripPlan.endDate
+      );
       if (!isDateRangeValid) {
         setHasInvalidDates(true);
       } else {
         setHasInvalidDates(false);
         const isPhoneNumberValid = validatePhoneNumberFormat(
-          emergency_contact_number
+          tripPlan.emergencyContactNumber
         );
 
         if (!isPhoneNumberValid) {
@@ -196,13 +174,40 @@ function EditTrip() {
     }
   };
 
+  const getTrailCheckpoints = async () => {
+    console.log(tripPlan.trailId);
+    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${tripPlan.trailId}`;
+    try {
+      const response = await fetch(apiEndPoint, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Get checkpoint options successful", data);
+
+        setCheckpointOptions(data.checkpoints);
+      } else {
+        console.log("Error getting checkpoint options", response.status);
+      }
+    } catch (error) {
+      console.log("Error getting checkpoint options", error);
+    }
+  };
+
   useEffect(() => {
     getTripPlan();
-    getCheckpointNames();
-  }, [trail_id]);
+    getTrailCheckpoints();
+  }, [tripPlan.trailId]);
 
-  const handleEditTripPlan = () => {
-    navigateTo("/trip-edit");
+  const handleInputChange = (field) => (value) => {
+    setTripPlan((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   return (
@@ -246,54 +251,58 @@ function EditTrip() {
               message={"Invalid phone number. Please try again."}
             />
           )}
-          <DisplayText label="Trail Name:" value={trail_name} />
+          <DisplayText label="Trail Name:" value={tripPlan.trailName} />
           <div className="two-col-inputs">
             <Dropdown
               label="Start Point:"
               options={checkpointOptions}
-              onSelect={setEntryPoint}
-              initialOptionValue={entry_point}
+              onSelect={(selectedId) =>
+                handleInputChange("startPoint")(selectedId)
+              }
+              initialOptionValue={tripPlan.startPoint}
             />
             <Dropdown
               label="End Point:"
               options={checkpointOptions}
-              onSelect={setExitPoint}
-              initialOptionValue={exit_point}
+              onSelect={(selectedId) =>
+                handleInputChange("endPoint")(selectedId)
+              }
+              initialOptionValue={tripPlan.endPoint}
             />
           </div>
           <div className="two-col-inputs">
             <InputDateTime
               label="Start Date:"
-              value={formatDateFromDatabase(start_date)}
-              onChange={setStartDate}
+              value={formatDateFromDatabase(tripPlan.startDate)}
+              onChange={handleInputChange("startDate")}
             />
             <InputDateTime
               label="End Date:"
-              value={formatDateFromDatabase(end_date)}
-              onChange={setEndDate}
+              value={formatDateFromDatabase(tripPlan.endDate)}
+              onChange={handleInputChange("endDate")}
             />
           </div>
           <InputText
             label="Emergency Contact Name:"
-            value={emergency_contact_name}
-            onChange={setContactName}
+            value={tripPlan.emergencyContactName}
+            onChange={handleInputChange("emergencyContactName")}
           />
           <div>
             <InputText
               label="Emergency Contact Phone Number:"
-              value={emergency_contact_number}
-              onChange={setContactNumber}
+              value={tripPlan.emergencyContactNumber}
+              onChange={handleInputChange("emergencyContactNumber")}
             />
           </div>
           <InputText
             label="Tag Identifier:"
-            value={rfid_tag_uid}
-            onChange={setRfidTagID}
+            value={tripPlan.tagId}
+            onChange={handleInputChange("tagId")}
           />
           <LongInputText
             label="Additional Notes:"
-            value={additionalNotes}
-            onChange={setAdditionalNotes}
+            value={tripPlan.additionalNotes}
+            onChange={handleInputChange("additionalNotes")}
           />
         </div>
       </div>
