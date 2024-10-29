@@ -38,7 +38,6 @@ function EditTrip() {
     endDate: "",
     emergencyContactName: "",
     emergencyContactNumber: "",
-    tagId: "",
     additionalNotes: "",
     progressLink: "",
     archived: "",
@@ -92,7 +91,6 @@ function EditTrip() {
           endDate: data.trail.end_date,
           emergencyContactName: data.trail.emergency_contact_name,
           emergencyContactNumber: data.trail.emergency_contact_number,
-          tagId: data.trail.rfid_tag_uid,
           additionalNotes: "",
           progressLink: data.trail.progress_tracking_link,
           archived: data.trail.archived,
@@ -122,7 +120,6 @@ function EditTrip() {
           end_date: tripPlan.endDate,
           emergency_contact_name: tripPlan.emergencyContactName,
           emergency_contact_number: tripPlan.emergencyContactNumber,
-          rfid_tag_uid: tripPlan.tagId,
         }),
       });
 
@@ -146,8 +143,7 @@ function EditTrip() {
       tripPlan.startDate === "" ||
       tripPlan.endDate === "" ||
       tripPlan.emergencyContactName === "" ||
-      tripPlan.emergencyContactNumber === "" ||
-      tripPlan.tagId === ""
+      tripPlan.emergencyContactNumber === ""
     ) {
       setHasEmptyField(true);
     } else {
@@ -294,11 +290,6 @@ function EditTrip() {
               onChange={handleInputChange("emergencyContactNumber")}
             />
           </div>
-          <InputText
-            label="Tag Identifier:"
-            value={tripPlan.tagId}
-            onChange={handleInputChange("tagId")}
-          />
           <LongInputText
             label="Additional Notes:"
             value={tripPlan.additionalNotes}
