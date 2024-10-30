@@ -63,12 +63,13 @@ export const fetchProgress = async ({ uid }) => {
 
 export const archiveTripPlan = async ({ id }) => {
   const apiEndpoint = `${hikerPortalApi}/archive_trip_plan`;
-
+  const token = localStorage.getItem("token");
   try {
     const response = await fetch(apiEndpoint, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ id: id }),
     });

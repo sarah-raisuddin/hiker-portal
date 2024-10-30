@@ -35,6 +35,7 @@ function App() {
 
   const handleUserLogOut = () => {
     setIsUserLoggedIn(false);
+    localStorage.removeItem("token");
   };
 
   return (

@@ -8,8 +8,7 @@ import toggleArrow from "../images/toggle-arrow.png";
 
 function HikerDashboard() {
   // user details
-  const firstName = localStorage.getItem("firstName");
-  const userId = localStorage.getItem("userId");
+  const [firstName, setFirstName] = useState("");
   const [tripPlans, setTripPlans] = useState([]);
   const [showArchived, setShowArchived] = useState(false);
 
@@ -26,12 +25,14 @@ function HikerDashboard() {
   };
 
   const getTripPlans = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plans?user_id=${userId}`;
+    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plans`;
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -47,7 +48,32 @@ function HikerDashboard() {
     }
   };
 
+  const getFirstName = async () => {
+    const apiEndpoint = `http://localhost:3000/hiker_portal/accountDetails`;
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Get account info sucessful", data);
+        setFirstName(data.first_name);
+      } else {
+        console.log("Failed to get trip plans", response.status);
+      }
+    } catch (error) {
+      console.log("Error during get trip plans", error);
+    }
+  };
+
   useEffect(() => {
+    getFirstName();
     getTripPlans();
   }, []);
 

@@ -14,7 +14,6 @@ import DisplayLongText from "../base-components/display-text-long";
 function TripSummary() {
   //user info
   const tripPlanId = localStorage.getItem("tripPlanIdToView");
-  const userId = localStorage.getItem("userId");
   const webDomain =
     "https://hiker-portal-trekcheck-dff0bthcgfgceeh5.westus-01.azurewebsites.net/";
 
@@ -45,12 +44,14 @@ function TripSummary() {
 
   // TODO-KT: get additional notes text
   const getTripPlan = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plan/${userId}/${tripPlanId}`;
+    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plan/${tripPlanId}`;
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

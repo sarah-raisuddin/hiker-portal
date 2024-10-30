@@ -10,7 +10,6 @@ import InputErrorMessage from "../base-components/input-error-message";
 
 function EditAccount() {
   // user info
-  const userId = localStorage.getItem("userId");
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -39,12 +38,14 @@ function EditAccount() {
   }, [location]);
 
   const getUserAccountInfo = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/accountDetails/${userId}`;
+    const apiEndpoint = `http://localhost:3000/hiker_portal/accountDetails`;
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -72,12 +73,14 @@ function EditAccount() {
   };
 
   const updateUserAccountInfo = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/updateAccount/${userId}`;
+    const apiEndpoint = `http://localhost:3000/hiker_portal/updateAccount`;
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ first_name: firstName, last_name: lastName }),
       });
@@ -85,7 +88,6 @@ function EditAccount() {
       if (response.ok) {
         const data = await response.json();
         console.log("Update user account info sucessful", data);
-        localStorage.setItem("firstName", firstName);
         setUpdateStatus("success");
       } else {
         console.log("Failed to update user account info", response.status);

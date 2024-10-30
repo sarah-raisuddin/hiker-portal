@@ -24,7 +24,6 @@ function EditTrip() {
 
   //user info
   const tripPlanId = localStorage.getItem("tripPlanIdToView");
-  const userId = localStorage.getItem("userId");
 
   // trip plan info
   const [tripPlan, setTripPlan] = useState({
@@ -67,12 +66,14 @@ function EditTrip() {
 
   // TODO-KT: get additional notes text
   const getTripPlan = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plan/${userId}/${tripPlanId}`;
+    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plan/${tripPlanId}`;
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -106,14 +107,15 @@ function EditTrip() {
   };
 
   const handleSave = async () => {
-    console.log(userId);
     console.log(tripPlanId);
-    const apiEndPoint = `http://localhost:3000/hiker_portal/trip_plan/${userId}/${tripPlanId}`;
+    const apiEndPoint = `http://localhost:3000/hiker_portal/trip_plan/${tripPlanId}`;
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndPoint, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           entry_point: tripPlan.startPoint,

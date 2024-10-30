@@ -53,8 +53,6 @@ function Login({ handleUserLogIn }) {
         setUnsuccessfulLogin(false);
         handleUserLogIn();
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.userId);
-        localStorage.setItem("firstName", data.firstName);
 
         // direct user to terms and conditions
         navigateTo("/terms-conditions");

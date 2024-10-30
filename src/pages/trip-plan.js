@@ -12,9 +12,6 @@ import InputErrorMessage from "../base-components/input-error-message";
 import LongInputText from "../base-components/input-text-long";
 
 function PlanTrip() {
-  // user info
-  const user_id = localStorage.getItem("userId");
-
   // select options
   const [trailOptions, setTrailOptions] = useState([]);
   const [checkpointOptions, setCheckpointOptions] = useState([]);
@@ -148,15 +145,16 @@ function PlanTrip() {
   // TODO-KT: add additonal notes to server endpoint
   const submitTripPlan = async () => {
     const apiEndpoint = "http://localhost:3000/hiker_portal/trip_plans";
+    const token = localStorage.getItem("token");
     console.log("trip plan to submit: ", tripPlan);
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          user_id: user_id,
           start_date: tripPlan.startDate,
           end_date: tripPlan.endDate,
           trail_id: tripPlan.trailId,
