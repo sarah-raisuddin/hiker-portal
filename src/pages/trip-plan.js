@@ -24,7 +24,6 @@ function PlanTrip() {
     endDate: "",
     emergencyContactName: "",
     emergencyContactNumber: "",
-    tagId: "",
     additionalNotes: "",
   });
 
@@ -114,8 +113,7 @@ function PlanTrip() {
       tripPlan.startDate === "" ||
       tripPlan.endDate === "" ||
       tripPlan.emergencyContactName === "" ||
-      tripPlan.emergencyContactNumber === "" ||
-      tripPlan.tagId === ""
+      tripPlan.emergencyContactNumber === ""
     ) {
       setHasEmptyField(true);
     } else {
@@ -162,7 +160,6 @@ function PlanTrip() {
           exit_point: tripPlan.endPoint,
           emergency_contact_name: tripPlan.emergencyContactName,
           emergency_contact_number: tripPlan.emergencyContactNumber,
-          rfid_tag_uid: tripPlan.tagId,
         }),
       });
 
@@ -249,12 +246,6 @@ function PlanTrip() {
               onChange={handleInputChange("emergencyContactNumber")}
             />
           </div>
-          <InputText
-            label="Tag Identifier:"
-            placeholder="Type Tag Identifier"
-            value={tripPlan.tagId}
-            onChange={handleInputChange("tagId")}
-          />
           <LongInputText
             label="Additional Notes:"
             placeholder="Type Additional Notes"

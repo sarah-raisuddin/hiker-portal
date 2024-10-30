@@ -14,6 +14,7 @@ function EditAccount() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [updateStatus, setUpdateStatus] = useState("");
+  const [tagId, setTagId] = useState("");
 
   const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
@@ -147,6 +148,7 @@ function EditAccount() {
               onChange={setLastName}
             />
           </div>
+          <InputText label="Tag ID" value={tagId} onChange={setTagId} />
           {hasEmptyField && (
             <InputErrorMessage
               message={"Account information cannot be blank. Please try again."}

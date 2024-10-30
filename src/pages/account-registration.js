@@ -16,6 +16,7 @@ function AccountRegistration() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [tagId, setTagId] = useState("");
 
   // error handling
   const [registrationStatus, setRegistrationStatus] = useState("");
@@ -134,6 +135,12 @@ function AccountRegistration() {
               placeholder="Type your Last Name"
               value={lastName}
               onChange={setLastName}
+            />
+            <InputText
+              label="Tag ID"
+              placeholder="Type your tag ID"
+              value={tagId}
+              onChange={setTagId}
             />
           </div>
           {hasEmptyField && (
