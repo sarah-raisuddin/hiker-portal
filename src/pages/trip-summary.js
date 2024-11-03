@@ -36,7 +36,6 @@ function TripSummary() {
     endDate: "",
     emergencyContactName: "",
     emergencyContactNumber: "",
-    tagId: "",
     additionalNotes: "",
     progressLink: "",
     archived: "",
@@ -71,8 +70,7 @@ function TripSummary() {
           endDate: data.trail.end_date,
           emergencyContactName: data.trail.emergency_contact_name,
           emergencyContactNumber: data.trail.emergency_contact_number,
-          tagId: data.trail.rfid_tag_uid,
-          additionalNotes: "",
+          additionalNotes: data.trail.additional_notes,
           progressLink: data.trail.progress_tracking_link,
           archived: data.trail.archived,
         });
@@ -171,7 +169,6 @@ function TripSummary() {
               value={tripPlan.emergencyContactNumber}
             />
           </div>
-          <DisplayText label="Tag Identifier:" value={tripPlan.tagId} />
           <DisplayLongText
             label="Additional Notes:"
             value={tripPlan.additionalNotes}

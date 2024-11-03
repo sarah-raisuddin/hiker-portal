@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 
 function DisplayLongText({ label, value, onClick }) {
   return (

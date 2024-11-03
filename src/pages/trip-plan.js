@@ -160,6 +160,7 @@ function PlanTrip() {
           exit_point: tripPlan.endPoint,
           emergency_contact_name: tripPlan.emergencyContactName,
           emergency_contact_number: tripPlan.emergencyContactNumber,
+          additional_notes: tripPlan.additionalNotes,
         }),
       });
 

@@ -92,7 +92,7 @@ function EditTrip() {
           endDate: data.trail.end_date,
           emergencyContactName: data.trail.emergency_contact_name,
           emergencyContactNumber: data.trail.emergency_contact_number,
-          additionalNotes: "",
+          additionalNotes: data.trail.additional_notes,
           progressLink: data.trail.progress_tracking_link,
           archived: data.trail.archived,
         });
@@ -122,6 +122,7 @@ function EditTrip() {
           end_date: tripPlan.endDate,
           emergency_contact_name: tripPlan.emergencyContactName,
           emergency_contact_number: tripPlan.emergencyContactNumber,
+          additional_notes: tripPlan.additionalNotes,
         }),
       });
 
