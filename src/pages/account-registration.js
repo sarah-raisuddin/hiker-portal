@@ -30,7 +30,8 @@ function AccountRegistration() {
     email.trim() === "" ||
     password.trim() === "" ||
     firstName.trim() === "" ||
-    lastName.trim() === "";
+    lastName.trim() === "" ||
+    tagId.trim() === "";
 
   // reset update status upon re-navigating back to this page
   useEffect(() => {
