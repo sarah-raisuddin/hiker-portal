@@ -24,6 +24,8 @@ function AccountRegistration() {
   const [emailInputError, setEmailInputError] = useState(false);
   const [isTagLinked, setIsTagLinked] = useState(false);
   const [tagDuplicate, setHasDuplicateTag] = useState(false);
+  const [isEmailLinked, setIsEmailLinked] = useState(false);
+  const [emailDuplicatError, setEmailDuplicateError] = useState(false);
 
   const location = useLocation();
 
@@ -43,6 +45,32 @@ function AccountRegistration() {
   useEffect(() => {
     checkIfTagIsAlreadyLinked();
   }, [tagId]);
+
+  useEffect(() => {
+    checkifEmailIsAlreadyLinked();
+  }, [email]);
+
+  const checkifEmailIsAlreadyLinked = async () => {
+    const apiEndpoint = "http://localhost:3000/hiker_portal/check-email";
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setIsEmailLinked(data.isEmailLinked);
+      } else {
+        console.log("Failed to check email link status", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error checking email link status:", error);
+    }
+  };
 
   const registerUserAccount = async () => {
     const apiEndpoint = "http://localhost:3000/hiker_portal/register";
@@ -83,12 +111,16 @@ function AccountRegistration() {
       const isEmailValid = validateEmailFormat(email);
       if (isEmailValid) {
         setEmailInputError(false);
-        if (isTagLinked) {
-          setHasDuplicateTag(true);
+        if (isEmailLinked) {
+          setEmailDuplicateError(true);
         } else {
-          setHasDuplicateTag(false);
-
-          registerUserAccount();
+          setEmailDuplicateError(false);
+          if (isTagLinked) {
+            setHasDuplicateTag(true);
+          } else {
+            setHasDuplicateTag(false);
+            registerUserAccount();
+          }
         }
       } else {
         setEmailInputError(true);
@@ -192,6 +224,13 @@ function AccountRegistration() {
             <InputErrorMessage
               message={
                 "The tag provided is already linked to another account. Please enter an unlinked tag."
+              }
+            />
+          )}
+          {emailDuplicatError && (
+            <InputErrorMessage
+              message={
+                "The email you provided is already in use. Please enter another email."
               }
             />
           )}
