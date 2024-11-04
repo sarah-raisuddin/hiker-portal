@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../images/wanderSafe-logo-grey.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function HeaderMenu({ isUserLoggedIn, handleUserLogOut }) {
   // navigation
   const navigateTo = useNavigate();
+  const location = useLocation();
 
   // useNavigate was used so that user log-in status does not get
   // reset like it does when Link is used
@@ -29,6 +30,8 @@ function HeaderMenu({ isUserLoggedIn, handleUserLogOut }) {
     navigateTo("/bug-report");
   };
 
+  const isTermsConditionsPage = location.pathname === "/terms-conditions";
+
   return (
     <nav className="header-menu">
       <div className="header-menu-left">
@@ -38,22 +41,26 @@ function HeaderMenu({ isUserLoggedIn, handleUserLogOut }) {
       </div>
       <div className="header-menu-right">
         <div className="menu-links">
-          {isUserLoggedIn && (
+          {isUserLoggedIn && !isTermsConditionsPage && (
             <button className="underlined-link" onClick={handleDashboardNav}>
               <p>Dashboard</p>
             </button>
           )}
-          {isUserLoggedIn && (
+          {isUserLoggedIn && !isTermsConditionsPage && (
             <button className="underlined-link" onClick={handleEditAccountNav}>
               <p>Edit Account</p>
             </button>
           )}
-          <button className="underlined-link" onClick={handleFaqNav}>
-            <p>FAQs</p>
-          </button>
-          <button className="underlined-link" onClick={handleReportBugNav}>
-            <p>Report An Issue</p>
-          </button>
+          {!isTermsConditionsPage && (
+            <button className="underlined-link" onClick={handleFaqNav}>
+              <p>FAQs</p>
+            </button>
+          )}
+          {!isTermsConditionsPage && (
+            <button className="underlined-link" onClick={handleReportBugNav}>
+              <p>Report An Issue</p>
+            </button>
+          )}
           <div className="account-control-link">
             <li>
               {isUserLoggedIn ? (
