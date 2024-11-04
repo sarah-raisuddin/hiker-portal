@@ -14,7 +14,11 @@ function EditAccount() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [updateStatus, setUpdateStatus] = useState("");
+  const [existingTagId, setExistingTagId] = useState("");
   const [tagId, setTagId] = useState("");
+
+  const [isTagLinked, setIsTagLinked] = useState(false);
+  const [tagDuplicateError, setHasDuplicateTagError] = useState(false);
 
   const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
@@ -38,6 +42,10 @@ function EditAccount() {
     setUpdateStatus("");
   }, [location]);
 
+  useEffect(() => {
+    checkIfTagIsAlreadyLinked();
+  }, [tagId]);
+
   const getUserAccountInfo = async () => {
     const apiEndpoint = `http://localhost:3000/hiker_portal/accountDetails`;
     const token = localStorage.getItem("token");
@@ -56,6 +64,8 @@ function EditAccount() {
         setEmail(data.email);
         setFirstName(data.first_name);
         setLastName(data.last_name);
+        setTagId(data.tag_id);
+        setExistingTagId(data.tag_id);
       } else {
         console.log("Failed to get user account info", response.status);
       }
@@ -69,7 +79,34 @@ function EditAccount() {
       setHasEmptyField(true);
     } else {
       setHasEmptyField(false);
-      updateUserAccountInfo();
+      if (isTagLinked && existingTagId !== tagId) {
+        setHasDuplicateTagError(true);
+      } else {
+        setHasDuplicateTagError(false);
+        updateUserAccountInfo();
+      }
+    }
+  };
+
+  const checkIfTagIsAlreadyLinked = async () => {
+    const apiEndpoint = "http://localhost:3000/hiker_portal/check-tag";
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ rfid_tag_uid: tagId }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setIsTagLinked(data.isLinked);
+      } else {
+        console.log("Failed to get tag link status", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error checking tag link status: ", error);
     }
   };
 
@@ -83,7 +120,11 @@ function EditAccount() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ first_name: firstName, last_name: lastName }),
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          tag_id: tagId,
+        }),
       });
 
       if (response.ok) {
@@ -152,6 +193,13 @@ function EditAccount() {
           {hasEmptyField && (
             <InputErrorMessage
               message={"Account information cannot be blank. Please try again."}
+            />
+          )}
+          {tagDuplicateError && (
+            <InputErrorMessage
+              message={
+                "The tag provided is already linked to another account. Please enter an unlinked tag."
+              }
             />
           )}
           <SubmissionButton

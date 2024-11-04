@@ -22,6 +22,8 @@ function AccountRegistration() {
   const [registrationStatus, setRegistrationStatus] = useState("");
   const [hasEmptyField, setHasEmptyField] = useState(false);
   const [emailInputError, setEmailInputError] = useState(false);
+  const [isTagLinked, setIsTagLinked] = useState(false);
+  const [tagDuplicate, setHasDuplicateTag] = useState(false);
 
   const location = useLocation();
 
@@ -38,6 +40,10 @@ function AccountRegistration() {
     setRegistrationStatus("");
   }, [location]);
 
+  useEffect(() => {
+    checkIfTagIsAlreadyLinked();
+  }, [tagId]);
+
   const registerUserAccount = async () => {
     const apiEndpoint = "http://localhost:3000/hiker_portal/register";
     try {
@@ -46,7 +52,7 @@ function AccountRegistration() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ password, email, firstName, lastName }),
+        body: JSON.stringify({ password, email, firstName, lastName, tagId }),
       });
 
       if (response.ok) {
@@ -77,10 +83,38 @@ function AccountRegistration() {
       const isEmailValid = validateEmailFormat(email);
       if (isEmailValid) {
         setEmailInputError(false);
-        registerUserAccount();
+        if (isTagLinked) {
+          setHasDuplicateTag(true);
+        } else {
+          setHasDuplicateTag(false);
+
+          registerUserAccount();
+        }
       } else {
         setEmailInputError(true);
       }
+    }
+  };
+
+  const checkIfTagIsAlreadyLinked = async () => {
+    const apiEndpoint = "http://localhost:3000/hiker_portal/check-tag";
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ rfid_tag_uid: tagId }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setIsTagLinked(data.isLinked);
+      } else {
+        console.log("Failed to get tag link status", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error checking tag link status: ", error);
     }
   };
 
@@ -152,6 +186,13 @@ function AccountRegistration() {
           {emailInputError && (
             <InputErrorMessage
               message={"Invalid email address. Please try again."}
+            />
+          )}{" "}
+          {tagDuplicate && (
+            <InputErrorMessage
+              message={
+                "The tag provided is already linked to another account. Please enter an unlinked tag."
+              }
             />
           )}
           <SubmissionButton
