@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
 export const formatDate = (dateString) => {
   const date = new Date(dateString);
   const dateOptions = { year: "numeric", month: "long", day: "numeric" };
@@ -63,4 +65,24 @@ export const validatePhoneNumberFormat = (number) => {
 
   const isNumberValid = phoneRegEx.test(number);
   return isNumberValid;
+};
+
+export const isUserLoggedIn = () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return false;
+  }
+
+  try {
+    const decodedToken = jwtDecode(token);
+
+    // convert into seconds from ms
+    const currentTime = Date.now() / 1000;
+    const expiration = decodedToken.exp > currentTime;
+
+    return expiration;
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return false;
+  }
 };

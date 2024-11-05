@@ -5,6 +5,7 @@ import TripCard from "../base-components/trip-card";
 import plus from "../images/button-plus.png";
 import { useNavigate } from "react-router-dom";
 import toggleArrow from "../images/toggle-arrow.png";
+import { isUserLoggedIn } from "../util";
 
 function HikerDashboard() {
   // user details
@@ -12,13 +13,12 @@ function HikerDashboard() {
   const [tripPlans, setTripPlans] = useState([]);
   const [showArchived, setShowArchived] = useState(false);
 
-  const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
   useEffect(() => {
-    if (isUserLoggedIn === "false") {
+    if (!isUserLoggedIn()) {
       navigateTo("/login");
     }
-  }, [isUserLoggedIn, navigateTo]);
+  }, [navigateTo]);
 
   const handleAddNewPlan = () => {
     navigateTo("/trip-plan");

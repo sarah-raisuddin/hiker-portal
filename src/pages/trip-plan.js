@@ -10,6 +10,7 @@ import BackToDashboard from "../base-components/back-to-dashboard";
 import { validateDateRange, validatePhoneNumberFormat } from "../util";
 import InputErrorMessage from "../base-components/input-error-message";
 import LongInputText from "../base-components/input-text-long";
+import { isUserLoggedIn } from "../util";
 
 function PlanTrip() {
   // select options
@@ -32,13 +33,12 @@ function PlanTrip() {
   const [hasInvalidDates, setHasInvalidDates] = useState(false);
   const [hasInvalidPhoneNumber, setHasInvalidPhoneNumber] = useState(false);
 
-  const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
   useEffect(() => {
-    if (isUserLoggedIn === "false") {
+    if (!isUserLoggedIn()) {
       navigateTo("/login");
     }
-  }, [isUserLoggedIn, navigateTo]);
+  }, [navigateTo]);
 
   // button state
   const isButtonDisabled =

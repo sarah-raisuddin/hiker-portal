@@ -12,15 +12,15 @@ import { formatDateFromDatabase } from "../util";
 import { validateDateRange, validatePhoneNumberFormat } from "../util";
 import InputErrorMessage from "../base-components/input-error-message";
 import LongInputText from "../base-components/input-text-long";
+import { isUserLoggedIn } from "../util";
 
 function EditTrip() {
-  const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
   useEffect(() => {
-    if (isUserLoggedIn === "false") {
+    if (!isUserLoggedIn()) {
       navigateTo("/login");
     }
-  }, [isUserLoggedIn, navigateTo]);
+  }, [navigateTo]);
 
   //user info
   const tripPlanId = localStorage.getItem("tripPlanIdToView");

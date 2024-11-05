@@ -10,6 +10,7 @@ import edit from "../images/button-edit.png";
 import archive from "../images/button-archive.png";
 import info from "../images/info.png";
 import DisplayLongText from "../base-components/display-text-long";
+import { isUserLoggedIn } from "../util";
 
 function TripSummary() {
   //user info
@@ -17,13 +18,12 @@ function TripSummary() {
   const webDomain =
     "https://hiker-portal-trekcheck-dff0bthcgfgceeh5.westus-01.azurewebsites.net/";
 
-  const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
   useEffect(() => {
-    if (isUserLoggedIn === "false") {
+    if (!isUserLoggedIn()) {
       navigateTo("/login");
     }
-  }, [isUserLoggedIn, navigateTo]);
+  }, [navigateTo]);
 
   const [tripPlan, setTripPlan] = useState({
     trailId: "",

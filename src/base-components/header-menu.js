@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../images/wanderSafe-logo-grey.png";
 import { useNavigate, useLocation } from "react-router-dom";
+import { isUserLoggedIn } from "../util";
 
-function HeaderMenu({ isUserLoggedIn, handleUserLogOut }) {
+function HeaderMenu({ handleUserLogOut }) {
   // navigation
   const navigateTo = useNavigate();
   const location = useLocation();
@@ -30,6 +31,13 @@ function HeaderMenu({ isUserLoggedIn, handleUserLogOut }) {
     navigateTo("/bug-report");
   };
 
+  // authentification
+  const [loggedInStatus, setIsUserLoggedIn] = useState(false);
+  useEffect(() => {
+    setIsUserLoggedIn(isUserLoggedIn());
+  }, [location]);
+
+  // special case for terms and conditions page
   const isTermsConditionsPage = location.pathname === "/terms-conditions";
 
   return (
@@ -41,12 +49,12 @@ function HeaderMenu({ isUserLoggedIn, handleUserLogOut }) {
       </div>
       <div className="header-menu-right">
         <div className="menu-links">
-          {isUserLoggedIn && !isTermsConditionsPage && (
+          {loggedInStatus && !isTermsConditionsPage && (
             <button className="underlined-link" onClick={handleDashboardNav}>
               <p>Dashboard</p>
             </button>
           )}
-          {isUserLoggedIn && !isTermsConditionsPage && (
+          {loggedInStatus && !isTermsConditionsPage && (
             <button className="underlined-link" onClick={handleEditAccountNav}>
               <p>Edit Account</p>
             </button>
@@ -63,7 +71,7 @@ function HeaderMenu({ isUserLoggedIn, handleUserLogOut }) {
           )}
           <div className="account-control-link">
             <li>
-              {isUserLoggedIn ? (
+              {loggedInStatus ? (
                 <Link to="/home" onClick={handleUserLogOut}>
                   Logout
                 </Link>

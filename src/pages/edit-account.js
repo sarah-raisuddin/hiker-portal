@@ -7,6 +7,7 @@ import InputText from "../base-components/input-text";
 import PopUpMessage from "../base-components/pop-up-message";
 import { useNavigate, useLocation } from "react-router-dom";
 import InputErrorMessage from "../base-components/input-error-message";
+import { isUserLoggedIn } from "../util";
 
 function EditAccount() {
   // user info
@@ -20,13 +21,12 @@ function EditAccount() {
   const [isTagLinked, setIsTagLinked] = useState(false);
   const [tagDuplicateError, setHasDuplicateTagError] = useState(false);
 
-  const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
   const navigateTo = useNavigate();
   useEffect(() => {
-    if (isUserLoggedIn === "false") {
+    if (!isUserLoggedIn()) {
       navigateTo("/login");
     }
-  }, [isUserLoggedIn, navigateTo]);
+  }, [navigateTo]);
 
   // error handling
   const [hasEmptyField, setHasEmptyField] = useState(false);

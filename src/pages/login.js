@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import InputPassword from "../base-components/input-password";
 import { validateEmailFormat } from "../util";
 
-function Login({ handleUserLogIn }) {
+function Login() {
   // login info
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,7 +51,6 @@ function Login({ handleUserLogIn }) {
 
         // set login state variable to true, store important login info in local storage
         setUnsuccessfulLogin(false);
-        handleUserLogIn();
         localStorage.setItem("token", data.token);
 
         // direct user to terms and conditions

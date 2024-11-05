@@ -20,37 +20,17 @@ import { useEffect } from "react";
 import HeaderMenu from "./base-components/header-menu";
 
 function App() {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(() => {
-    const loginState = localStorage.getItem("isUserLoggedIn");
-    return loginState === "true";
-  });
-
-  useEffect(() => {
-    localStorage.setItem("isUserLoggedIn", isUserLoggedIn);
-  }, [isUserLoggedIn]);
-
-  const handleUserLogIn = () => {
-    setIsUserLoggedIn(true);
-  };
-
   const handleUserLogOut = () => {
-    setIsUserLoggedIn(false);
     localStorage.removeItem("token");
   };
 
   return (
     <div>
-      <HeaderMenu
-        isUserLoggedIn={isUserLoggedIn}
-        handleUserLogOut={handleUserLogOut}
-      />
+      <HeaderMenu handleUserLogOut={handleUserLogOut} />
       <Routes>
         {<Route path="/" element={<Home />} />}
         <Route path="/home" element={<Home />} />
-        <Route
-          path="/login"
-          element={<Login handleUserLogIn={handleUserLogIn} />}
-        />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<AccountRegistration />} />
         <Route path="/trips" element={<HikerDashboard />} />
         <Route path="/edit-account" element={<EditAccount />} />
