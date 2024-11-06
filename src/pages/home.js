@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import descriptionText from "../data/system-description";
 import systemDiagram from "../images/trekCheckDiagram.png";
 import trekCheckLogo from "../images/trekCheck-logo-white.png";

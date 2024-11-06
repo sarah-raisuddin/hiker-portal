@@ -1,7 +1,9 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import PageHeader from "../base-components/page-header";
-import DisplayVideo from "../base-components/display-video";
 import dummyVideo from "../videos/tutorial.mp4";
+import LoadingSpinner from "../base-components/loading-spinner";
+
+const DisplayVideo = lazy(() => import("../base-components/display-video"));
 
 // TODO-KT: put actually tutorial videos here
 function Tutorial() {
@@ -19,15 +21,25 @@ function Tutorial() {
             next adventure!
           </p>
           <h3>Registering An Account</h3>
-          <DisplayVideo src={dummyVideo} />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DisplayVideo src={dummyVideo} />
+          </Suspense>
           <h3>Navigating the Hiker Portal</h3>
-          <DisplayVideo src={dummyVideo} />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DisplayVideo src={dummyVideo} />
+          </Suspense>
           <h3>Creating a Trip Plan</h3>
-          <DisplayVideo src={dummyVideo} />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DisplayVideo src={dummyVideo} />
+          </Suspense>
           <h3>Monitoring Progress</h3>
-          <DisplayVideo src={dummyVideo} />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DisplayVideo src={dummyVideo} />
+          </Suspense>
           <h2>Trail Checkpoints</h2>
-          <DisplayVideo src={dummyVideo} />
+          <Suspense fallback={<LoadingSpinner />}>
+            <DisplayVideo src={dummyVideo} />
+          </Suspense>
         </div>
       </div>
     </div>
