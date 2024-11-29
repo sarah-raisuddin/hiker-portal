@@ -1,7 +1,8 @@
 //const sarDashApi = "https://local-test-deployment-capstone-2024.azurewebsites.net/sar_dashboard";
 //const hikerPortalApi = "https://local-test-deployment-capstone-2024.azurewebsites.net/hiker_portal";
-const sarDashApi = "http://localhost:3000/sar_dashboard";
-const hikerPortalApi = "http://localhost:3000/hiker_portal";
+const sarDashApi = "https://trekcheck-server.azurewebsites.net/sar_dashboard";
+const hikerPortalApi =
+  "https://trekcheck-server.azurewebsites.net/hiker_portal";
 
 export const fetchTrail = async ({ trailId }) => {
   // Replace with your API endpoint
@@ -84,12 +85,14 @@ export const archiveTripPlan = async ({ id }) => {
 };
 
 export const fetchUserInfo = async (userId) => {
-  const apiEndpoint = `${hikerPortalApi}/accountDetails/${userId}`;
+  const apiEndpoint = `${hikerPortalApi}/accountDetails`;
+  const token = localStorage.getItem("token");
   try {
     const response = await fetch(apiEndpoint, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 

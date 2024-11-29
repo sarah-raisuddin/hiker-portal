@@ -1,5 +1,5 @@
 import React from "react";
-import SubmissionButton from "./button";
+import SubmissionButton from "../button";
 import { useNavigate } from "react-router-dom";
 
 const PopUpOption = ({
@@ -12,12 +12,9 @@ const PopUpOption = ({
 }) => {
   const navigateTo = useNavigate();
 
-  const directToPage1 = () => {
-    navigateTo(link1);
-  };
-
-  const directToPage2 = () => {
-    navigateTo(link2);
+  const directToPage = (link) => {
+    console.log("pls");
+    navigateTo(link);
   };
 
   return (
@@ -26,8 +23,14 @@ const PopUpOption = ({
         <h1>{title}</h1>
         <p>{message}</p>
         <div className="pop-up-options">
-          <SubmissionButton handleSubmit={directToPage1} text={link1Label} />
-          <SubmissionButton handleSubmit={directToPage2} text={link2label} />
+          <SubmissionButton
+            handleSubmit={directToPage(link1)}
+            text={link1Label}
+          />
+          <SubmissionButton
+            handleSubmit={directToPage(link2)}
+            text={link2label}
+          />
         </div>
       </div>
     </div>

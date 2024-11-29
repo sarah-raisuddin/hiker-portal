@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../base-components/page-header";
-import DisplayText from "../base-components/display-text";
+import DisplayText from "../base-components/displays/display-text";
 import SubmissionButton from "../base-components/button";
-import save from "../images/button-save.png";
-import cancel from "../images/button-close.png";
+import save from "../images/buttons/button-save.png";
+import cancel from "../images/buttons/button-close.png";
 import { useNavigate } from "react-router-dom";
-import InputText from "../base-components/input-text";
-import Dropdown from "../base-components/input-dropdown";
-import InputDateTime from "../base-components/input-datetime";
+import InputText from "../base-components/inputs/input-text";
+import Dropdown from "../base-components/inputs/input-dropdown";
+import InputDateTime from "../base-components/inputs/input-datetime";
 import { formatDateFromDatabase } from "../util";
 import { validateDateRange, validatePhoneNumberFormat } from "../util";
-import InputErrorMessage from "../base-components/input-error-message";
-import LongInputText from "../base-components/input-text-long";
+import InputErrorMessage from "../base-components/inputs/input-error-message";
+import LongInputText from "../base-components/inputs/input-text-long";
 import { isUserLoggedIn } from "../util";
 
 function EditTrip() {
@@ -65,7 +65,7 @@ function EditTrip() {
 
   // TODO-KT: get additional notes text
   const getTripPlan = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plan/${tripPlanId}`;
+    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plan/${tripPlanId}`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
@@ -106,7 +106,7 @@ function EditTrip() {
 
   const handleSave = async () => {
     console.log(tripPlanId);
-    const apiEndPoint = `http://localhost:3000/hiker_portal/trip_plan/${tripPlanId}`;
+    const apiEndPoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plan/${tripPlanId}`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndPoint, {
@@ -175,7 +175,7 @@ function EditTrip() {
 
   const getTrailCheckpoints = async () => {
     console.log(tripPlan.trailId);
-    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${tripPlan.trailId}`;
+    const apiEndPoint = `https://trekcheck-server.azurewebsites.net/sar_dashboard/trailInfo/${tripPlan.trailId}`;
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",

@@ -1,5 +1,4 @@
 // src/App.scss
-
 // Colours
 $header-text: #304529;
 $body-text: #1e1e1e;
@@ -12,17 +11,25 @@ $header-background: #d9d9d9;
 // Font Sizes
 $label-font-size: 25px;
 $page-header-font-size: 60px;
+$mobile-page-header-font-size: 40px;
 $default-font-size: 20px;
 
 // Misc.
 $standard-roundness: 8px;
 $standard-container-margin: 2% auto;
 
+// Screens
+$mobile-screen: 480px;
+$tablet-screen: 620px;
+
 @mixin label-styles {
   font-size: $label-font-size;
   color: $label-text;
   font-weight: bold;
   font-style: italic;
+  @media (max-width: $tablet-screen) {
+    font-size: 12px;
+  }
 }
 
 @mixin button-styles {
@@ -31,6 +38,20 @@ $standard-container-margin: 2% auto;
   border-radius: $standard-roundness;
   border: none;
   cursor: pointer;
+  img {
+    max-width: 35px;
+  }
+
+  @media (max-width: $tablet-screen) {
+    padding: 5px 10px;
+    font-size: 12px;
+    p {
+      font-size: 12px;
+    }
+    img {
+      max-width: 20px;
+    }
+  }
 }
 
 @mixin body-styles {
@@ -39,7 +60,10 @@ $standard-container-margin: 2% auto;
   padding: 15px 35px;
   max-width: 1150px;
   margin: 0 auto;
-  width: 100%;
+  // width: 100%;
+  @media (max-width: $tablet-screen) {
+    padding: 15px 20px;
+  }
 }
 
 @mixin text-body-styles {
@@ -71,6 +95,13 @@ $standard-container-margin: 2% auto;
   width: 100%;
   max-width: 1150px;
   margin: 2% auto;
+}
+
+@mixin page-styles {
+  @media (max-width: $tablet-screen) {
+    max-width: 90%;
+    margin: 35px auto;
+  }
 }
 
 // global styles
@@ -121,10 +152,6 @@ button {
       margin: 0;
       vertical-align: middle;
     }
-
-    img {
-      max-width: 35px;
-    }
   }
 }
 
@@ -140,9 +167,65 @@ label {
   align-items: center;
   background-color: $header-background;
 
+  .overlay {
+    backdrop-filter: blur(8px);
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .mobile-menu {
+    position: absolute;
+    width: -webkit-fill-available;
+    top: 0;
+    right: 0;
+    padding: 10px 15px;
+    background-color: $header-background;
+    z-index: 2;
+
+    .button {
+      padding: 5px;
+      gap: 0px;
+      &-container {
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+    @media (max-width: $mobile-screen) {
+      display: block;
+    }
+    img {
+      width: 32px;
+      height: 32px;
+      margin-right: 20px;
+    }
+  }
+
   &-left {
+    .desktop-menu-logo {
+      display: block;
+      @media (max-width: $mobile-screen) {
+        display: none;
+      }
+    }
+    .mobile-menu-logo {
+      display: none;
+      width: 30px;
+      position: relative;
+      z-index: 4;
+      @media (max-width: $mobile-screen) {
+        display: block;
+      }
+    }
+
     .menu-logo {
-      height: 50px;
+      // height: 50px;
       width: auto;
       cursor: pointer;
       background-color: $header-background;
@@ -156,6 +239,14 @@ label {
       display: flex;
       align-items: center;
       gap: 5px;
+
+      @media (max-width: $mobile-screen) {
+        flex-direction: column;
+        z-index: 2;
+        p {
+          margin: 0 0 10px;
+        }
+      }
 
       .underlined-link {
         @include underlined-link-styles();
@@ -215,6 +306,9 @@ label {
     border-radius: $standard-roundness;
     border: none;
     font-size: $default-font-size;
+    @media (max-width: $tablet-screen) {
+      font-size: 12px;
+    }
 
     &::placeholder {
       @include label-styles();
@@ -242,6 +336,10 @@ label {
     color: $header-text;
     margin: 26px 39px 0px;
     font-style: italic;
+    @media (max-width: $tablet-screen) {
+      font-size: $mobile-page-header-font-size;
+      margin: 0 auto;
+    }
   }
 }
 
@@ -252,6 +350,9 @@ label {
     margin: 11px;
     cursor: pointer;
     overflow: hidden;
+    @media (max-width: $tablet-screen) {
+      margin: 11px 0px;
+    }
   }
 
   &-label {
@@ -286,10 +387,12 @@ label {
   &-body {
     @include body-styles();
     flex-direction: column;
+    width: 90%;
   }
 }
 
 .terms-conditions {
+  @include page-styles();
   &-container {
     @include form-container-styles();
   }
@@ -352,6 +455,9 @@ label {
 }
 
 .login {
+  max-width: 90%;
+  margin: 0 auto;
+
   &-productLogo {
     @include product-logo-styles();
   }
@@ -365,6 +471,12 @@ label {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    @media (max-width: 500px) {
+      flex-direction: column;
+      h2 {
+        margin: 0;
+      }
+    }
   }
 
   &-body {
@@ -394,12 +506,17 @@ label {
 }
 
 .trip-plan {
+  @include page-styles();
   &-container {
     @include form-container-styles();
   }
 
   &-body {
     @include body-styles();
+    width: 90%;
+    @media (max-width: $tablet-screen) {
+      margin: unset;
+    }
   }
 
   .two-col-inputs {
@@ -412,6 +529,7 @@ label {
 }
 
 .trip-summary {
+  @include page-styles();
   &-container {
     @include form-container-styles();
   }
@@ -433,10 +551,18 @@ label {
         font-size: $default-font-size;
         font-style: italic;
         font-weight: bold;
+        @media (max-width: $tablet-screen) {
+          font-size: 15px;
+        }
       }
 
       img {
         max-width: 60px;
+        @media (max-width: $tablet-screen) {
+          max-width: 30px;
+          align-self: flex-start;
+          margin-top: 20px;
+        }
       }
     }
 
@@ -452,6 +578,10 @@ label {
       padding-bottom: 8px;
       gap: 8px;
 
+      @media (max-width: $tablet-screen) {
+        justify-content: left;
+      }
+
       &-edit {
         .button-container {
           justify-content: right;
@@ -465,6 +595,13 @@ label {
           align-items: center;
           border-radius: $standard-roundness;
           padding: 5px 60px;
+          @media (max-width: $tablet-screen) {
+            padding: 5px 10px;
+            font-size: 12px;
+            img {
+              max-width: 20px !important;
+            }
+          }
           font-size: $default-font-size;
           font-weight: bold;
           background-color: $secondary-color;
@@ -494,12 +631,16 @@ label {
 }
 
 .trip-edit {
+  @include page-styles();
   &-container {
     @include form-container-styles();
   }
 
   &-body {
     @include body-styles();
+    @media (max-width: $tablet-screen) {
+      margin: unset;
+    }
 
     .controls {
       display: flex;
@@ -544,6 +685,12 @@ label {
     background-color: $primary-color;
     display: flex;
     justify-content: space-between;
+    @media (max-width: $tablet-screen) {
+      margin: 0;
+      flex-direction: column;
+      font-size: 18px;
+      padding: 12px;
+    }
     p {
       margin: 0 0 2px;
       color: white;
@@ -556,6 +703,43 @@ label {
     font-size: 25px;
     text-align: center;
     margin: 10px auto 40px;
+  }
+
+  &-mobile {
+    border: 1px solid grey;
+    .checkpoint {
+      background-color: #b1b1b1;
+      border-bottom: 1px solid gray;
+      padding: 24px 28px;
+    }
+    .checkpoint-item {
+      background-color: #b1b1b1;
+
+      display: flex;
+      align-items: center;
+      position: relative;
+
+      img {
+        position: absolute;
+        right: 5%;
+      }
+
+      .circle {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        border: 20px solid $primary-color;
+        cursor: pointer;
+
+        &-label {
+          font-weight: bold;
+        }
+
+        &-container {
+          margin-right: 20px;
+        }
+      }
+    }
   }
 
   .checkin-details {
@@ -655,23 +839,35 @@ label {
     background-color: $header-background;
     align-items: center;
 
+    @media (max-width: $tablet-screen) {
+      flex-direction: column;
+      margin-top: 100px;
+    }
+
     input {
       padding: 10px 5px;
       width: 700px;
       border-radius: $standard-roundness;
       border: none;
+      @media (max-width: $tablet-screen) {
+        margin: 20px 0px;
+      }
     }
 
     label {
       font-size: 25px;
       color: $body-text;
       font-weight: bold;
-      margin-right: 10px;
+      margin: 0 10px 0 0;
+      @media (max-width: $tablet-screen) {
+        margin: 10px 0px;
+      }
     }
   }
 }
 
 .hiker-dashboard {
+  @include page-styles();
   &-divider {
     &-two-col {
       display: flex;
@@ -679,12 +875,19 @@ label {
       align-items: center;
       padding: 0px 39px 0px;
 
+      @media (max-width: $tablet-screen) {
+        padding: 0;
+      }
+
       h2 {
         font-size: $page-header-font-size - 20;
         color: $primary-color;
         font-style: italic;
         margin-top: 20px;
         margin-bottom: 20px;
+        @media (max-width: $tablet-screen) {
+          font-size: 24px;
+        }
       }
     }
 
@@ -695,6 +898,9 @@ label {
     hr {
       margin: -2px 39px -60px;
       color: $header-background;
+      @media (max-width: $tablet-screen) {
+        margin: 0;
+      }
     }
   }
 
@@ -712,6 +918,9 @@ label {
     grid-template-columns: repeat(2, 1fr);
     gap: 40px;
     margin: 100px 39px;
+    @media (max-width: $tablet-screen) {
+      margin: 20px;
+    }
   }
 }
 
@@ -722,6 +931,9 @@ label {
   text-align: center;
   padding: 146px 98px;
   width: 100%;
+  @media (max-width: $tablet-screen) {
+    padding: 50px;
+  }
   &.archived {
     background-color: #474f44;
   }
@@ -749,6 +961,16 @@ label {
 .home {
   &-logo {
     @include product-logo-styles();
+
+    @media (max-width: $tablet-screen) {
+      max-width: 80%;
+      margin: 30px auto;
+    }
+  }
+
+  @media (max-width: $tablet-screen) {
+    max-width: 90%;
+    margin: 0 auto;
   }
 
   &-body {
@@ -784,6 +1006,10 @@ label {
   margin: 10px;
   background-color: white;
   border-radius: $standard-roundness;
+
+  @media (max-width: $tablet-screen) {
+    flex-direction: column;
+  }
 
   &-photo {
     width: 200px;
@@ -885,6 +1111,9 @@ label {
     background-color: white;
     border: #d9d9d9;
     margin: 8px 33px 0px;
+    @media (max-width: $tablet-screen) {
+      margin: 0;
+    }
 
     img {
       max-width: 20px;
@@ -933,5 +1162,17 @@ label {
     100% {
       transform: rotate(360deg);
     }
+  }
+}
+
+.faqs,
+.bug-report,
+.trip-progress {
+  @include page-styles();
+}
+
+.desktop-links {
+  @media (max-width: $tablet-screen) {
+    display: none;
   }
 }

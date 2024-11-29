@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 function InputText({ label, placeholder, value, onChange }) {
-
   const handleInputChange = (event) => {
     onChange(event.target.value);
   };
@@ -9,11 +8,12 @@ function InputText({ label, placeholder, value, onChange }) {
   return (
     <div className="input-box">
       <label>{label}</label>
-      <input 
+      <input
         type="text"
         value={value}
-        placeholder={placeholder} 
-        onChange={handleInputChange} />
+        placeholder={placeholder}
+        onChange={handleInputChange}
+      />
     </div>
   );
 }

@@ -1,8 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.ba74e0ce.css",
-    "main.js": "/static/js/main.9bc5140d.js",
+    "main.css": "/static/css/main.c54ae434.css",
+    "main.js": "/static/js/main.30b0b31d.js",
+    "static/js/231.e31f7ef5.chunk.js": "/static/js/231.e31f7ef5.chunk.js",
     "static/media/sarah.png": "/static/media/sarah.353d7663feb0caa8f74d.png",
+    "static/media/tutorial.mp4": "/static/media/tutorial.e16e2d2072d2f907601b.mp4",
     "static/media/daphne.jpeg": "/static/media/daphne.1cc28c2929866d344010.jpeg",
     "static/media/kaleigh.jpg": "/static/media/kaleigh.4ea4a121de955674efed.jpg",
     "static/media/trekCheckDiagram.png": "/static/media/trekCheckDiagram.877011f431ba9d7b4f84.png",
@@ -12,11 +14,12 @@
     "static/media/wanderSafe-logo-grey.png": "/static/media/wanderSafe-logo-grey.1f344b9bcff70bf59b4c.png",
     "static/media/wanderSafe-logo-white.png": "/static/media/wanderSafe-logo-white.e5a8bf57f81a2a0c89c1.png",
     "index.html": "/index.html",
-    "main.ba74e0ce.css.map": "/static/css/main.ba74e0ce.css.map",
-    "main.9bc5140d.js.map": "/static/js/main.9bc5140d.js.map"
+    "main.c54ae434.css.map": "/static/css/main.c54ae434.css.map",
+    "main.30b0b31d.js.map": "/static/js/main.30b0b31d.js.map",
+    "231.e31f7ef5.chunk.js.map": "/static/js/231.e31f7ef5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ba74e0ce.css",
-    "static/js/main.9bc5140d.js"
+    "static/css/main.c54ae434.css",
+    "static/js/main.30b0b31d.js"
   ]
 }

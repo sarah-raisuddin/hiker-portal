@@ -1,15 +1,15 @@
 // src/About.js
 import React, { useState, useEffect } from "react";
 import SubmissionButton from "../base-components/button";
-import InputText from "../base-components/input-text";
+import InputText from "../base-components/inputs/input-text";
 import PageHeader from "../base-components/page-header";
-import InputDateTime from "../base-components/input-datetime";
-import Dropdown from "../base-components/input-dropdown";
+import InputDateTime from "../base-components/inputs/input-datetime";
+import Dropdown from "../base-components/inputs/input-dropdown";
 import { useNavigate } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
 import { validateDateRange, validatePhoneNumberFormat } from "../util";
-import InputErrorMessage from "../base-components/input-error-message";
-import LongInputText from "../base-components/input-text-long";
+import InputErrorMessage from "../base-components/inputs/input-error-message";
+import LongInputText from "../base-components/inputs/input-text-long";
 import { isUserLoggedIn } from "../util";
 
 function PlanTrip() {
@@ -51,7 +51,8 @@ function PlanTrip() {
     tripPlan.emergencyContactNumber.trim() === "";
 
   const getTrailOptions = async () => {
-    const apiEndPoint = "http://localhost:3000/sar_dashboard/trails";
+    const apiEndPoint =
+      "https://trekcheck-server.azurewebsites.net/sar_dashboard/trails";
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",
@@ -75,7 +76,7 @@ function PlanTrip() {
 
   const getTrailCheckpoints = async () => {
     console.log(tripPlan.trailId);
-    const apiEndPoint = `http://localhost:3000/sar_dashboard/trailInfo/${tripPlan.trailId}`;
+    const apiEndPoint = `https://trekcheck-server.azurewebsites.net/sar_dashboard/trailInfo/${tripPlan.trailId}`;
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",
@@ -142,7 +143,8 @@ function PlanTrip() {
 
   // TODO-KT: add additonal notes to server endpoint
   const submitTripPlan = async () => {
-    const apiEndpoint = "http://localhost:3000/hiker_portal/trip_plans";
+    const apiEndpoint =
+      "https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plans";
     const token = localStorage.getItem("token");
     console.log("trip plan to submit: ", tripPlan);
     try {

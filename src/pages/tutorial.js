@@ -3,7 +3,9 @@ import PageHeader from "../base-components/page-header";
 import dummyVideo from "../videos/tutorial.mp4";
 import LoadingSpinner from "../base-components/loading-spinner";
 
-const DisplayVideo = lazy(() => import("../base-components/display-video"));
+const DisplayVideo = lazy(() =>
+  import("../base-components/displays/display-video")
+);
 
 // TODO-KT: put actually tutorial videos here
 function Tutorial() {

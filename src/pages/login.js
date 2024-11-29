@@ -1,18 +1,20 @@
 // src/About.js
 import React, { useState } from "react";
-import productLogo from "../images/trekCheck-logo-white.png";
-import companyLogo from "../images/wanderSafe-logo-white.png";
+import productLogo from "../images/logos/trekCheck-logo-white.png";
+import companyLogo from "../images/logos/wanderSafe-logo-white.png";
 import SubmissionButton from "../base-components/button";
-import InputText from "../base-components/input-text";
-import InputErrorMessage from "../base-components/input-error-message";
+import InputText from "../base-components/inputs/input-text";
+import InputErrorMessage from "../base-components/inputs/input-error-message";
 import { Link, useNavigate } from "react-router-dom";
-import InputPassword from "../base-components/input-password";
+import InputPassword from "../base-components/inputs/input-password";
 import { validateEmailFormat } from "../util";
+import PopUpPassword from "../base-components/pop-ups/pop-up-pwd";
 
 function Login() {
   // login info
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [forgotPassword, setForgotPassword] = useState(false);
 
   // error handling
   const [emailInputError, setEmailInputError] = useState(false);
@@ -35,7 +37,8 @@ function Login() {
       setEmailInputError(false);
     }
 
-    const apiEndpoint = "http://localhost:3000/hiker_portal/login";
+    const apiEndpoint =
+      "https://trekcheck-server.azurewebsites.net/hiker_portal/login";
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",
@@ -111,6 +114,12 @@ function Login() {
             <Link to="/account-registration">Click here to sign up</Link>
           </p>
         </div>
+        <div class="forgot-pwd account-registration-link">
+          <p>
+            <a onClick={() => setForgotPassword(true)}>Forgot Password?</a>
+          </p>
+        </div>
+        {forgotPassword && <PopUpPassword closePopup={setForgotPassword} />}
         <SubmissionButton
           text="Login"
           handleSubmit={handleSubmit}

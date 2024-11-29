@@ -1,15 +1,35 @@
 import React, { useEffect, useState } from "react";
-import DisplayText from "../base-components/display-text";
+import DisplayText from "../base-components/displays/display-text";
 import PageHeader from "../base-components/page-header";
 import SubmissionButton from "../base-components/button";
 import BackToDashboard from "../base-components/back-to-dashboard";
-import InputText from "../base-components/input-text";
-import PopUpMessage from "../base-components/pop-up-message";
+import InputText from "../base-components/inputs/input-text";
+import PopUpMessage from "../base-components/pop-ups/pop-up-message";
 import { useNavigate, useLocation } from "react-router-dom";
-import InputErrorMessage from "../base-components/input-error-message";
+import InputErrorMessage from "../base-components/inputs/input-error-message";
 import { isUserLoggedIn } from "../util";
+import apiBase from "../requests/base";
+import PopUpAction from "../base-components/pop-ups/pop-up-action";
 
 function EditAccount() {
+  useEffect(() => {
+    setUpdateStatus("");
+  }, [location]);
+
+  useEffect(() => {
+    checkIfTagIsAlreadyLinked();
+  }, [tagId]);
+
+  useEffect(() => {
+    if (!isUserLoggedIn()) {
+      navigateTo("/login");
+    }
+  }, [navigateTo]);
+
+  useEffect(() => {
+    getUserAccountInfo();
+  }, []);
+
   // user info
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -21,33 +41,22 @@ function EditAccount() {
   const [isTagLinked, setIsTagLinked] = useState(false);
   const [tagDuplicateError, setHasDuplicateTagError] = useState(false);
 
+  const [deleteAcc, setDeleteAcc] = useState(false);
+
+  const location = useLocation();
   const navigateTo = useNavigate();
-  useEffect(() => {
-    if (!isUserLoggedIn()) {
-      navigateTo("/login");
-    }
-  }, [navigateTo]);
 
   // error handling
   const [hasEmptyField, setHasEmptyField] = useState(false);
-
-  const location = useLocation();
 
   // button state
   const isButtonDisabled =
     email.trim() === "" || firstName.trim() === "" || lastName.trim() === "";
 
   // reset update status upon re-navigating back to this page
-  useEffect(() => {
-    setUpdateStatus("");
-  }, [location]);
-
-  useEffect(() => {
-    checkIfTagIsAlreadyLinked();
-  }, [tagId]);
 
   const getUserAccountInfo = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/accountDetails`;
+    const apiEndpoint = `${apiBase}/hiker_portal/accountDetails`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
@@ -89,7 +98,7 @@ function EditAccount() {
   };
 
   const checkIfTagIsAlreadyLinked = async () => {
-    const apiEndpoint = "http://localhost:3000/hiker_portal/check-tag";
+    const apiEndpoint = `${apiBase}/hiker_portal/check-tag`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",
@@ -111,7 +120,7 @@ function EditAccount() {
   };
 
   const updateUserAccountInfo = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/updateAccount`;
+    const apiEndpoint = `${apiBase}/hiker_portal/updateAccount`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
@@ -141,14 +150,45 @@ function EditAccount() {
     }
   };
 
-  useEffect(() => {
-    getUserAccountInfo();
-  }, []);
+  const deleteUserAccount = async () => {
+    const apiEndpoint = `${apiEndpoint}/hiker_portal/user`;
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+      } else {
+        console.log("Failed to delete account", response.status);
+      }
+    } catch (error) {
+      console.log("Error during update user account info", error);
+    }
+  };
 
   return (
     <div className="edit-account">
       <PageHeader text={"Edit Account"} />
       <BackToDashboard />
+      <a className="delete-data" onClick={() => setDeleteAcc(true)}>
+        Delete account data
+      </a>
+      {deleteAcc && (
+        <PopUpAction
+          title="Delete Account Data"
+          message={"this action cannot be undone"}
+          btnLabel={"Delete Data"}
+          handleSubmit={deleteUserAccount(email)}
+        />
+      )}
+
       {updateStatus === "success" && (
         <PopUpMessage
           title="Account information has been updated sucessfully!"
@@ -172,11 +212,6 @@ function EditAccount() {
       >
         <div className="edit-account-body">
           <DisplayText label="Email:" value={email} />
-          {/* TODO-beta: Password change and recovery moved to beta */}
-          {/* <DisplayText
-                        label="Password:"
-                        value={password}
-                    /> */}
           <div className="two-col-inputs">
             <InputText
               label="First Name"

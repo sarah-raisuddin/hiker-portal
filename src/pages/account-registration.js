@@ -1,13 +1,13 @@
 // src/About.js
 import React, { useState, useEffect } from "react";
 import SubmissionButton from "../base-components/button";
-import InputText from "../base-components/input-text";
+import InputText from "../base-components/inputs/input-text";
 import PageHeader from "../base-components/page-header";
-import PopUpMessage from "../base-components/pop-up-message";
-import PopUpOption from "../base-components/pop-up-option";
+import PopUpMessage from "../base-components/pop-ups/pop-up-message";
+import PopUpOption from "../base-components/pop-ups/pop-up-option";
 import { useLocation } from "react-router-dom";
-import InputErrorMessage from "../base-components/input-error-message";
-import InputPassword from "../base-components/input-password";
+import InputErrorMessage from "../base-components/inputs/input-error-message";
+import InputPassword from "../base-components/inputs/input-password";
 import { validateEmailFormat } from "../util";
 
 function AccountRegistration() {
@@ -51,7 +51,8 @@ function AccountRegistration() {
   }, [email]);
 
   const checkifEmailIsAlreadyLinked = async () => {
-    const apiEndpoint = "http://localhost:3000/hiker_portal/check-email";
+    const apiEndpoint =
+      "https://trekcheck-server.azurewebsites.net/hiker_portal/check-email";
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",
@@ -73,7 +74,8 @@ function AccountRegistration() {
   };
 
   const registerUserAccount = async () => {
-    const apiEndpoint = "http://localhost:3000/hiker_portal/register";
+    const apiEndpoint =
+      "https://trekcheck-server.azurewebsites.net/hiker_portal/register";
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",
@@ -129,7 +131,8 @@ function AccountRegistration() {
   };
 
   const checkIfTagIsAlreadyLinked = async () => {
-    const apiEndpoint = "http://localhost:3000/hiker_portal/check-tag";
+    const apiEndpoint =
+      "https://trekcheck-server.azurewebsites.net/hiker_portal/check-tag";
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",

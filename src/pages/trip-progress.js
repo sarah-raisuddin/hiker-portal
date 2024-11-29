@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SubmissionButton from "../base-components/button";
 import PageHeader from "../base-components/page-header";
 import { fetchProgress, fetchTrail, fetchUserInfo } from "../api";
-import { useEffect } from "react";
 import { formatDate } from "../util";
 import { useLocation } from "react-router-dom";
+import toggleArrow from "../images/toggle-arrow.png";
 
 const TripProgress = () => {
   const [activeCheckpoint, setActiveCheckpoint] = useState(null);
   const [trailData, setTrailData] = useState(null);
   const [progressData, setProgressData] = useState({});
-  const [userData, setUserData] = useState({});
 
   const location = useLocation();
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,11 +27,12 @@ const TripProgress = () => {
 
       if (uid) {
         const progressResult = await fetchProgress({ uid });
+
         const result = await fetchTrail({
           trailId: progressResult.tripPlan.trail_id,
         });
-        const userData = await fetchUserInfo(progressResult.tripPlan.user_id);
-        setUserData(userData);
+
+        console.log(progressResult);
         setProgressData(progressResult);
         setTrailData(result);
       }
@@ -33,8 +40,6 @@ const TripProgress = () => {
     fetchData();
   }, [location.search]);
 
-  console.log(trailData);
-  console.log(progressData);
   if (!trailData || !progressData) {
     return <div>Loading...</div>;
   }
@@ -57,7 +62,7 @@ const TripProgress = () => {
     return checkpointEntries.some((entry) => entry.pole_id === checkpointId);
   };
 
-  const TripProgressView = ({ checkpoints }) => {
+  const TripProgressViewDesktop = ({ checkpoints }) => {
     return (
       <div className="trip-progress-view">
         <span className="progress-line" />
@@ -70,6 +75,26 @@ const TripProgress = () => {
               onClick={() => setActiveCheckpoint(checkpoint)}
             />
           </React.Fragment>
+        ))}
+      </div>
+    );
+  };
+
+  const TripProgressViewMobile = ({ checkpoints }) => {
+    return (
+      <div class="trip-progress-mobile">
+        {checkpoints.map((checkpoint, index) => (
+          <div class="checkpoint">
+            <div class="checkpoint-item">
+              <ProgressCircleMobile
+                progress={getCheckpointVisited(checkpoint.pole_id)}
+                label={checkpoint.name}
+                active={activeCheckpoint === checkpoint}
+                onClick={() => setActiveCheckpoint(checkpoint)}
+              />
+            </div>
+            {activeCheckpoint === checkpoint ? <CheckinTableMobile /> : ""}
+          </div>
         ))}
       </div>
     );
@@ -104,6 +129,10 @@ const TripProgress = () => {
             valueText={getCheckpointName(tripPlan.exit_point)}
           />
         </div>
+        <FormattedKeyValue
+          keyText={"Additional Notes"}
+          valueText={tripPlan.additional_notes}
+        />
       </div>
     );
   };
@@ -126,6 +155,19 @@ const TripProgress = () => {
     );
   };
 
+  const ProgressCircleMobile = ({ progress, label, active, onClick }) => {
+    return (
+      <>
+        <div className="circle-container" onClick={onClick}>
+          <div className={`circle ${progress ? "filled" : "empty"}`} />
+          {active && <div className="triangle" />}
+        </div>
+        <p className="circle-label">{label}</p>
+        <img src={toggleArrow} onClick={onClick} />
+      </>
+    );
+  };
+
   const CheckinDetails = () => {
     return (
       <div className="checkin-details">
@@ -139,6 +181,15 @@ const TripProgress = () => {
   const checkinDetailsTitle = activeCheckpoint
     ? `${activeCheckpoint.name} (${activeCheckpoint.latitude}, ${activeCheckpoint.longitude})`
     : "";
+
+  const checkinDetailsTitleMobile = activeCheckpoint ? (
+    <p>
+      <strong>{activeCheckpoint.name}</strong> ({activeCheckpoint.latitude},{" "}
+      {activeCheckpoint.longitude})
+    </p>
+  ) : (
+    ""
+  );
 
   const CheckinTable = () => {
     const data = getProgressEntries(activeCheckpoint.pole_id) || [];
@@ -162,19 +213,47 @@ const TripProgress = () => {
     );
   };
 
+  const CheckinTableMobile = () => {
+    const data = getProgressEntries(activeCheckpoint.pole_id) || [];
+    return (
+      <div class="checkin-details-mobile">
+        <p className="title">{checkinDetailsTitleMobile}</p>
+        {data.length === 0 ? (
+          <p>No data to show</p>
+        ) : (
+          <li>
+            {data.map((row) => (
+              <ul>
+                {formatDate(row.time).date}, {formatDate(row.time).time}
+              </ul>
+            ))}
+          </li>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="trip-progress">
-      <PageHeader text={`${userData.first_name}'s Progress`} />
+      <PageHeader text={`${tripPlan.first_name}'s Progress`} />
       <OverviewTable tripPlan={tripPlan} />
       <h2>Click on a checkpoint for more info</h2>
-      <TripProgressView checkpoints={checkpoints} />
-      {activeCheckpoint && <CheckinDetails />}
+      {width > 640 ? (
+        <>
+          <TripProgressViewDesktop checkpoints={checkpoints} />
+          {activeCheckpoint && <CheckinDetails />}
+        </>
+      ) : (
+        <>
+          <TripProgressViewMobile checkpoints={checkpoints} />
+        </>
+      )}
       <div className="trip-progress-container">
         <div className="trip-progress-body"></div>
         <div className="trip-progress-footer">
           <div>
             <label>Sign up for email alerts</label>
-            <input type="text" />
+            <input style={{ width: "100%" }} type="text" />
           </div>
           <SubmissionButton />
         </div>

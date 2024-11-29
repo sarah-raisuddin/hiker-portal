@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import PageHeader from "../base-components/page-header";
 import bugReportText from "../data/bug-report-data";
 import SubmissionButton from "../base-components/button";
-import LongInputText from "../base-components/input-text-long";
-import issueIcon from "../images/issue-icon.png";
+import LongInputText from "../base-components/inputs/input-text-long";
+import issueIcon from "../images/icons/issue-icon.png";
 import { useLocation } from "react-router-dom";
-import PopUpMessage from "../base-components/pop-up-message";
+import PopUpMessage from "../base-components/pop-ups/pop-up-message";
 
 function BugReport() {
   const [isIssueSubmitted, setIsIssueSubmitted] = useState(false);
@@ -24,7 +24,7 @@ function BugReport() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiEndpoint = `http://localhost:3000/hiker_portal/bug`;
+    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/bug`;
 
     const issueDetails = {
       submittedDate: new Date().toISOString(),

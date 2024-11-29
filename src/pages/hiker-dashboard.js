@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SubmissionButton from "../base-components/button";
 import PageHeader from "../base-components/page-header";
 import TripCard from "../base-components/trip-card";
-import plus from "../images/button-plus.png";
+import plus from "../images/buttons/button-plus.png";
 import { useNavigate } from "react-router-dom";
 import toggleArrow from "../images/toggle-arrow.png";
 import { isUserLoggedIn } from "../util";
@@ -25,7 +25,7 @@ function HikerDashboard() {
   };
 
   const getTripPlans = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plans`;
+    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plans`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
@@ -49,7 +49,7 @@ function HikerDashboard() {
   };
 
   const getFirstName = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/accountDetails`;
+    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/accountDetails`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {

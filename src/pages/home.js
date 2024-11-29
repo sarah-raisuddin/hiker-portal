@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import descriptionText from "../data/system-description";
 import systemDiagram from "../images/trekCheckDiagram.png";
-import trekCheckLogo from "../images/trekCheck-logo-white.png";
+import trekCheckLogo from "../images/logos/trekCheck-logo-white.png";
 import AboutMe from "../base-components/about-me";
 import teamAboutMeData from "../data/about-me-data";
 import SubmissionButton from "../base-components/button";

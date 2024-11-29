@@ -1,6 +1,6 @@
 // src/InputComponent.js
 import React, { useState } from "react";
-import arrow from "../images/button-arrow.png";
+import arrow from "../images/buttons/button-arrow.png";
 
 function SubmissionButton({ handleSubmit, text, specialIcon, inactive }) {
   const buttonImage = specialIcon || arrow;

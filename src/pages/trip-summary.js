@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from "react";
-import DisplayText from "../base-components/display-text";
+import DisplayText from "../base-components/displays/display-text";
 import PageHeader from "../base-components/page-header";
 import SubmissionButton from "../base-components/button";
 import { useNavigate } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
 import { archiveTripPlan } from "../api";
 import { formatDate } from "../util";
-import edit from "../images/button-edit.png";
-import archive from "../images/button-archive.png";
-import info from "../images/info.png";
-import DisplayLongText from "../base-components/display-text-long";
+import edit from "../images/buttons/button-edit.png";
+import archive from "../images/buttons/button-archive.png";
+import info from "../images/icons/info.png";
+import DisplayLongText from "../base-components/displays/display-text-long";
 import { isUserLoggedIn } from "../util";
 
 function TripSummary() {
   //user info
   const tripPlanId = localStorage.getItem("tripPlanIdToView");
-  const webDomain =
-    "https://hiker-portal-trekcheck-dff0bthcgfgceeh5.westus-01.azurewebsites.net/";
+  // const webDomain =
+  // "https://hiker-portal-trekcheck-dff0bthcgfgceeh5.westus-01.azurewebsites.net/";
 
+  const webDomain = "localhost:3000/";
   const navigateTo = useNavigate();
   useEffect(() => {
     if (!isUserLoggedIn()) {
@@ -43,7 +44,7 @@ function TripSummary() {
 
   // TODO-KT: get additional notes text
   const getTripPlan = async () => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/trip_plan/${tripPlanId}`;
+    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plan/${tripPlanId}`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
@@ -138,7 +139,8 @@ function TripSummary() {
           </div>
           <DisplayText
             label="Progress Tracking Link:"
-            value={`${webDomain}/trip-progress?uids=${tripPlan.progressLink}`}
+            // value={`${webDomain}/trip-progress?uids=${tripPlan.progressLink}`}
+            value={`hikerportal.trekcheck/trip-progress?uids=${tripPlan.progressLink}`}
             onClick={() =>
               navigateTo(`/trip-progress?uid=${tripPlan.progressLink}`)
             }
