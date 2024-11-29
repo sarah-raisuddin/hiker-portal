@@ -45,12 +45,19 @@ function MenuLinks({
           >
             <p>Report An Issue</p>
           </button>
+          <button
+            className="underlined-link"
+            onClick={() => navigateTo("/about-us")}
+          >
+            <p>About Us</p>
+          </button>
         </>
       )}
+
       <div className="account-control-link">
         <li>
           {loggedInStatus ? (
-            <Link to="/home" onClick={handleUserLogOut}>
+            <Link to="/login" onClick={handleUserLogOut}>
               Logout
             </Link>
           ) : (
