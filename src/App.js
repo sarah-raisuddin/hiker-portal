@@ -28,8 +28,8 @@ function App() {
     <div>
       <HeaderMenu handleUserLogOut={handleUserLogOut} />
       <Routes>
-        {<Route path="/" element={<Home />} />}
-        <Route path="/home" element={<Home />} />
+        {<Route path="/" element={<Login />} />}
+        <Route path="/about-us" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<AccountRegistration />} />
         <Route path="/trips" element={<HikerDashboard />} />

@@ -14,10 +14,6 @@ function HeaderMenu({ handleUserLogOut }) {
   const navigateTo = useNavigate();
   const location = useLocation();
 
-  const handleHomeNav = () => {
-    navigateTo("/home");
-  };
-
   // authentification
   const [loggedInStatus, setIsUserLoggedIn] = useState(false);
   const [openMobileMenu, setMobileMenu] = useState(false);
@@ -25,6 +21,11 @@ function HeaderMenu({ handleUserLogOut }) {
   useEffect(() => {
     setIsUserLoggedIn(isUserLoggedIn());
   }, [location]);
+
+  const handleHomeNav = () => {
+    const link = loggedInStatus ? "/dashboard" : "/login";
+    navigateTo(link);
+  };
 
   // special case for terms and conditions page
   const isTermsConditionsPage = location.pathname === "/terms-conditions";
@@ -57,7 +58,7 @@ function HeaderMenu({ handleUserLogOut }) {
 
         {openMobileMenu && (
           <>
-            <div class="overlay" />
+            <div class="overlay" onClick={() => setMobileMenu(false)} />
             <div className="mobile-menu">
               <SubmissionButton
                 specialIcon={closeIcon}
@@ -67,6 +68,7 @@ function HeaderMenu({ handleUserLogOut }) {
                 loggedInStatus={loggedInStatus}
                 isTermsConditionsPage={isTermsConditionsPage}
                 handleUserLogOut={handleUserLogOut}
+                closeMenu={setMobileMenu}
               />
             </div>
           </>
