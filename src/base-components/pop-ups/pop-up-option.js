@@ -4,10 +4,12 @@ import SubmissionButton from "../button";
 const PopUpOption = ({
   title,
   message,
-  link1Label,
-  link2Label,
-  onLink1Click,
-  onLink2Click,
+  button1Label,
+  button2Label,
+  onButton1Click,
+  onButton2Click,
+  specialIcon1,
+  specialIcon2,
 }) => {
   return (
     <div className="pop-up-underlay">
@@ -15,8 +17,16 @@ const PopUpOption = ({
         <h1>{title}</h1>
         <p>{message}</p>
         <div className="pop-up-options">
-          <SubmissionButton handleSubmit={onLink1Click} text={link1Label} />
-          <SubmissionButton handleSubmit={onLink2Click} text={link2Label} />
+          <SubmissionButton
+            handleSubmit={onButton1Click}
+            text={button1Label}
+            specialIcon={specialIcon1}
+          />
+          <SubmissionButton
+            handleSubmit={onButton2Click}
+            text={button2Label}
+            specialIcon={specialIcon2}
+          />
         </div>
       </div>
     </div>

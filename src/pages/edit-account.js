@@ -9,7 +9,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import InputErrorMessage from "../base-components/inputs/input-error-message";
 import { isUserLoggedIn } from "../util";
 import apiBase from "../requests/base";
-import PopUpAction from "../base-components/pop-ups/pop-up-action";
+import PopUpOption from "../base-components/pop-ups/pop-up-option";
+import cancelIcon from "../images/buttons/button-close.png";
 
 function EditAccount() {
   // user info
@@ -178,6 +179,10 @@ function EditAccount() {
     }
   };
 
+  const handleCancelDelete = () => {
+    setDeleteAcc(false);
+  };
+
   return (
     <div className="edit-account">
       <PageHeader text={"Edit Account"} />
@@ -186,11 +191,14 @@ function EditAccount() {
         Delete account data
       </a>
       {deleteAcc && (
-        <PopUpAction
+        <PopUpOption
           title="Delete Account Data"
           message={"this action cannot be undone"}
-          btnLabel={"Delete Data"}
-          handleSubmit={() => deleteUserAccount(email)}
+          button2Label={"Delete Data"}
+          button1Label={"Cancel"}
+          onButton2Click={() => deleteUserAccount(email)}
+          onButton1Click={handleCancelDelete}
+          specialIcon1={cancelIcon}
         />
       )}
 
@@ -210,7 +218,7 @@ function EditAccount() {
       )}
       <div
         className={
-          updateStatus
+          updateStatus || deleteAcc
             ? "blur edit-account-container"
             : "edit-account-container"
         }
