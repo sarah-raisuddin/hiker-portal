@@ -151,8 +151,6 @@ function EditAccount() {
   };
 
   const deleteUserAccount = async () => {
-    console.log("im here");
-    console.log(email);
     const apiEndpoint = `${apiBase}/hiker_portal/user`;
     try {
       const response = await fetch(apiEndpoint, {
@@ -169,7 +167,6 @@ function EditAccount() {
         const data = await response.json();
         localStorage.removeItem("token");
         navigateTo("/login");
-        console.log("and nowwww im here");
       } else {
         console.log("Failed to delete account", response.status);
       }
