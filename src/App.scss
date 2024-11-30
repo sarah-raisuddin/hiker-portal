@@ -673,6 +673,11 @@ label {
     @include body-styles();
   }
 
+  &-delete {
+    display: flex;
+    justify-content: right;
+  }
+
   .two-col-inputs {
     display: flex;
     justify-content: space-between;

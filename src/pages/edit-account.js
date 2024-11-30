@@ -187,9 +187,6 @@ function EditAccount() {
     <div className="edit-account">
       <PageHeader text={"Edit Account"} />
       <BackToDashboard />
-      <a className="delete-data" onClick={() => setDeleteAcc(true)}>
-        Delete account data
-      </a>
       {deleteAcc && (
         <PopUpOption
           title="Delete Account Data"
@@ -224,6 +221,13 @@ function EditAccount() {
         }
       >
         <div className="edit-account-body">
+          <div className="edit-account-delete">
+            <SubmissionButton
+              text="Delete Account"
+              handleSubmit={() => setDeleteAcc(true)}
+              specialIcon={cancelIcon}
+            ></SubmissionButton>
+          </div>
           <DisplayText label="Email:" value={email} />
           <div className="two-col-inputs">
             <InputText
