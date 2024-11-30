@@ -983,14 +983,11 @@ label {
     margin: 0 auto;
   }
 
+  &-container {
+    @include form-container-styles();
+  }
   &-body {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    background-color: $primary-color;
-    border-radius: $standard-roundness;
-    padding: 15px 15px;
-
+    @include body-styles();
     .system-diagram {
       border-radius: $standard-roundness;
       width: 100%;
