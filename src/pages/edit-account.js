@@ -12,6 +12,25 @@ import apiBase from "../requests/base";
 import PopUpAction from "../base-components/pop-ups/pop-up-action";
 
 function EditAccount() {
+  // user info
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [updateStatus, setUpdateStatus] = useState("");
+  const [existingTagId, setExistingTagId] = useState("");
+  const [tagId, setTagId] = useState("");
+
+  const [isTagLinked, setIsTagLinked] = useState(false);
+  const [tagDuplicateError, setHasDuplicateTagError] = useState(false);
+
+  const [deleteAcc, setDeleteAcc] = useState(false);
+
+  // error handling
+  const [hasEmptyField, setHasEmptyField] = useState(false);
+
+  const location = useLocation();
+  const navigateTo = useNavigate();
+
   useEffect(() => {
     setUpdateStatus("");
   }, [location]);
@@ -29,25 +48,6 @@ function EditAccount() {
   useEffect(() => {
     getUserAccountInfo();
   }, []);
-
-  // user info
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [updateStatus, setUpdateStatus] = useState("");
-  const [existingTagId, setExistingTagId] = useState("");
-  const [tagId, setTagId] = useState("");
-
-  const [isTagLinked, setIsTagLinked] = useState(false);
-  const [tagDuplicateError, setHasDuplicateTagError] = useState(false);
-
-  const [deleteAcc, setDeleteAcc] = useState(false);
-
-  const location = useLocation();
-  const navigateTo = useNavigate();
-
-  // error handling
-  const [hasEmptyField, setHasEmptyField] = useState(false);
 
   // button state
   const isButtonDisabled =
@@ -151,7 +151,9 @@ function EditAccount() {
   };
 
   const deleteUserAccount = async () => {
-    const apiEndpoint = `${apiEndpoint}/hiker_portal/user`;
+    console.log("im here");
+    console.log(email);
+    const apiEndpoint = `${apiBase}/hiker_portal/user`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "DELETE",
@@ -165,6 +167,9 @@ function EditAccount() {
 
       if (response.ok) {
         const data = await response.json();
+        localStorage.removeItem("token");
+        navigateTo("/login");
+        console.log("and nowwww im here");
       } else {
         console.log("Failed to delete account", response.status);
       }
@@ -185,7 +190,7 @@ function EditAccount() {
           title="Delete Account Data"
           message={"this action cannot be undone"}
           btnLabel={"Delete Data"}
-          handleSubmit={deleteUserAccount(email)}
+          handleSubmit={() => deleteUserAccount(email)}
         />
       )}
 

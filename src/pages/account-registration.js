@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 import InputErrorMessage from "../base-components/inputs/input-error-message";
 import InputPassword from "../base-components/inputs/input-password";
 import { validateEmailFormat } from "../util";
+import { useNavigate } from "react-router-dom";
 
 function AccountRegistration() {
   // user info
@@ -153,6 +154,16 @@ function AccountRegistration() {
     }
   };
 
+  const navigateTo = useNavigate();
+
+  const handleNavLogin = () => {
+    navigateTo("/login");
+  };
+
+  const handleNavTutorial = () => {
+    navigateTo("/tutorials");
+  };
+
   return (
     <div className="account-registration">
       <PageHeader text={"Register for an Account"} />
@@ -160,10 +171,10 @@ function AccountRegistration() {
         <PopUpOption
           title="Registration successful!"
           message="You can return to the login page to access your account, or learn how to navigate the HikerPortal by watching one of our tutorials."
-          link1="/login"
+          onLink1Click={handleNavLogin}
           link1Label="Login"
-          link2="/tutorials"
-          link2label="Tutorials"
+          onLink2Click={handleNavTutorial}
+          link2Label="Tutorials"
         />
       )}
       {registrationStatus === "failure" && (
