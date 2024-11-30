@@ -6,8 +6,17 @@ function MenuLinks({
   loggedInStatus,
   isTermsConditionsPage,
   handleUserLogOut,
+  closeMenu,
 }) {
   const navigateTo = useNavigate();
+
+  const handleSubmit = (link) => {
+    navigateTo(link);
+    if (closeMenu) {
+      closeMenu(false);
+    }
+  };
+
   return (
     <div className="menu-links">
       {loggedInStatus && !isTermsConditionsPage && (
@@ -15,7 +24,7 @@ function MenuLinks({
           <button
             className="underlined-link"
             onClick={() => {
-              navigateTo("/trips");
+              handleSubmit("/trips");
             }}
           >
             <p>Dashboard</p>
@@ -23,7 +32,7 @@ function MenuLinks({
 
           <button
             className="underlined-link"
-            onClick={() => navigateTo("/edit-account")}
+            onClick={() => handleSubmit("/edit-account")}
           >
             <p>Edit Account</p>
           </button>
@@ -34,20 +43,20 @@ function MenuLinks({
           <button
             className="underlined-link"
             onClick={() => {
-              navigateTo("/faqs");
+              handleSubmit("/faqs");
             }}
           >
             <p>FAQs</p>
           </button>
           <button
             className="underlined-link"
-            onClick={() => navigateTo("/bug-report")}
+            onClick={() => handleSubmit("/bug-report")}
           >
             <p>Report An Issue</p>
           </button>
           <button
             className="underlined-link"
-            onClick={() => navigateTo("/about-us")}
+            onClick={() => handleSubmit("/about-us")}
           >
             <p>About Us</p>
           </button>
@@ -61,7 +70,9 @@ function MenuLinks({
               Logout
             </Link>
           ) : (
-            <Link to="/login">Login</Link>
+            <Link to="/login" onClick={() => handleSubmit("/login")}>
+              Login
+            </Link>
           )}
         </li>
       </div>

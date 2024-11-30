@@ -58,7 +58,7 @@ function HeaderMenu({ handleUserLogOut }) {
 
         {openMobileMenu && (
           <>
-            <div class="overlay" />
+            <div class="overlay" onClick={() => setMobileMenu(false)} />
             <div className="mobile-menu">
               <SubmissionButton
                 specialIcon={closeIcon}
@@ -68,6 +68,7 @@ function HeaderMenu({ handleUserLogOut }) {
                 loggedInStatus={loggedInStatus}
                 isTermsConditionsPage={isTermsConditionsPage}
                 handleUserLogOut={handleUserLogOut}
+                closeMenu={setMobileMenu}
               />
             </div>
           </>

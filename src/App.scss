@@ -325,6 +325,10 @@ label {
     top: 43px;
     padding-right: 8px;
     cursor: pointer;
+    @media (max-width: $tablet-screen) {
+      max-width: 30px;
+      top: 28px;
+    }
   }
 }
 
@@ -381,6 +385,7 @@ label {
 
 // page styles
 .account-registration {
+  @include page-styles();
   &-container {
     @include form-container-styles();
   }
@@ -456,7 +461,7 @@ label {
 
 .login {
   max-width: 90%;
-  margin: 0 auto;
+  margin: 35px auto;
 
   &-productLogo {
     @include product-logo-styles();
