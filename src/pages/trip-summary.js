@@ -11,14 +11,13 @@ import archive from "../images/buttons/button-archive.png";
 import info from "../images/icons/info.png";
 import DisplayLongText from "../base-components/displays/display-text-long";
 import { isUserLoggedIn } from "../util";
+import apiBase from "../requests/base";
 
 function TripSummary() {
   //user info
   const tripPlanId = localStorage.getItem("tripPlanIdToView");
-  // const webDomain =
-  // "https://hiker-portal-trekcheck-dff0bthcgfgceeh5.westus-01.azurewebsites.net/";
 
-  const webDomain = "localhost:3000/";
+  const webDomain = `${apiBase}/`;
   const navigateTo = useNavigate();
   useEffect(() => {
     if (!isUserLoggedIn()) {
@@ -44,7 +43,8 @@ function TripSummary() {
 
   // TODO-KT: get additional notes text
   const getTripPlan = async () => {
-    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plan/${tripPlanId}`;
+    const apiEndpoint = `${apiBase}/hiker_portal/trip_plan/${tripPlanId}`;
+
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {

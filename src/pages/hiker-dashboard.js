@@ -6,6 +6,7 @@ import plus from "../images/buttons/button-plus.png";
 import { useNavigate } from "react-router-dom";
 import toggleArrow from "../images/toggle-arrow.png";
 import { isUserLoggedIn } from "../util";
+import apiBase from "../requests/base";
 
 function HikerDashboard() {
   // user details
@@ -25,7 +26,8 @@ function HikerDashboard() {
   };
 
   const getTripPlans = async () => {
-    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plans`;
+    const apiEndpoint = `${apiBase}/hiker_portal/trip_plans`;
+
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
@@ -49,7 +51,7 @@ function HikerDashboard() {
   };
 
   const getFirstName = async () => {
-    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/accountDetails`;
+    const apiEndpoint = `${apiBase}/hiker_portal/accountDetails`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {

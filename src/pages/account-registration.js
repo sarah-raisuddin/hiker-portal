@@ -10,6 +10,7 @@ import InputErrorMessage from "../base-components/inputs/input-error-message";
 import InputPassword from "../base-components/inputs/input-password";
 import { validateEmailFormat } from "../util";
 import { useNavigate } from "react-router-dom";
+import apiBase from "../requests/base";
 
 function AccountRegistration() {
   // user info
@@ -52,8 +53,7 @@ function AccountRegistration() {
   }, [email]);
 
   const checkifEmailIsAlreadyLinked = async () => {
-    const apiEndpoint =
-      "https://trekcheck-server.azurewebsites.net/hiker_portal/check-email";
+    const apiEndpoint = `${apiBase}/hiker_portal/check-email`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",
@@ -75,8 +75,7 @@ function AccountRegistration() {
   };
 
   const registerUserAccount = async () => {
-    const apiEndpoint =
-      "https://trekcheck-server.azurewebsites.net/hiker_portal/register";
+    const apiEndpoint = `${apiBase}/hiker_portal/register`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",
@@ -132,8 +131,7 @@ function AccountRegistration() {
   };
 
   const checkIfTagIsAlreadyLinked = async () => {
-    const apiEndpoint =
-      "https://trekcheck-server.azurewebsites.net/hiker_portal/check-tag";
+    const apiEndpoint = `${apiBase}/hiker_portal/check-tag`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",

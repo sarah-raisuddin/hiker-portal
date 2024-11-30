@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import InputPassword from "../base-components/inputs/input-password";
 import { validateEmailFormat } from "../util";
 import PopUpPassword from "../base-components/pop-ups/pop-up-pwd";
+import apiBase from "../requests/base";
 
 function Login() {
   // login info
@@ -37,8 +38,7 @@ function Login() {
       setEmailInputError(false);
     }
 
-    const apiEndpoint =
-      "https://trekcheck-server.azurewebsites.net/hiker_portal/login";
+    const apiEndpoint = `${apiBase}/hiker_portal/login`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",

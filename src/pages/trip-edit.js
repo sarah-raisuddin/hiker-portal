@@ -13,6 +13,7 @@ import { validateDateRange, validatePhoneNumberFormat } from "../util";
 import InputErrorMessage from "../base-components/inputs/input-error-message";
 import LongInputText from "../base-components/inputs/input-text-long";
 import { isUserLoggedIn } from "../util";
+import apiBase from "../requests/base";
 
 function EditTrip() {
   const navigateTo = useNavigate();
@@ -65,7 +66,7 @@ function EditTrip() {
 
   // TODO-KT: get additional notes text
   const getTripPlan = async () => {
-    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plan/${tripPlanId}`;
+    const apiEndpoint = `${apiBase}/hiker_portal/trip_plan/${tripPlanId}`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
@@ -106,7 +107,8 @@ function EditTrip() {
 
   const handleSave = async () => {
     console.log(tripPlanId);
-    const apiEndPoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plan/${tripPlanId}`;
+    const apiEndPoint = `${apiBase}/hiker_portal/trip_plan/${tripPlanId}`;
+
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndPoint, {
@@ -175,7 +177,8 @@ function EditTrip() {
 
   const getTrailCheckpoints = async () => {
     console.log(tripPlan.trailId);
-    const apiEndPoint = `https://trekcheck-server.azurewebsites.net/sar_dashboard/trailInfo/${tripPlan.trailId}`;
+    const apiEndPoint = `${apiBase}/sar_dashboard/trailInfo/${tripPlan.trailId}`;
+
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",

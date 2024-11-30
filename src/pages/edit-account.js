@@ -151,12 +151,15 @@ function EditAccount() {
   };
 
   const deleteUserAccount = async () => {
-    const apiEndpoint = `${apiBase}/hiker_portal/user`;
+    const apiEndpoint = `${apiBase}/hiker_portal/deleteAccount`;
+    const token = localStorage.getItem("token");
+
     try {
       const response = await fetch(apiEndpoint, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           email: email,
