@@ -171,7 +171,7 @@ function PlanTrip() {
         const tripPlanId = data.id;
 
         localStorage.setItem("tripPlanIdToView", tripPlanId);
-        navigateTo("/trip-summary");
+        navigateTo("/trip-summary", { state: { fromPage: "trip-plan" } });
       } else {
         // Handle errors
         console.log("Trip plan creation failed", response.statusText);

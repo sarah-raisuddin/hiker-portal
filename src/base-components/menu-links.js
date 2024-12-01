@@ -60,6 +60,12 @@ function MenuLinks({
           >
             <p>About Us</p>
           </button>
+          <button
+            className="underlined-link"
+            onClick={() => handleSubmit("know-before-you-go")}
+          >
+            <p>Know Before You Go</p>
+          </button>
         </>
       )}
 

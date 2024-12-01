@@ -61,7 +61,7 @@ function EditTrip() {
     tripPlan.emergencyContactNumber.trim() === "";
 
   const handleCancel = () => {
-    navigateTo("/trip-summary");
+    navigateTo("/trip-summary", { state: { fromPage: "trip-edit" } });
   };
 
   // TODO-KT: get additional notes text

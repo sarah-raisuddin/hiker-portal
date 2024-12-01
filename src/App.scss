@@ -1183,3 +1183,33 @@ label {
     display: none;
   }
 }
+
+.know-before {
+  &-container {
+    @include form-container-styles();
+  }
+  &-body {
+    @include body-styles();
+
+    .know-before-reminders {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      gap: 10px;
+
+      img {
+        max-width: 80px;
+        @media (max-width: $tablet-screen) {
+          max-width: 30px;
+          align-self: flex-start;
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+
+  @include text-body-styles();
+  font-size: $default-font-size;
+  text-align: left;
+}
