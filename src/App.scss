@@ -318,7 +318,13 @@ label {
   &.password {
     position: relative;
   }
-  .visibility-icon {
+
+  &.help {
+    position: relative;
+  }
+
+  .visibility-icon,
+  .help-icon {
     max-width: 35px;
     position: absolute;
     right: 0;
@@ -1206,4 +1212,25 @@ label {
   @include text-body-styles();
   font-size: $default-font-size;
   text-align: left;
+}
+
+.input-info-message {
+  background-color: $secondary-color;
+  border-radius: $standard-roundness;
+  max-height: 80;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  margin-top: 8px;
+
+  p {
+    color: white;
+    font-weight: bold;
+  }
+
+  img {
+    max-width: 30px;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
 }

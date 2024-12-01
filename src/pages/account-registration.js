@@ -11,6 +11,7 @@ import InputPassword from "../base-components/inputs/input-password";
 import { validateEmailFormat } from "../util";
 import { useNavigate } from "react-router-dom";
 import apiBase from "../requests/base";
+import InputHelpText from "../base-components/inputs/input-text-help";
 
 function AccountRegistration() {
   // user info
@@ -169,10 +170,10 @@ function AccountRegistration() {
         <PopUpOption
           title="Registration successful!"
           message="You can return to the login page to access your account, or learn how to navigate the HikerPortal by watching one of our tutorials."
-          onLink1Click={handleNavLogin}
-          link1Label="Login"
-          onLink2Click={handleNavTutorial}
-          link2Label="Tutorials"
+          onButton1Click={handleNavLogin}
+          button1Label="Login"
+          onButton2Click={handleNavTutorial}
+          button2Label="Tutorials"
         />
       )}
       {registrationStatus === "failure" && (
@@ -215,11 +216,14 @@ function AccountRegistration() {
               value={lastName}
               onChange={setLastName}
             />
-            <InputText
+            <InputHelpText
               label="Tag ID"
               placeholder="Type your tag ID"
               value={tagId}
               onChange={setTagId}
+              helpDescription={
+                "Your tag ID is the number printed on the back of your Identification Tag. If you do not have an Identification Tag then please purchase one before creating an account."
+              }
             />
           </div>
           {hasEmptyField && (
