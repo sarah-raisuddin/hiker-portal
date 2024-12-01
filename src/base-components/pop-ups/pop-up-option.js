@@ -1,22 +1,16 @@
 import React from "react";
 import SubmissionButton from "../button";
-import { useNavigate } from "react-router-dom";
 
 const PopUpOption = ({
   title,
   message,
-  link1,
-  link1Label,
-  link2,
-  link2label,
+  button1Label,
+  button2Label,
+  onButton1Click,
+  onButton2Click,
+  specialIcon1,
+  specialIcon2,
 }) => {
-  const navigateTo = useNavigate();
-
-  const directToPage = (link) => {
-    console.log("pls");
-    navigateTo(link);
-  };
-
   return (
     <div className="pop-up-underlay">
       <div className="pop-up-box">
@@ -24,12 +18,14 @@ const PopUpOption = ({
         <p>{message}</p>
         <div className="pop-up-options">
           <SubmissionButton
-            handleSubmit={directToPage(link1)}
-            text={link1Label}
+            handleSubmit={onButton1Click}
+            text={button1Label}
+            specialIcon={specialIcon1}
           />
           <SubmissionButton
-            handleSubmit={directToPage(link2)}
-            text={link2label}
+            handleSubmit={onButton2Click}
+            text={button2Label}
+            specialIcon={specialIcon2}
           />
         </div>
       </div>

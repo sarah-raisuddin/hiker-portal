@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import DisplayText from "../base-components/displays/display-text";
 import PageHeader from "../base-components/page-header";
 import SubmissionButton from "../base-components/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
 import { archiveTripPlan } from "../api";
 import { formatDate } from "../util";
@@ -11,15 +11,18 @@ import archive from "../images/buttons/button-archive.png";
 import info from "../images/icons/info.png";
 import DisplayLongText from "../base-components/displays/display-text-long";
 import { isUserLoggedIn } from "../util";
+import apiBase from "../requests/base";
+import PopUpOption from "../base-components/pop-ups/pop-up-option";
+import cancelIcon from "../images/buttons/button-close.png";
 
 function TripSummary() {
   //user info
   const tripPlanId = localStorage.getItem("tripPlanIdToView");
-  // const webDomain =
-  // "https://hiker-portal-trekcheck-dff0bthcgfgceeh5.westus-01.azurewebsites.net/";
 
-  const webDomain = "localhost:3000/";
+  const webDomain = `${apiBase}/`;
   const navigateTo = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     if (!isUserLoggedIn()) {
       navigateTo("/login");
@@ -42,8 +45,13 @@ function TripSummary() {
     archived: "",
   });
 
+  const [showReminder, setShowReminder] = useState(
+    location.state?.fromPage === "trip-plan"
+  );
+
   const getTripPlan = async () => {
-    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plan/${tripPlanId}`;
+    const apiEndpoint = `${apiBase}/hiker_portal/trip_plan/${tripPlanId}`;
+
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(apiEndpoint, {
@@ -100,11 +108,36 @@ function TripSummary() {
     navigateTo("/trip-edit");
   };
 
+  const handleMaybeLater = () => {
+    setShowReminder(false);
+  };
+
+  const handleViewInfo = () => {
+    navigateTo("/know-before-you-go");
+  };
+
   return (
     <div className="trip-summary">
       <PageHeader text={"Trip Summary"} />
       <BackToDashboard />
-      <div className="trip-summary-container">
+      {showReminder && (
+        <PopUpOption
+          title="Ready for Your Next Adventure?"
+          message="Please take a look at some important things you should know before you go. If you have any other questions regarding the use of TrekCheck on the trail, please take a look at our FAQ page."
+          button1Label={"Maybe Later"}
+          button2Label={"View Information"}
+          onButton1Click={handleMaybeLater}
+          onButton2Click={handleViewInfo}
+          specialIcon1={cancelIcon}
+        />
+      )}
+      <div
+        className={
+          showReminder
+            ? " blur trip-summary-container"
+            : "trip-summary-container"
+        }
+      >
         <div
           className={`trip-summary-body ${tripPlan.archived ? "archived" : ""}`}
         >

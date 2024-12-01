@@ -9,9 +9,29 @@ import { useNavigate, useLocation } from "react-router-dom";
 import InputErrorMessage from "../base-components/inputs/input-error-message";
 import { isUserLoggedIn } from "../util";
 import apiBase from "../requests/base";
-import PopUpAction from "../base-components/pop-ups/pop-up-action";
+import PopUpOption from "../base-components/pop-ups/pop-up-option";
+import cancelIcon from "../images/buttons/button-close.png";
 
 function EditAccount() {
+  // user info
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [updateStatus, setUpdateStatus] = useState("");
+  const [existingTagId, setExistingTagId] = useState("");
+  const [tagId, setTagId] = useState("");
+
+  const [isTagLinked, setIsTagLinked] = useState(false);
+  const [tagDuplicateError, setHasDuplicateTagError] = useState(false);
+
+  const [deleteAcc, setDeleteAcc] = useState(false);
+
+  // error handling
+  const [hasEmptyField, setHasEmptyField] = useState(false);
+
+  const location = useLocation();
+  const navigateTo = useNavigate();
+
   useEffect(() => {
     setUpdateStatus("");
   }, [location]);
@@ -29,25 +49,6 @@ function EditAccount() {
   useEffect(() => {
     getUserAccountInfo();
   }, []);
-
-  // user info
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [updateStatus, setUpdateStatus] = useState("");
-  const [existingTagId, setExistingTagId] = useState("");
-  const [tagId, setTagId] = useState("");
-
-  const [isTagLinked, setIsTagLinked] = useState(false);
-  const [tagDuplicateError, setHasDuplicateTagError] = useState(false);
-
-  const [deleteAcc, setDeleteAcc] = useState(false);
-
-  const location = useLocation();
-  const navigateTo = useNavigate();
-
-  // error handling
-  const [hasEmptyField, setHasEmptyField] = useState(false);
 
   // button state
   const isButtonDisabled =
@@ -151,12 +152,15 @@ function EditAccount() {
   };
 
   const deleteUserAccount = async () => {
-    const apiEndpoint = `${apiEndpoint}/hiker_portal/user`;
+    const apiEndpoint = `${apiBase}/hiker_portal/deleteAccount`;
+    const token = localStorage.getItem("token");
+
     try {
       const response = await fetch(apiEndpoint, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           email: email,
@@ -165,6 +169,8 @@ function EditAccount() {
 
       if (response.ok) {
         const data = await response.json();
+        localStorage.removeItem("token");
+        navigateTo("/login");
       } else {
         console.log("Failed to delete account", response.status);
       }
@@ -173,19 +179,23 @@ function EditAccount() {
     }
   };
 
+  const handleCancelDelete = () => {
+    setDeleteAcc(false);
+  };
+
   return (
     <div className="edit-account">
       <PageHeader text={"Edit Account"} />
       <BackToDashboard />
-      <a className="delete-data" onClick={() => setDeleteAcc(true)}>
-        Delete account data
-      </a>
       {deleteAcc && (
-        <PopUpAction
+        <PopUpOption
           title="Delete Account Data"
-          message={"this action cannot be undone"}
-          btnLabel={"Delete Data"}
-          handleSubmit={deleteUserAccount(email)}
+          message={"This action cannot be undone"}
+          button2Label={"Delete Data"}
+          button1Label={"Cancel"}
+          onButton2Click={() => deleteUserAccount(email)}
+          onButton1Click={handleCancelDelete}
+          specialIcon1={cancelIcon}
         />
       )}
 
@@ -205,12 +215,19 @@ function EditAccount() {
       )}
       <div
         className={
-          updateStatus
+          updateStatus || deleteAcc
             ? "blur edit-account-container"
             : "edit-account-container"
         }
       >
         <div className="edit-account-body">
+          <div className="edit-account-delete">
+            <SubmissionButton
+              text="Delete Account"
+              handleSubmit={() => setDeleteAcc(true)}
+              specialIcon={cancelIcon}
+            ></SubmissionButton>
+          </div>
           <DisplayText label="Email:" value={email} />
           <div className="two-col-inputs">
             <InputText

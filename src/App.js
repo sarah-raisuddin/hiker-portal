@@ -15,6 +15,7 @@ import Faqs from "./pages/faqs";
 import EditTrip from "./pages/trip-edit";
 import BugReport from "./pages/bug-report";
 import Tutorials from "./pages/tutorial";
+import KnowBefore from "./pages/know-before";
 import { useEffect } from "react";
 
 import HeaderMenu from "./base-components/header-menu";
@@ -43,6 +44,7 @@ function App() {
         <Route path="/trip-edit" element={<EditTrip />} />
         <Route path="/bug-report" element={<BugReport />} />
         <Route path="/tutorials" element={<Tutorials />} />
+        <Route path="/know-before-you-go" element={<KnowBefore />} />
       </Routes>
     </div>
   );

@@ -16,6 +16,7 @@ import {
 import InputErrorMessage from "../base-components/inputs/input-error-message";
 import LongInputText from "../base-components/inputs/input-text-long";
 import { isUserLoggedIn } from "../util";
+import apiBase from "../requests/base";
 
 function PlanTrip() {
   // select options
@@ -59,8 +60,7 @@ function PlanTrip() {
     tripPlan.emergencyContactNumber.trim() === "";
 
   const getTrailOptions = async () => {
-    const apiEndPoint =
-      "https://trekcheck-server.azurewebsites.net/sar_dashboard/trails";
+    const apiEndPoint = `${apiBase}/sar_dashboard/trails`;
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",
@@ -84,7 +84,7 @@ function PlanTrip() {
 
   const getTrailCheckpoints = async () => {
     console.log(tripPlan.trailId);
-    const apiEndPoint = `https://trekcheck-server.azurewebsites.net/sar_dashboard/trailInfo/${tripPlan.trailId}`;
+    const apiEndPoint = `${apiBase}/sar_dashboard/trailInfo/${tripPlan.trailId}`;
     try {
       const response = await fetch(apiEndPoint, {
         method: "GET",
@@ -191,8 +191,7 @@ function PlanTrip() {
 
   // TODO-KT: add additonal notes to server endpoint
   const submitTripPlan = async () => {
-    const apiEndpoint =
-      "https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plans";
+    const apiEndpoint = `${apiBase}/hiker_portal/trip_plans`;
     const token = localStorage.getItem("token");
     console.log("trip plan to submit: ", tripPlan);
     try {
@@ -220,7 +219,7 @@ function PlanTrip() {
         const tripPlanId = data.id;
 
         localStorage.setItem("tripPlanIdToView", tripPlanId);
-        navigateTo("/trip-summary");
+        navigateTo("/trip-summary", { state: { fromPage: "trip-plan" } });
       } else {
         // Handle errors
         console.log("Trip plan creation failed", response.statusText);

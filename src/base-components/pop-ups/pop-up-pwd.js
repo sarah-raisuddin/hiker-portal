@@ -13,19 +13,21 @@ const PopUpPassword = ({ closePopup }) => {
   return (
     <div className="pop-up-underlay">
       <div className="pop-up-box">
-        <SubmissionButton
-          specialIcon={close}
-          handleSubmit={() => closePopup(false)}
-        />
+        <h1>Password Recovery</h1>
         {msg ? (
           <p>
             You will recieve an email with instructions to reset your password
           </p>
         ) : (
           <>
-            <p>Enter email to recover password</p>
+            <p>Enter your email below to reset your password</p>
             <InputText placeholder={"email"} onChange={setEmail} />
             <div className="pop-up-options">
+              <SubmissionButton
+                text={"Cancel"}
+                specialIcon={close}
+                handleSubmit={() => closePopup(false)}
+              />
               <SubmissionButton
                 text={"Submit"}
                 handleSubmit={() => {
@@ -34,6 +36,15 @@ const PopUpPassword = ({ closePopup }) => {
               />
             </div>
           </>
+        )}
+        {msg && (
+          <div className="pop-up-options">
+            <SubmissionButton
+              text={"Close"}
+              specialIcon={close}
+              handleSubmit={() => closePopup(false)}
+            />
+          </div>
         )}
       </div>
     </div>

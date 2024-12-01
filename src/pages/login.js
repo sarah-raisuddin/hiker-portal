@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import InputPassword from "../base-components/inputs/input-password";
 import { validateEmailFormat } from "../util";
 import PopUpPassword from "../base-components/pop-ups/pop-up-pwd";
+import apiBase from "../requests/base";
 
 function Login() {
   // login info
@@ -37,8 +38,7 @@ function Login() {
       setEmailInputError(false);
     }
 
-    const apiEndpoint =
-      "https://trekcheck-server.azurewebsites.net/hiker_portal/login";
+    const apiEndpoint = `${apiBase}/hiker_portal/login`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "POST",
@@ -71,60 +71,55 @@ function Login() {
 
   return (
     <div className="login">
-      <div>
+      {forgotPassword && <PopUpPassword closePopup={setForgotPassword} />}
+      <div
+        className={forgotPassword ? "blur login-container" : "login-container"}
+      >
         <img className="login-productLogo" src={productLogo}></img>
         <div className="login-subtitle">
           <h2>by</h2>
           <img className="login-companyLogo" src={companyLogo}></img>
         </div>
-      </div>
-      <div className="login-body">
-        <InputText
-          label="Email"
-          placeholder="type your email"
-          value={email}
-          onChange={setEmail}
-        />
-        <InputPassword
-          label="Password"
-          placeholder="type your password"
-          value={password}
-          onChange={setPassword}
-        />
-        {emailInputError && (
-          <InputErrorMessage
-            message={"Invalid email address. Please try again."}
+        <div className="login-body">
+          <InputText
+            label="Email"
+            placeholder="type your email"
+            value={email}
+            onChange={setEmail}
           />
-        )}
-        {unsuccessfulLogin && !emailInputError && (
-          <InputErrorMessage
-            message={"Incorrect email or password. Please try again."}
+          <InputPassword
+            label="Password"
+            placeholder="type your password"
+            value={password}
+            onChange={setPassword}
           />
-        )}
-        {/* TODO-beta: add accont recovery functionality       
-        <div className="forgot-password-link">
-          <p>
-            Forgot password? <a>Click here for account recovery</a>
-          </p>
+          {emailInputError && (
+            <InputErrorMessage
+              message={"Invalid email address. Please try again."}
+            />
+          )}
+          {unsuccessfulLogin && !emailInputError && (
+            <InputErrorMessage
+              message={"Incorrect email or password. Please try again."}
+            />
+          )}
+          <div className="account-registration-link">
+            <p>
+              Don't have an account?{" "}
+              <Link to="/account-registration">Click here to sign up</Link>
+            </p>
+          </div>
+          <div class="forgot-pwd account-registration-link">
+            <p>
+              <a onClick={() => setForgotPassword(true)}>Forgot Password?</a>
+            </p>
+          </div>
+          <SubmissionButton
+            text="Login"
+            handleSubmit={handleSubmit}
+            inactive={isButtonDisabled}
+          />
         </div>
-        */}
-        <div className="account-registration-link">
-          <p>
-            Don't have an account?{" "}
-            <Link to="/account-registration">Click here to sign up</Link>
-          </p>
-        </div>
-        <div class="forgot-pwd account-registration-link">
-          <p>
-            <a onClick={() => setForgotPassword(true)}>Forgot Password?</a>
-          </p>
-        </div>
-        {forgotPassword && <PopUpPassword closePopup={setForgotPassword} />}
-        <SubmissionButton
-          text="Login"
-          handleSubmit={handleSubmit}
-          inactive={isButtonDisabled}
-        />
       </div>
     </div>
   );

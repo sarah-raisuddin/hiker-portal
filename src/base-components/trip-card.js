@@ -12,7 +12,7 @@ function TripCard({ trailPlan }) {
   const handleSubmit = () => {
     localStorage.setItem("tripPlanIdToView", trailPlan.id);
     console.log("trip plan from trip-card: ", trailPlan);
-    navigateTo("/trip-summary");
+    navigateTo("/trip-summary", { state: { fromPage: "dashboard" } });
   };
 
   return (

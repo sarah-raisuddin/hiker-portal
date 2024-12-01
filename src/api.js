@@ -1,5 +1,5 @@
-//const sarDashApi = "https://local-test-deployment-capstone-2024.azurewebsites.net/sar_dashboard";
-//const hikerPortalApi = "https://local-test-deployment-capstone-2024.azurewebsites.net/hiker_portal";
+//const sarDashApi = "http://localhost:3000/sar_dashboard";
+//const hikerPortalApi = "http://localhost:3000/hiker_portal";
 const sarDashApi = "https://trekcheck-server.azurewebsites.net/sar_dashboard";
 const hikerPortalApi =
   "https://trekcheck-server.azurewebsites.net/hiker_portal";

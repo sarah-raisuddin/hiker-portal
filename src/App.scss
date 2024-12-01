@@ -318,7 +318,13 @@ label {
   &.password {
     position: relative;
   }
-  .visibility-icon {
+
+  &.help {
+    position: relative;
+  }
+
+  .visibility-icon,
+  .help-icon {
     max-width: 35px;
     position: absolute;
     right: 0;
@@ -497,12 +503,6 @@ label {
     }
   }
 
-  h1 {
-    font-size: 115px;
-    color: $header-text;
-    margin: 0;
-    text-align: center;
-  }
   h2 {
     color: $header-text;
     font-size: 25px;
@@ -671,6 +671,11 @@ label {
 
   &-body {
     @include body-styles();
+  }
+
+  &-delete {
+    display: flex;
+    justify-content: right;
   }
 
   .two-col-inputs {
@@ -990,14 +995,11 @@ label {
     margin: 0 auto;
   }
 
+  &-container {
+    @include form-container-styles();
+  }
   &-body {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    background-color: $primary-color;
-    border-radius: $standard-roundness;
-    padding: 15px 15px;
-
+    @include body-styles();
     .system-diagram {
       border-radius: $standard-roundness;
       width: 100%;
@@ -1191,5 +1193,56 @@ label {
 .desktop-links {
   @media (max-width: $tablet-screen) {
     display: none;
+  }
+}
+
+.know-before {
+  &-container {
+    @include form-container-styles();
+  }
+  &-body {
+    @include body-styles();
+
+    .know-before-reminders {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      gap: 10px;
+
+      img {
+        max-width: 80px;
+        @media (max-width: $tablet-screen) {
+          max-width: 30px;
+          align-self: flex-start;
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+
+  @include text-body-styles();
+  font-size: $default-font-size;
+  text-align: left;
+}
+
+.input-info-message {
+  background-color: $secondary-color;
+  border-radius: $standard-roundness;
+  max-height: 80;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  margin-top: 8px;
+
+  p {
+    color: white;
+    font-weight: bold;
+  }
+
+  img {
+    max-width: 30px;
+    margin-right: 10px;
+    margin-left: 10px;
   }
 }
