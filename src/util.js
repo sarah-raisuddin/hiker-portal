@@ -56,7 +56,16 @@ export const validateDateRange = (startDateString, endDateString) => {
   const endDate = new Date(endDateString);
 
   const isDateRangeValid = startDate <= endDate;
+
   return isDateRangeValid;
+};
+
+export const validateDates = (endDateString) => {
+  const endDate = new Date(endDateString);
+  const today = new Date();
+
+  const isDateInPast = endDate < today;
+  return !isDateInPast;
 };
 
 export const validatePhoneNumberFormat = (number) => {
@@ -85,4 +94,30 @@ export const isUserLoggedIn = () => {
     console.error("Invalid token:", error);
     return false;
   }
+};
+
+export const checkOverlappingTrips = (tripPlans, currTripPlan) => {
+  // collect all dates
+  if (tripPlans === null) {
+    return false;
+  }
+
+  return tripPlans.some((element) => {
+    if (
+      Number(element.trail_id) === Number(currTripPlan.trailId) &&
+      element.archived === false
+    ) {
+      const startDate = new Date(element.start_date);
+
+      const currStart = new Date(currTripPlan.startDate);
+      const currEnd = new Date(currTripPlan.endDate);
+
+      console.log("going to check now");
+
+      if (currStart >= startDate && startDate <= currEnd) {
+        console.log("invalid date range!!!");
+        return true;
+      }
+    }
+  });
 };

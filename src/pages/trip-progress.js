@@ -5,6 +5,7 @@ import { fetchProgress, fetchTrail, fetchUserInfo } from "../api";
 import { formatDate } from "../util";
 import { useLocation } from "react-router-dom";
 import toggleArrow from "../images/toggle-arrow.png";
+import InputErrorMessage from "../base-components/inputs/input-error-message";
 
 const TripProgress = () => {
   const [activeCheckpoint, setActiveCheckpoint] = useState(null);
@@ -13,6 +14,7 @@ const TripProgress = () => {
 
   const location = useLocation();
   const [width, setWidth] = useState(window.innerWidth);
+  console.log(trailData);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -163,7 +165,14 @@ const TripProgress = () => {
           {active && <div className="triangle" />}
         </div>
         <p className="circle-label">{label}</p>
-        <img src={toggleArrow} onClick={onClick} />
+        <img
+          src={toggleArrow}
+          onClick={onClick}
+          style={{
+            transform: active ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.3s ease",
+          }}
+        />
       </>
     );
   };
@@ -184,8 +193,11 @@ const TripProgress = () => {
 
   const checkinDetailsTitleMobile = activeCheckpoint ? (
     <p>
-      <strong>{activeCheckpoint.name}</strong> ({activeCheckpoint.latitude},{" "}
-      {activeCheckpoint.longitude})
+      <strong>
+        <u>Coordinates:</u>
+      </strong>{" "}
+      ({activeCheckpoint.latitude.slice(0, 6)},{" "}
+      {activeCheckpoint.longitude.slice(0, 6)})
     </p>
   ) : (
     ""
@@ -236,7 +248,15 @@ const TripProgress = () => {
   return (
     <div className="trip-progress">
       <PageHeader text={`${tripPlan.first_name}'s Progress`} />
+
       <OverviewTable tripPlan={tripPlan} />
+      {trailData.trail.id === 13 && (
+        <InputErrorMessage
+          message={
+            "Checkpoint Status Alert: The Left Bridge checkpoint is currently experiencing a temporary disruption and may not be broadcasting hiker progress. "
+          }
+        />
+      )}
       <h2>Click on a checkpoint for more info</h2>
       {width > 640 ? (
         <>

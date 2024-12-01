@@ -7,7 +7,12 @@ import InputDateTime from "../base-components/inputs/input-datetime";
 import Dropdown from "../base-components/inputs/input-dropdown";
 import { useNavigate } from "react-router-dom";
 import BackToDashboard from "../base-components/back-to-dashboard";
-import { validateDateRange, validatePhoneNumberFormat } from "../util";
+import {
+  validateDateRange,
+  validatePhoneNumberFormat,
+  validateDates,
+  checkOverlappingTrips,
+} from "../util";
 import InputErrorMessage from "../base-components/inputs/input-error-message";
 import LongInputText from "../base-components/inputs/input-text-long";
 import { isUserLoggedIn } from "../util";
@@ -32,6 +37,9 @@ function PlanTrip() {
   const [hasEmptyField, setHasEmptyField] = useState(false);
   const [hasInvalidDates, setHasInvalidDates] = useState(false);
   const [hasInvalidPhoneNumber, setHasInvalidPhoneNumber] = useState(false);
+
+  const [overlappingDates, setOverlappingDates] = useState(false);
+  const [tripPlans, setTripPlans] = useState(null);
 
   const navigateTo = useNavigate();
   useEffect(() => {
@@ -98,47 +106,87 @@ function PlanTrip() {
     }
   };
 
+  const getTripPlans = async () => {
+    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plans`;
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Get trip plans sucessful", data);
+        setTripPlans(data.trails);
+      } else {
+        console.log("Failed to get trip plans", response.status);
+      }
+    } catch (error) {
+      console.log("Error during get trip plans", error);
+    }
+  };
+
   useEffect(() => {
     getTrailOptions();
+    getTripPlans();
   }, []);
 
   useEffect(() => {
     getTrailCheckpoints();
   }, [tripPlan.trailId]);
 
-  const validateTripPlan = () => {
-    if (
-      tripPlan.trailId === "" ||
-      tripPlan.startPoint === "" ||
-      tripPlan.endPoint === "" ||
-      tripPlan.startDate === "" ||
-      tripPlan.endDate === "" ||
-      tripPlan.emergencyContactName === "" ||
-      tripPlan.emergencyContactNumber === ""
-    ) {
-      setHasEmptyField(true);
-    } else {
-      setHasEmptyField(false);
-      const isDateRangeValid = validateDateRange(
-        tripPlan.startDate,
-        tripPlan.endDate
-      );
-      if (!isDateRangeValid) {
-        setHasInvalidDates(true);
-      } else {
-        setHasInvalidDates(false);
-        const isPhoneNumberValid = validatePhoneNumberFormat(
-          tripPlan.emergencyContactNumber
-        );
+  // Helper Functions
+  const hasEmptyFields = (tripPlan) => {
+    const requiredFields = [
+      "trailId",
+      "startPoint",
+      "endPoint",
+      "startDate",
+      "endDate",
+      "emergencyContactName",
+      "emergencyContactNumber",
+    ];
+    return requiredFields.some((field) => tripPlan[field] === "");
+  };
 
-        if (!isPhoneNumberValid) {
-          setHasInvalidPhoneNumber(true);
-        } else {
-          setHasInvalidPhoneNumber(false);
-          submitTripPlan();
-        }
-      }
+  const isValidDateRange = (startDate, endDate) => {
+    return validateDateRange(startDate, endDate) && validateDates(endDate);
+  };
+
+  const isValidPhoneNumber = (phoneNumber) => {
+    return validatePhoneNumberFormat(phoneNumber);
+  };
+
+  const validateTripPlan = () => {
+    if (hasEmptyFields(tripPlan)) {
+      setHasEmptyField(true);
+      return;
     }
+
+    setHasEmptyField(false);
+
+    if (!isValidDateRange(tripPlan.startDate, tripPlan.endDate)) {
+      setHasInvalidDates(true);
+      return;
+    }
+
+    setHasInvalidDates(false);
+
+    if (!isValidPhoneNumber(tripPlan.emergencyContactNumber)) {
+      setHasInvalidPhoneNumber(true);
+      return;
+    }
+    if (checkOverlappingTrips(tripPlans, tripPlan)) {
+      setOverlappingDates(true);
+      return;
+    }
+
+    setHasInvalidPhoneNumber(false);
+    submitTripPlan();
   };
 
   // TODO-KT: add additonal notes to server endpoint
@@ -263,15 +311,18 @@ function PlanTrip() {
             />
           )}
           {hasInvalidDates && (
-            <InputErrorMessage
-              message={
-                "The start date cannot be after the end date. Please try again."
-              }
-            />
+            <InputErrorMessage message={"Invalid date range."} />
           )}
           {hasInvalidPhoneNumber && (
             <InputErrorMessage
               message={"Invalid phone number. Please try again."}
+            />
+          )}
+          {overlappingDates && (
+            <InputErrorMessage
+              message={
+                "Trip plan for this trail within these dates already exists"
+              }
             />
           )}
           <SubmissionButton

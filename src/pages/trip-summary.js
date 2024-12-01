@@ -42,7 +42,6 @@ function TripSummary() {
     archived: "",
   });
 
-  // TODO-KT: get additional notes text
   const getTripPlan = async () => {
     const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/trip_plan/${tripPlanId}`;
     const token = localStorage.getItem("token");
@@ -142,7 +141,11 @@ function TripSummary() {
             // value={`${webDomain}/trip-progress?uids=${tripPlan.progressLink}`}
             value={`hikerportal.trekcheck/trip-progress?uids=${tripPlan.progressLink}`}
             onClick={() =>
-              navigateTo(`/trip-progress?uid=${tripPlan.progressLink}`)
+              // navigateTo(`/trip-progress?uid=${tripPlan.progressLink}`)
+              window.open(
+                `/trip-progress?uid=${tripPlan.progressLink}`,
+                "_blank"
+              )
             }
           />
           <hr></hr>
