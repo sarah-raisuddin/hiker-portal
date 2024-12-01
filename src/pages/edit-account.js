@@ -190,7 +190,7 @@ function EditAccount() {
       {deleteAcc && (
         <PopUpOption
           title="Delete Account Data"
-          message={"this action cannot be undone"}
+          message={"This action cannot be undone"}
           button2Label={"Delete Data"}
           button1Label={"Cancel"}
           onButton2Click={() => deleteUserAccount(email)}

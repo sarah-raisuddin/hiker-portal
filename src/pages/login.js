@@ -103,13 +103,6 @@ function Login() {
               message={"Incorrect email or password. Please try again."}
             />
           )}
-          {/* TODO-beta: add accont recovery functionality       
-        <div className="forgot-password-link">
-          <p>
-            Forgot password? <a>Click here for account recovery</a>
-          </p>
-        </div>
-        */}
           <div className="account-registration-link">
             <p>
               Don't have an account?{" "}
