@@ -38,7 +38,7 @@ function Home() {
               Whether you are gearing up for your next adventure or simply
               curious about how our platform works, we have tutorials that will
               guide you every step of the way. Learn how to create trip plans,
-              navigate the Hiker Portal, and se the checkpoint system to keep
+              navigate the Hiker Portal, and use the checkpoint system to keep
               your emergency contact updated. Click the button below to start
               getting the most of your journey!
             </p>

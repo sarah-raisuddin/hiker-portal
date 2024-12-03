@@ -1226,6 +1226,28 @@ label {
   text-align: left;
 }
 
+.maps {
+  &-container {
+    @include form-container-styles();
+  }
+  &-body {
+    @include body-styles();
+
+    img {
+      max-width: 800px;
+      @media (max-width: $tablet-screen) {
+        max-width: 350px;
+        align-self: flex-start;
+        margin-top: 20px;
+      }
+    }
+  }
+
+  @include text-body-styles();
+  font-size: $default-font-size;
+  text-align: left;
+}
+
 .input-info-message {
   background-color: $secondary-color;
   border-radius: $standard-roundness;

@@ -19,7 +19,7 @@ function Tutorial() {
         <div className="tutorials-body">
           <h2>Hiker Portal</h2>
           <p>
-            The Hiker ortal helps you plan trips, track your progress, and keep
+            The Hiker Portal helps you plan trips, track your progress, and keep
             your emergency contact updated on your progress through our digital
             checkpoint system. The tutorials provided below provide a general
             overview for how to best utilize our system to stay safe on your
