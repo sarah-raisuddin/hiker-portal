@@ -1,20 +1,46 @@
 import React, { useState, useEffect } from "react";
 import SubmissionButton from "../base-components/button";
+import InputText from "../base-components/inputs/input-text";
 import PageHeader from "../base-components/page-header";
 import { fetchProgress, fetchTrail, fetchUserInfo } from "../api";
 import { formatDate } from "../util";
 import { useLocation } from "react-router-dom";
 import toggleArrow from "../images/toggle-arrow.png";
 import InputErrorMessage from "../base-components/inputs/input-error-message";
+import apiBase from "../requests/base";
 
 const TripProgress = () => {
   const [activeCheckpoint, setActiveCheckpoint] = useState(null);
   const [trailData, setTrailData] = useState(null);
   const [progressData, setProgressData] = useState({});
+  const [emergency_contact_email, setEmail] = useState("");
 
   const location = useLocation();
   const [width, setWidth] = useState(window.innerWidth);
-  console.log(trailData);
+
+  const submitEmail = async (tripPlanId) => {
+    const apiEndpoint = `http://localhost:3000/hiker_portal/add_emergency_contact/${tripPlanId}`;
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json", // Correctly specify content type
+        },
+        body: JSON.stringify({
+          emergency_contact_email, // Properly stringify the object
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Response data:", data);
+      } else {
+        console.error("Failed to submit email, status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error during email submission:", error);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -39,7 +65,13 @@ const TripProgress = () => {
         setTrailData(result);
       }
     };
+
     fetchData();
+
+    // refresh every one minutes
+    const intervalId = setInterval(fetchData, 1 * 30 * 1000);
+
+    return () => clearInterval(intervalId);
   }, [location.search]);
 
   if (!trailData || !progressData) {
@@ -273,9 +305,17 @@ const TripProgress = () => {
         <div className="trip-progress-footer">
           <div>
             <label>Sign up for email alerts</label>
-            <input style={{ width: "100%" }} type="text" />
+            {/* <input style={{ width: "100%" }} type="text" onChange={() => setEmail(this.value)}/> */}
+            <InputText
+              placeholder={"email"}
+              value={emergency_contact_email}
+              onChange={setEmail}
+            />
           </div>
-          <SubmissionButton />
+          <SubmissionButton
+            text={"Submit Email"}
+            handleSubmit={() => submitEmail(tripPlan.id)}
+          />
         </div>
       </div>
     </div>

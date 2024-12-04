@@ -7,11 +7,13 @@ import issueIcon from "../images/icons/issue-icon.png";
 import { useLocation } from "react-router-dom";
 import PopUpMessage from "../base-components/pop-ups/pop-up-message";
 import apiBase from "../requests/base";
+import InputErrorMessage from "../base-components/inputs/input-error-message";
 
 function BugReport() {
   const [isIssueSubmitted, setIsIssueSubmitted] = useState(false);
   const [issueDescription, setIssueDescription] = useState("");
   const [errorStatus, setErrorStatus] = useState(false);
+  const [invalidData, setInvalidData] = useState(false);
 
   const location = useLocation();
 
@@ -31,6 +33,13 @@ function BugReport() {
       submittedDate: new Date().toISOString(),
       bugDescription: issueDescription,
     };
+
+    if (issueDescription.length > 300) {
+      setInvalidData(true);
+      return;
+    }
+
+    setInvalidData(false);
 
     try {
       const response = await fetch(apiEndpoint, {
@@ -86,6 +95,12 @@ function BugReport() {
                 value={issueDescription}
                 onChange={setIssueDescription}
               />
+              {invalidData && (
+                <InputErrorMessage
+                  message={"Bug description limit is 300 characters."}
+                />
+              )}
+
               <SubmissionButton
                 text="Submit"
                 handleSubmit={handleSubmit}

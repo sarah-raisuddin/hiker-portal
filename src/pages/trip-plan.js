@@ -38,6 +38,7 @@ function PlanTrip() {
   const [hasEmptyField, setHasEmptyField] = useState(false);
   const [hasInvalidDates, setHasInvalidDates] = useState(false);
   const [hasInvalidPhoneNumber, setHasInvalidPhoneNumber] = useState(false);
+  const [invalidAddNotes, setInvalidAddNotes] = useState(false);
 
   const [overlappingDates, setOverlappingDates] = useState(false);
   const [tripPlans, setTripPlans] = useState(null);
@@ -180,11 +181,17 @@ function PlanTrip() {
       setHasInvalidPhoneNumber(true);
       return;
     }
+
     if (checkOverlappingTrips(tripPlans, tripPlan)) {
       setOverlappingDates(true);
       return;
     }
 
+    if (tripPlan.additionalNotes.length > 300) {
+      setInvalidAddNotes(true);
+    }
+
+    setOverlappingDates(false);
     setHasInvalidPhoneNumber(false);
     submitTripPlan();
   };
@@ -322,6 +329,11 @@ function PlanTrip() {
               message={
                 "Trip plan for this trail within these dates already exists"
               }
+            />
+          )}
+          {invalidAddNotes && (
+            <InputErrorMessage
+              message={"Additional notes limit is 300 characters."}
             />
           )}
           <SubmissionButton

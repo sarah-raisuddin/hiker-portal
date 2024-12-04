@@ -133,7 +133,7 @@ function EditAccount() {
         body: JSON.stringify({
           first_name: firstName,
           last_name: lastName,
-          tag_id: tagId,
+          rfid_tag_uid: tagId,
         }),
       });
 

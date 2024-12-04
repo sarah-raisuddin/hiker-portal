@@ -96,28 +96,30 @@ export const isUserLoggedIn = () => {
   }
 };
 
-export const checkOverlappingTrips = (tripPlans, currTripPlan) => {
-  // collect all dates
-  if (tripPlans === null) {
-    return false;
-  }
+// validate date range taken from
+// https://stackoverflow.com/questions/22784883/check-if-more-than-two-date-ranges-overlap
 
-  return tripPlans.some((element) => {
+function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
+  if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
+  if (a_start <= b_end && b_end <= a_end) return true; // b ends in a
+  if (b_start < a_start && a_end < b_end) return true; // a in b
+  if (b_start > a_start && b_end < a_end);
+  return false;
+}
+
+export function checkOverlappingTrips(exisitingTripPlans, currTripPlan) {
+  return exisitingTripPlans.some((el) => {
     if (
-      Number(element.trail_id) === Number(currTripPlan.trailId) &&
-      element.archived === false
+      Number(el.trail_id) === Number(currTripPlan.trailId) &&
+      el.archived === false
     ) {
-      const startDate = new Date(element.start_date);
+      const startDate = new Date(el.start_date);
+      const endDate = new Date(el.end_date);
 
       const currStart = new Date(currTripPlan.startDate);
       const currEnd = new Date(currTripPlan.endDate);
 
-      console.log("going to check now");
-
-      if (currStart >= startDate && startDate <= currEnd) {
-        console.log("invalid date range!!!");
-        return true;
-      }
+      return dateRangeOverlaps(startDate, endDate, currStart, currEnd);
     }
   });
-};
+}
