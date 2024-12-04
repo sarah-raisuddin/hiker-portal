@@ -66,6 +66,12 @@ function MenuLinks({
           >
             <p>Know Before You Go</p>
           </button>
+          <button
+            className="underlined-link"
+            onClick={() => handleSubmit("maps")}
+          >
+            <p>Maps</p>
+          </button>
         </>
       )}
 

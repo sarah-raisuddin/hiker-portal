@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import toggleArrow from "../images/toggle-arrow.png";
 import InputErrorMessage from "../base-components/inputs/input-error-message";
 import apiBase from "../requests/base";
+import LoadingSpinner from "../base-components/loading-spinner";
 
 const TripProgress = () => {
   const [activeCheckpoint, setActiveCheckpoint] = useState(null);
@@ -75,7 +76,7 @@ const TripProgress = () => {
   }, [location.search]);
 
   if (!trailData || !progressData) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   const checkpoints = trailData.checkpoints || [];

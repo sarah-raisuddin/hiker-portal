@@ -3,6 +3,8 @@ import PageHeader from "../base-components/page-header";
 import BackToDashboard from "../base-components/back-to-dashboard";
 import { isUserLoggedIn } from "../util";
 import info from "../images/icons/info.png";
+import { useNavigate } from "react-router-dom";
+import SubmissionButton from "../base-components/button";
 
 function KnowBefore() {
   const preTripList = [
@@ -22,6 +24,16 @@ function KnowBefore() {
     "Alert your emergency contact that you have completed the trail",
     "If you encountered a checkpoint that was unresponsive or continously flashed red when you tapped your tag, please let us know by submitting an issue report on our Report an Issue page.",
   ];
+
+  const navigateTo = useNavigate();
+
+  const navToMaps = () => {
+    navigateTo("/maps");
+  };
+
+  const navToIssueReport = () => {
+    navigateTo("/bug-report");
+  };
 
   const isLoggedIn = isUserLoggedIn();
 
@@ -51,6 +63,10 @@ function KnowBefore() {
               <li key={index}>{item}</li>
             ))}
           </ol>
+          <SubmissionButton
+            text={"View Checkpoint Maps"}
+            handleSubmit={navToMaps}
+          />
           <h2>During your Trek:</h2>
           <ol>
             {duringTripList.map((item, index) => (
@@ -63,6 +79,10 @@ function KnowBefore() {
               <li key={index}>{item}</li>
             ))}
           </ol>
+          <SubmissionButton
+            text={"Submit an Issue"}
+            handleSubmit={navToIssueReport}
+          />
         </div>
       </div>
     </div>
