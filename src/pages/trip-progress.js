@@ -20,7 +20,7 @@ const TripProgress = () => {
   const [width, setWidth] = useState(window.innerWidth);
 
   const submitEmail = async (tripPlanId) => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/add_emergency_contact/${tripPlanId}`;
+    const apiEndpoint = `https://trekcheck-server.azurewebsites.net/hiker_portal/add_emergency_contact/${tripPlanId}`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "PUT",
