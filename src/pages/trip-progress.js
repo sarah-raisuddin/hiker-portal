@@ -9,18 +9,20 @@ import toggleArrow from "../images/toggle-arrow.png";
 import InputErrorMessage from "../base-components/inputs/input-error-message";
 import apiBase from "../requests/base";
 import LoadingSpinner from "../base-components/loading-spinner";
+import PopUpAction from "../base-components/pop-ups/pop-up-action";
 
 const TripProgress = () => {
   const [activeCheckpoint, setActiveCheckpoint] = useState(null);
   const [trailData, setTrailData] = useState(null);
   const [progressData, setProgressData] = useState({});
   const [emergency_contact_email, setEmail] = useState("");
+  const [emailSubmitStatus, setEmailStubmitStatus] = useState("");
 
   const location = useLocation();
   const [width, setWidth] = useState(window.innerWidth);
 
   const submitEmail = async (tripPlanId) => {
-    const apiEndpoint = `http://localhost:3000/hiker_portal/add_emergency_contact/${tripPlanId}`;
+    const apiEndpoint = `${apiBase}/hiker_portal/add_emergency_contact/${tripPlanId}`;
     try {
       const response = await fetch(apiEndpoint, {
         method: "PUT",
@@ -35,11 +37,14 @@ const TripProgress = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Response data:", data);
+        setEmailStubmitStatus("success");
       } else {
         console.error("Failed to submit email, status:", response.status);
+        setEmailStubmitStatus("failure");
       }
     } catch (error) {
       console.error("Error during email submission:", error);
+      setEmailStubmitStatus("failure");
     }
   };
 
@@ -48,6 +53,10 @@ const TripProgress = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    setEmailStubmitStatus("");
+  }, [location]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -278,30 +287,59 @@ const TripProgress = () => {
     );
   };
 
+  const handleClosePopup = () => {
+    setEmailStubmitStatus("");
+  };
+
   return (
     <div className="trip-progress">
       <PageHeader text={`${tripPlan.first_name}'s Progress`} />
-
-      <OverviewTable tripPlan={tripPlan} />
-      {trailData.trail.id === 13 && (
-        <InputErrorMessage
-          message={
-            "Checkpoint Status Alert: The Left Bridge checkpoint is currently experiencing a temporary disruption and may not be broadcasting hiker progress. "
-          }
+      {emailSubmitStatus === "success" && (
+        <PopUpAction
+          title="Email sign up successful!"
+          message="You will now recieve email updates on the hiker's progress for this trip"
+          handleSubmit={handleClosePopup}
         />
       )}
-      <h2>Click on a checkpoint for more info</h2>
-      {width > 640 ? (
-        <>
-          <TripProgressViewDesktop checkpoints={checkpoints} />
-          {activeCheckpoint && <CheckinDetails />}
-        </>
-      ) : (
-        <>
-          <TripProgressViewMobile checkpoints={checkpoints} />
-        </>
+      {emailSubmitStatus === "failure" && (
+        <PopUpAction
+          title="Email sign up failed"
+          message="Please try again"
+          handleSubmit={handleClosePopup}
+        />
       )}
-      <div className="trip-progress-container">
+      <div
+        className={
+          emailSubmitStatus ? "blur trip-progress-upper" : "trip-progress-upper"
+        }
+      >
+        <OverviewTable tripPlan={tripPlan} />
+        {trailData.trail.id === 13 && (
+          <InputErrorMessage
+            message={
+              "Checkpoint Status Alert: The Left Bridge checkpoint is currently experiencing a temporary disruption and may not be broadcasting hiker progress. "
+            }
+          />
+        )}
+        <h2>Click on a checkpoint for more info</h2>
+        {width > 640 ? (
+          <>
+            <TripProgressViewDesktop checkpoints={checkpoints} />
+            {activeCheckpoint && <CheckinDetails />}
+          </>
+        ) : (
+          <>
+            <TripProgressViewMobile checkpoints={checkpoints} />
+          </>
+        )}
+      </div>
+      <div
+        className={
+          emailSubmitStatus
+            ? "blur trip-progress-container"
+            : "trip-progress-container"
+        }
+      >
         <div className="trip-progress-body"></div>
         <div className="trip-progress-footer">
           <div>
