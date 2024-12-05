@@ -235,7 +235,7 @@ function AccountRegistration() {
             <InputErrorMessage
               message={"Invalid email address. Please try again."}
             />
-          )}{" "}
+          )}
           {tagDuplicate && (
             <InputErrorMessage
               message={

@@ -138,7 +138,7 @@ function EditAccount() {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data = await response.status;
         console.log("Update user account info sucessful", data);
         setUpdateStatus("success");
       } else {
@@ -168,7 +168,7 @@ function EditAccount() {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data = await response.status;
         localStorage.removeItem("token");
         navigateTo("/login");
       } else {
